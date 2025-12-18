@@ -1,0 +1,20 @@
+fastapi
+uvicorn[standard]
+
+# Database
+sqlalchemy
+psycopg2-binary
+alembic
+
+# Auth & security
+python-jose[cryptography]
+passlib[bcrypt]
+
+# Validation
+pydantic[email]
+
+# Env
+python-dotenv
+
+# Utilities
+uuid7
