@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
-from jose import jwt
-
+from jose import jwt, JWTError
+from typing import Any
 from app.core.settings import settings
 
 def create_access_token(subject: str) -> str:
@@ -11,3 +11,10 @@ def create_access_token(subject: str) -> str:
         "type": "access",
     }
     return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
+
+
+def decode_access_token(token: str) -> dict[str, Any]:
+    try:
+        return jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
+    except JWTError:
+        raise
