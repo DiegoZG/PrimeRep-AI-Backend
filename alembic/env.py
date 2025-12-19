@@ -25,7 +25,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from app.core.database import Base
-from app.models import User  # ensures models load
+from app.models import User, OnboardingProfile  # ensures models load
 
 target_metadata = Base.metadata
 
