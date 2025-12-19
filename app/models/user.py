@@ -1,5 +1,6 @@
 import uuid
-from sqlalchemy import Column, String, DateTime, func
+from sqlalchemy import Column, String, DateTime, Boolean, func
+from sqlalchemy.orm import relationship
 
 from app.core.database import Base
 
@@ -15,10 +16,18 @@ class User(Base):
 
     password_hash = Column(String, nullable=False)
 
+    has_completed_onboarding = Column(Boolean, nullable=False, default=False)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
+    )
+
+    onboarding_profile = relationship(
+        "OnboardingProfile",
+        uselist=False,
+        back_populates="user",
     )
