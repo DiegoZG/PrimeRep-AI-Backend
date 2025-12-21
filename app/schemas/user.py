@@ -9,6 +9,7 @@ class UserResponse(BaseModel):
     email: EmailStr
     preferred_name: str
     last_name: Optional[str] = None
+    has_completed_onboarding: bool
     created_at: datetime
     updated_at: datetime
 
