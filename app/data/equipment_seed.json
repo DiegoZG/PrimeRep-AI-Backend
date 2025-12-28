@@ -1,0 +1,339 @@
+[
+  {
+    "id": "ab_crunch_machine",
+    "name": "Ab Crunch Machine",
+    "category": "machine"
+  },
+  {
+    "id": "abductor_machine",
+    "name": "Abductor Machine",
+    "category": "machine"
+  },
+  {
+    "id": "adductor_machine",
+    "name": "Adductor Machine",
+    "category": "machine"
+  },
+  {
+    "id": "assisted_weight_machine",
+    "name": "Assisted Weight Machine",
+    "category": "machine"
+  },
+  {
+    "id": "bench_press_machine",
+    "name": "Bench Press Machine",
+    "category": "machine"
+  },
+  {
+    "id": "bicep_curl_machine",
+    "name": "Bicep Curl Machine",
+    "category": "machine"
+  },
+  {
+    "id": "calf_raise_machine",
+    "name": "Calf Raise Machine",
+    "category": "machine"
+  },
+  {
+    "id": "calf_extension_machine",
+    "name": "Calf Extension Machine",
+    "category": "machine"
+  },
+  { "id": "fly_machine", "name": "Fly Machine", "category": "machine" },
+  { "id": "glute_machine", "name": "Glute Machine", "category": "machine" },
+  {
+    "id": "hack_squat_machine_selectorized",
+    "name": "Hack Squat Machine",
+    "category": "machine"
+  },
+  {
+    "id": "leg_curl_machine",
+    "name": "Leg Curl Machine",
+    "category": "machine"
+  },
+  {
+    "id": "leg_extension_machine",
+    "name": "Leg Extension Machine",
+    "category": "machine"
+  },
+  {
+    "id": "leg_press_machine_selectorized",
+    "name": "Leg Press Machine",
+    "category": "machine"
+  },
+  {
+    "id": "multi_hip_machine",
+    "name": "Multi Hip Machine",
+    "category": "machine"
+  },
+  {
+    "id": "overhead_press_machine",
+    "name": "Overhead Press Machine",
+    "category": "machine"
+  },
+  {
+    "id": "preacher_curl_machine",
+    "name": "Preacher Curl Machine",
+    "category": "machine"
+  },
+  { "id": "row_machine", "name": "Row Machine", "category": "machine" },
+  {
+    "id": "seated_leg_curl_machine",
+    "name": "Seated Leg Curl Machine",
+    "category": "machine"
+  },
+  {
+    "id": "sissy_squat_machine",
+    "name": "Sissy Squat Machine",
+    "category": "machine"
+  },
+  {
+    "id": "torso_rotation_machine",
+    "name": "Torso Rotation Machine",
+    "category": "machine"
+  },
+  {
+    "id": "tricep_dip_machine",
+    "name": "Tricep Dip Machine",
+    "category": "machine"
+  },
+  {
+    "id": "triceps_extension_machine",
+    "name": "Triceps Extension Machine",
+    "category": "machine"
+  },
+  {
+    "id": "lateral_raise_machine",
+    "name": "Lateral Raise Machine",
+    "category": "machine"
+  },
+  {
+    "id": "bent_arm_fly_machine",
+    "name": "Bent Arm Fly Machine",
+    "category": "machine"
+  },
+  {
+    "id": "back_extension_machine",
+    "name": "Back Extension Machine",
+    "category": "machine"
+  },
+  { "id": "smith_machine", "name": "Smith Machine", "category": "machine" },
+  {
+    "id": "plate_loaded_t_bar",
+    "name": "Plate-Loaded T Bar Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_lat_pulldown",
+    "name": "Plate-Loaded Lat Pulldown Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_chest_horizontal",
+    "name": "Plate-Loaded Chest Horizontal Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_preacher",
+    "name": "Plate-Loaded Preacher Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_seated_calf",
+    "name": "Plate-Loaded Seated Calf Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_glute",
+    "name": "Plate-Loaded Glute Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_hip_thrust",
+    "name": "Plate-Loaded Hip Thrust Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_hip_thrust_belt",
+    "name": "Plate-Loaded Hip Thrust Machine (Belt Supported)",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_chest_supported_t_bar",
+    "name": "Plate-Loaded Chest Supported T Bar",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_ab_crunch",
+    "name": "Plate-Loaded Ab Crunch Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_chest_supported_row",
+    "name": "Plate-Loaded Chest Supported Row Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_standing_lateral_raise",
+    "name": "Plate-Loaded Standing Lateral Raise Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_pullover",
+    "name": "Plate-Loaded Pullover Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_standing_leg_curl",
+    "name": "Plate-Loaded Standing Leg Curl Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_dip_machine",
+    "name": "Plate-Loaded Dip Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_angled_calf_press",
+    "name": "Plate-Loaded Angled Calf Press Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "pendulum_squat_machine",
+    "name": "Pendulum Squat Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "vertical_leg_press",
+    "name": "Vertical Leg Press",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "belt_squat_machine",
+    "name": "Belt Squat Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_iso_lateral_chest",
+    "name": "Plate-Loaded Iso-Lateral Chest Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_decline_chest",
+    "name": "Plate-Loaded Decline Chest Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_high_row",
+    "name": "Plate-Loaded High Row Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_incline_chest",
+    "name": "Plate-Loaded Incline Chest Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_iso_lateral_row",
+    "name": "Plate-Loaded Iso-Lateral Row Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_shrug_machine",
+    "name": "Plate-Loaded Shrug Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_shoulder_machine",
+    "name": "Plate-Loaded Shoulder Machine",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "leg_press_plate_loaded",
+    "name": "Leg Press (Plate-Loaded)",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "plate_loaded_hack_squat",
+    "name": "Hack Squat Machine (Plate-Loaded)",
+    "category": "plateLoaded"
+  },
+  {
+    "id": "back_extension_bench",
+    "name": "Back Extension Bench",
+    "category": "benchRack"
+  },
+  { "id": "decline_bench", "name": "Decline Bench", "category": "benchRack" },
+  { "id": "dip_bar", "name": "Dip Bar", "category": "benchRack" },
+  { "id": "flat_bench", "name": "Flat Bench", "category": "benchRack" },
+  {
+    "id": "glute_ham_raise_bench",
+    "name": "Glute Ham Raise Bench",
+    "category": "benchRack"
+  },
+  { "id": "incline_bench", "name": "Incline Bench", "category": "benchRack" },
+  {
+    "id": "preacher_curl_bench",
+    "name": "Preacher Curl Bench",
+    "category": "benchRack"
+  },
+  { "id": "pull_up_bar", "name": "Pull Up Bar", "category": "benchRack" },
+  { "id": "squat_rack", "name": "Squat Rack", "category": "benchRack" },
+  { "id": "vertical_bench", "name": "Vertical Bench", "category": "benchRack" },
+  { "id": "crossover_cable", "name": "Crossover Cable", "category": "cable" },
+  { "id": "hi_lo_pull_cable", "name": "Hi Lo Pull Cable", "category": "cable" },
+  {
+    "id": "lat_pulldown_cable",
+    "name": "Lat Pulldown Cable",
+    "category": "cable"
+  },
+  { "id": "row_cable", "name": "Row Cable", "category": "cable" },
+  {
+    "id": "olympic_barbell",
+    "name": "Olympic Barbell",
+    "category": "freeWeight"
+  },
+  { "id": "ez_bar", "name": "EZ Bar", "category": "freeWeight" },
+  { "id": "landmine", "name": "Landmine", "category": "freeWeight" },
+  { "id": "plates", "name": "Plates", "category": "freeWeight" },
+  { "id": "trap_bar", "name": "Trap Bar", "category": "freeWeight" },
+  { "id": "short_bar", "name": "Short Bar", "category": "freeWeight" },
+  { "id": "dumbbells", "name": "Dumbbells", "category": "freeWeight" },
+  { "id": "kettlebells", "name": "Kettlebells", "category": "freeWeight" },
+  { "id": "ab_wheel", "name": "Ab Wheel", "category": "functional" },
+  { "id": "plyo_box", "name": "Box", "category": "functional" },
+  { "id": "medicine_ball", "name": "Medicine Ball", "category": "functional" },
+  {
+    "id": "stability_ball",
+    "name": "Stability Ball",
+    "category": "functional"
+  },
+  { "id": "tire", "name": "Tire", "category": "functional" },
+  { "id": "trx", "name": "TRX", "category": "functional" },
+  { "id": "foam_roller", "name": "Foam Roller", "category": "functional" },
+  { "id": "sled", "name": "Sled", "category": "functional" },
+  { "id": "battle_ropes", "name": "Battle Ropes", "category": "functional" },
+  { "id": "loop_bands", "name": "Loop Bands", "category": "bandAccessory" },
+  { "id": "mini_bands", "name": "Mini Bands", "category": "bandAccessory" },
+  {
+    "id": "skipping_rope",
+    "name": "Skipping Rope",
+    "category": "bandAccessory"
+  },
+  { "id": "air_bike", "name": "Air Bike", "category": "cardio" },
+  { "id": "stationary_bike", "name": "Stationary Bike", "category": "cardio" },
+  { "id": "elliptical", "name": "Elliptical", "category": "cardio" },
+  {
+    "id": "rowing_machine_cardio",
+    "name": "Rowing Machine",
+    "category": "cardio"
+  },
+  { "id": "stair_stepper", "name": "Stair Stepper", "category": "cardio" },
+  { "id": "treadmill", "name": "Treadmill", "category": "cardio" },
+  {
+    "id": "vertical_climber",
+    "name": "Vertical Climber",
+    "category": "cardio"
+  },
+  { "id": "ski_erg", "name": "SkiErg", "category": "cardio" }
+]

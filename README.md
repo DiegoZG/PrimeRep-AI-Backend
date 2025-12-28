@@ -21,6 +21,7 @@ This service provides authentication, user management, and the foundation for wo
 ## Project Structure
 
 primerep-backend/
+
 - app/
   - api/
     - v1/
@@ -37,7 +38,7 @@ primerep-backend/
       - passwords.py
   - models/
     - user.py
-    - __init__.py
+    - **init**.py
   - schemas/
     - auth.py
   - main.py
@@ -82,7 +83,7 @@ docker compose up -d
 
 ### 5. Run database migrations
 
-python3 -m alembic upgrade head
+alembic upgrade head
 
 ---
 
@@ -98,6 +99,35 @@ http://127.0.0.1:8000/docs
 
 ---
 
+## API Endpoints
+
+### Equipment Catalog (Public)
+
+GET /v1/equipment
+
+Returns all active equipment items, ordered by category_order, sort_order, then name.
+
+Response
+
+```json
+{
+  "items": [
+    {
+      "id": "ab_crunch_machine",
+      "name": "Ab Crunch Machine",
+      "category": "machine",
+      "category_order": 10,
+      "sort_order": 0,
+      "icon_key": null,
+      "image_url": null,
+      "is_active": true
+    }
+  ]
+}
+```
+
+---
+
 ## Authentication (MVP)
 
 ### Signup
@@ -107,17 +137,17 @@ POST /v1/auth/signup
 Request body
 
 {
-  "email": "test@primerep.com",
-  "password": "StrongPass123",
-  "preferred_name": "Diego",
-  "last_name": "Zegarra"
+"email": "test@primerep.com",
+"password": "StrongPass123",
+"preferred_name": "Diego",
+"last_name": "Zegarra"
 }
 
 Response
 
 {
-  "access_token": "<jwt>",
-  "token_type": "bearer"
+"access_token": "<jwt>",
+"token_type": "bearer"
 }
 
 ---
@@ -144,11 +174,11 @@ JWT_ACCESS_TOKEN_EXPIRE_MINUTES=60
 
 Create a new migration
 
-python3 -m alembic revision --autogenerate -m "description"
+alembic revision --autogenerate -m "description"
 
 Apply migrations
 
-python3 -m alembic upgrade head
+alembic upgrade head
 
 ---
 
