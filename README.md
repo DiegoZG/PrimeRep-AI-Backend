@@ -128,6 +128,90 @@ Response
 
 ---
 
+### Exercise Catalog (Public)
+
+GET /v1/exercises
+
+Returns all active exercises, filterable via query parameters:
+
+- `q`: free-text search on `name` and `id`
+- `muscle`: primary or secondary muscle (canonical strings)
+- `equipment_id`: required equipment id
+- `type`: exercise type (`strength`, `bodyweight`, `cardio`, `mobility`, `olympic`, `accessory`)
+- `limit`, `offset`: simple pagination
+
+Example:
+
+```bash
+curl "http://127.0.0.1:8000/v1/exercises?q=press&muscle=chest&equipment_id=flat_bench&type=strength"
+```
+
+Sample response:
+
+```json
+{
+  "items": [
+    {
+      "id": "bench_press",
+      "name": "Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": ["triceps", "shoulders"],
+      "required_equipment_ids": ["flat_bench", "olympic_barbell", "plates"],
+      "demo_video_url": null,
+      "image_url": null,
+      "is_active": true,
+      "is_favorited": false
+    }
+  ]
+}
+```
+
+GET /v1/exercises/{id}
+
+Returns details for a single exercise by id.
+
+Canonical muscle strings:
+
+`chest, shoulders, back, biceps, triceps, quads, hamstrings, glutes, calves, abs, forearms, neck, cardio, full_body`
+
+Exercise types:
+
+`strength, bodyweight, cardio, mobility, olympic, accessory`
+
+---
+
+### Exercise Favorites (Authenticated)
+
+These endpoints require a valid `Authorization: Bearer <access_token>` header.
+
+Favorite an exercise:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer <token>" \
+  "http://127.0.0.1:8000/v1/exercises/bench_press/favorite"
+```
+
+Unfavorite:
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer <token>" \
+  "http://127.0.0.1:8000/v1/exercises/bench_press/favorite"
+```
+
+List favorites:
+
+```bash
+curl -H "Authorization: Bearer <token>" \
+  "http://127.0.0.1:8000/v1/exercises/favorites"
+```
+
+Response shape matches the exercise catalog list, with `is_favorited` set to `true` on all items.
+
+---
+
 ## Authentication (MVP)
 
 ### Signup
