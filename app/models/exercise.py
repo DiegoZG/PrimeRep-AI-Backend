@@ -94,4 +94,3 @@ class Exercise(Base):
     )
     owner = relationship("User", foreign_keys=[owner_user_id])
 
-
