@@ -8,6 +8,7 @@ from app.api.v1.exercises.favorites_router import router as exercise_favorites_r
 from app.api.v1.exercises.router import router as exercises_router
 from app.api.v1.onboarding.router import router as onboarding_router
 from app.api.v1.users.router import router as users_router
+from app.api.v1.workouts.logging_router import router as workout_logging_router
 from app.api.v1.workouts.router import router as workouts_router
 from app.core.database import get_db
 
@@ -23,6 +24,7 @@ api_router.include_router(
 )
 api_router.include_router(exercises_router, prefix="/exercises", tags=["exercises"])
 api_router.include_router(workouts_router)
+api_router.include_router(workout_logging_router)
 
 
 @api_router.get("/_ping")
