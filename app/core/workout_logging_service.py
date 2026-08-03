@@ -85,6 +85,27 @@ def log_set(
     return set_log
 
 
+def get_last_sets(
+    db: Session,
+    user_id: str,
+    exercise_id: str,
+    limit: int = 3,
+) -> list[SetLog]:
+    """Most recent logged sets for an exercise, from the user's completed sessions."""
+    return (
+        db.query(SetLog)
+        .join(WorkoutSession, SetLog.session_id == WorkoutSession.id)
+        .filter(
+            WorkoutSession.user_id == user_id,
+            WorkoutSession.completed_at.isnot(None),
+            SetLog.exercise_id == exercise_id,
+        )
+        .order_by(SetLog.logged_at.desc(), SetLog.id.desc())
+        .limit(limit)
+        .all()
+    )
+
+
 # ── Stats ─────────────────────────────────────────────────────────────────────
 
 def get_stats(db: Session, user_id: str) -> dict:
