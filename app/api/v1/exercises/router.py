@@ -5,7 +5,11 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.exercise_service import get_exercise, list_exercises
+from app.core.security.deps import get_current_user
+from app.core.workout_logging_service import get_last_sets
+from app.models.user import User
 from app.schemas.exercise import ExerciseListOut, ExerciseOut
+from app.schemas.workout_logging import LastSetOut, LastSetsOut
 
 
 router = APIRouter()
@@ -49,6 +53,25 @@ def list_exercises_endpoint(
         items.append(ExerciseOut.model_validate(exercise_dict))
 
     return {"items": items}
+
+
+@router.get("/{exercise_id}/last-sets", response_model=LastSetsOut)
+def get_last_sets_endpoint(
+    exercise_id: str,
+    limit: int = Query(3, ge=1, le=20),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Return the authenticated user's most recently logged sets for an exercise,
+    newest first, drawn only from completed workout sessions.
+    """
+    exercise = get_exercise(db, exercise_id)
+    if not exercise:
+        raise HTTPException(status_code=404, detail="Exercise not found")
+
+    sets = get_last_sets(db, user_id=str(current_user.id), exercise_id=exercise_id, limit=limit)
+    return LastSetsOut(items=[LastSetOut.model_validate(s) for s in sets])
 
 
 @router.get("/{exercise_id}", response_model=ExerciseOut)

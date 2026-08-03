@@ -39,6 +39,21 @@ class SetLogOut(BaseModel):
     model_config = ConfigDict(populate_by_name=True, from_attributes=True)
 
 
+class LastSetOut(BaseModel):
+    id: str
+    exercise_id: str = Field(..., alias="exerciseId")
+    set_number: int = Field(..., alias="setNumber")
+    reps: int
+    weight_kg: Optional[float] = Field(None, alias="weightKg")
+    logged_at: datetime = Field(..., alias="loggedAt")
+
+    model_config = ConfigDict(populate_by_name=True, from_attributes=True)
+
+
+class LastSetsOut(BaseModel):
+    items: list[LastSetOut]
+
+
 class SessionOut(BaseModel):
     id: str
     workout_day_id: str = Field(..., alias="workoutDayId")
