@@ -13,6 +13,12 @@ class Settings:
     JWT_REFRESH_SECRET: str = os.getenv("JWT_REFRESH_SECRET", "")
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("JWT_REFRESH_TOKEN_EXPIRE_DAYS", "30"))
 
+    # Optional — the exercise Q&A feature checks this at call time and returns
+    # a 503 if missing, rather than failing the whole app at import time
+    # (keeps local dev / tests working without an API key).
+    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
+    ANTHROPIC_QA_MODEL: str = os.getenv("ANTHROPIC_QA_MODEL", "claude-haiku-4-5-20251001")
+
     if not JWT_SECRET:
         raise RuntimeError("JWT_SECRET is not set in .env")
 

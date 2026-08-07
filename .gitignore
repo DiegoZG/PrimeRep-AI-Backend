@@ -9,6 +9,7 @@ __pycache__/
 # Environment variables
 .env
 .env.*
+!.env.example
 
 # Alembic
 alembic/versions/__pycache__/
