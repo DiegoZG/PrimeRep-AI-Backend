@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     String,
     Table,
+    Text,
     func,
     text,
 )
@@ -71,6 +72,10 @@ class Exercise(Base):
     secondary_muscles = Column(JSONB, nullable=False, default=list)
     demo_video_url = Column(String, nullable=True)
     image_url = Column(String, nullable=True)
+    how_to = Column(Text, nullable=True)
+    why_it_works = Column(Text, nullable=True)
+    common_mistakes = Column(Text, nullable=True)
+    beginner_notes = Column(Text, nullable=True)
     is_active = Column(Boolean, nullable=False, server_default=text("true"))
     source = Column(String, nullable=False, server_default=text("'seed'"))
     owner_user_id = Column(String, ForeignKey("users.id"), nullable=True)

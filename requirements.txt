@@ -16,5 +16,8 @@ pydantic[email]
 # Env
 python-dotenv
 
+# AI / LLM
+anthropic
+
 # Utilities
 uuid7
