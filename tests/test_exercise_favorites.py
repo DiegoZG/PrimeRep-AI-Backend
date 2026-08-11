@@ -3,12 +3,18 @@ Tests for exercise favorites endpoints.
 
 Note: These tests assume migrations have been run and seed data exists in the dev DB.
 """
+import uuid
+
 from fastapi.testclient import TestClient
 
 from app.main import app
 
 
 client = TestClient(app)
+
+
+def _unique_email(prefix: str) -> str:
+    return f"fav_{prefix}_{uuid.uuid4().hex[:8]}@example.com"
 
 
 def _signup_and_get_token(email: str) -> str:
@@ -30,7 +36,7 @@ def _auth_headers(token: str) -> dict[str, str]:
 
 def test_favorite_exercise_idempotent():
     """Favoriting the same exercise twice should be idempotent."""
-    token = _signup_and_get_token("favtester1@example.com")
+    token = _signup_and_get_token(_unique_email("tester1"))
     headers = _auth_headers(token)
 
     # First favorite
@@ -57,7 +63,7 @@ def test_favorite_exercise_idempotent():
 
 def test_unfavorite_exercise_idempotent():
     """Unfavoriting should be idempotent and remove from favorites list."""
-    token = _signup_and_get_token("favtester2@example.com")
+    token = _signup_and_get_token(_unique_email("tester2"))
     headers = _auth_headers(token)
 
     # Ensure favorited first

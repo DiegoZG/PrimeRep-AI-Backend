@@ -6,12 +6,18 @@ Tests for weekly workout plan endpoints:
 
 Note: These tests assume migrations have been run and seed data exists in the dev DB.
 """
+import uuid
+
 from fastapi.testclient import TestClient
 
 from app.main import app
 
 
 client = TestClient(app)
+
+
+def _unique_email(prefix: str) -> str:
+    return f"week_{prefix}_{uuid.uuid4().hex[:8]}@example.com"
 
 
 def _signup_and_get_token(email: str) -> str:
@@ -46,7 +52,7 @@ def test_week_requires_auth():
 
 def test_week_returns_plan_with_correct_structure():
     """Logged-in user should receive a weekly plan with correct structure."""
-    token = _signup_and_get_token("week_structure1@example.com")
+    token = _signup_and_get_token(_unique_email("structure1"))
     headers = _auth_headers(token)
 
     # Set onboarding with days_per_week
@@ -79,7 +85,7 @@ def test_week_returns_plan_with_correct_structure():
 
 def test_week_workout_day_structure():
     """Each workout day should have the correct structure."""
-    token = _signup_and_get_token("week_day_structure1@example.com")
+    token = _signup_and_get_token(_unique_email("day_structure1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -114,7 +120,7 @@ def test_week_workout_day_structure():
 
 def test_week_days_per_week_2():
     """User with days_per_week=2 should get 2 workouts."""
-    token = _signup_and_get_token("week_days2@example.com")
+    token = _signup_and_get_token(_unique_email("days2"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -137,7 +143,7 @@ def test_week_days_per_week_2():
 
 def test_week_days_per_week_5():
     """User with days_per_week=5 should get 5 workouts."""
-    token = _signup_and_get_token("week_days5@example.com")
+    token = _signup_and_get_token(_unique_email("days5"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -160,7 +166,7 @@ def test_week_days_per_week_5():
 
 def test_week_deterministic_without_force():
     """Same user calling GET /week without force should get same plan."""
-    token = _signup_and_get_token("week_deterministic1@example.com")
+    token = _signup_and_get_token(_unique_email("deterministic1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -191,7 +197,7 @@ def test_week_deterministic_without_force():
 
 def test_week_force_regenerates_with_new_ids():
     """GET /week?force=true should generate new workoutDayIds."""
-    token = _signup_and_get_token("week_force_regen1@example.com")
+    token = _signup_and_get_token(_unique_email("force_regen1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -236,7 +242,7 @@ def test_skip_requires_auth():
 
 def test_skip_removes_and_appends():
     """Skipping a workout should remove it and append a new one."""
-    token = _signup_and_get_token("week_skip1@example.com")
+    token = _signup_and_get_token(_unique_email("skip1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -281,7 +287,7 @@ def test_skip_removes_and_appends():
 
 def test_skip_maintains_slot_indices():
     """After skip, slotIndex should be normalized 0..N-1."""
-    token = _signup_and_get_token("week_skip_slots1@example.com")
+    token = _signup_and_get_token(_unique_email("skip_slots1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -316,7 +322,7 @@ def test_skip_maintains_slot_indices():
 
 def test_skip_follows_rotation():
     """New workout appended after skip should follow split rotation."""
-    token = _signup_and_get_token("week_skip_rotation1@example.com")
+    token = _signup_and_get_token(_unique_email("skip_rotation1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -356,7 +362,7 @@ def test_skip_follows_rotation():
 
 def test_skip_invalid_workout_day_id():
     """Skipping a non-existent workoutDayId should return 404."""
-    token = _signup_and_get_token("week_skip_invalid1@example.com")
+    token = _signup_and_get_token(_unique_email("skip_invalid1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -399,7 +405,7 @@ def test_duration_requires_auth():
 
 def test_duration_updates_and_regenerates():
     """Updating duration should update the workout and regenerate exercises."""
-    token = _signup_and_get_token("week_duration1@example.com")
+    token = _signup_and_get_token(_unique_email("duration1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -438,7 +444,7 @@ def test_duration_updates_and_regenerates():
 
 def test_duration_preserves_workout_day_ids():
     """Duration update should preserve all workoutDayIds."""
-    token = _signup_and_get_token("week_duration_ids1@example.com")
+    token = _signup_and_get_token(_unique_email("duration_ids1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -474,7 +480,7 @@ def test_duration_preserves_workout_day_ids():
 
 def test_duration_preserves_all_durations():
     """Duration update should preserve durations for all workouts."""
-    token = _signup_and_get_token("week_duration_preserve1@example.com")
+    token = _signup_and_get_token(_unique_email("duration_preserve1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -510,7 +516,7 @@ def test_duration_preserves_all_durations():
 
 def test_duration_invalid_workout_day_id():
     """Updating duration for non-existent workoutDayId should return 404."""
-    token = _signup_and_get_token("week_duration_invalid1@example.com")
+    token = _signup_and_get_token(_unique_email("duration_invalid1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -539,7 +545,7 @@ def test_duration_invalid_workout_day_id():
 
 def test_duration_affects_exercise_count():
     """Longer duration should result in more exercises."""
-    token = _signup_and_get_token("week_duration_count1@example.com")
+    token = _signup_and_get_token(_unique_email("duration_count1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -590,7 +596,7 @@ def test_duration_affects_exercise_count():
 
 def test_next_creates_week_plan():
     """POST /next should create a week plan if none exists."""
-    token = _signup_and_get_token("week_next_creates1@example.com")
+    token = _signup_and_get_token(_unique_email("next_creates1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -620,7 +626,7 @@ def test_next_creates_week_plan():
 
 def test_next_returns_workout_from_week_plan():
     """POST /next should return a workout from the existing week plan."""
-    token = _signup_and_get_token("week_next_from_plan1@example.com")
+    token = _signup_and_get_token(_unique_email("next_from_plan1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
@@ -649,7 +655,7 @@ def test_next_returns_workout_from_week_plan():
 
 def test_next_force_regenerates_week():
     """POST /next?force=true should regenerate the week plan first."""
-    token = _signup_and_get_token("week_next_force1@example.com")
+    token = _signup_and_get_token(_unique_email("next_force1"))
     headers = _auth_headers(token)
 
     onboarding_payload = {
