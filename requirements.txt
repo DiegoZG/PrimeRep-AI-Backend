@@ -19,5 +19,9 @@ python-dotenv
 # AI / LLM
 anthropic
 
+# Object storage — used only by scripts/upload_local_footage.py, never by the
+# running app. Speaks to AWS S3 or any S3-compatible service (e.g. Cloudflare R2).
+boto3
+
 # Utilities
 uuid7
