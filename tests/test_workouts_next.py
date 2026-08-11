@@ -3,12 +3,18 @@ Tests for POST /v1/workouts/next endpoint.
 
 Note: These tests assume migrations have been run and seed data exists in the dev DB.
 """
+import uuid
+
 from fastapi.testclient import TestClient
 
 from app.main import app
 
 
 client = TestClient(app)
+
+
+def _unique_email(prefix: str) -> str:
+    return f"next_{prefix}_{uuid.uuid4().hex[:8]}@example.com"
 
 
 def _signup_and_get_token(email: str) -> str:
@@ -36,7 +42,7 @@ def test_workout_next_requires_auth():
 
 def test_workout_next_logged_in_with_equipment():
     """Logged-in user with equipment should receive a valid workout."""
-    token = _signup_and_get_token("workout_tester1@example.com")
+    token = _signup_and_get_token(_unique_email("tester1"))
     headers = _auth_headers(token)
 
     # Set user equipment via onboarding
@@ -105,7 +111,7 @@ def test_workout_next_logged_in_with_equipment():
 
 def test_workout_next_no_duplicates():
     """Workout should not contain duplicate exercises."""
-    token = _signup_and_get_token("workout_tester2@example.com")
+    token = _signup_and_get_token(_unique_email("tester2"))
     headers = _auth_headers(token)
 
     # Set user equipment via onboarding
@@ -142,7 +148,7 @@ def test_workout_rotation_upper_lower():
     Calling /v1/workouts/next twice should rotate day types (upper -> lower).
     History is persisted, so second call on same day updates day_type.
     """
-    token = _signup_and_get_token("workout_rotation1@example.com")
+    token = _signup_and_get_token(_unique_email("rotation1"))
     headers = _auth_headers(token)
 
     # Set equipment + split preference
@@ -166,7 +172,7 @@ def test_workout_rotation_upper_lower():
 
 def test_workout_ppl_split():
     """User with PPL split should get push/pull/legs rotation."""
-    token = _signup_and_get_token("workout_ppl1@example.com")
+    token = _signup_and_get_token(_unique_email("ppl1"))
     headers = _auth_headers(token)
 
     # Set PPL split preference
@@ -190,7 +196,7 @@ def test_workout_ppl_split():
 
 def test_workout_full_body_split():
     """User with full_body split should always get full_body day."""
-    token = _signup_and_get_token("workout_fullbody1@example.com")
+    token = _signup_and_get_token(_unique_email("fullbody1"))
     headers = _auth_headers(token)
 
     # Set full body split preference
@@ -214,7 +220,7 @@ def test_workout_full_body_split():
 
 def test_workout_default_split_preference():
     """User without split_preference should default to upper_lower."""
-    token = _signup_and_get_token("workout_default1@example.com")
+    token = _signup_and_get_token(_unique_email("default1"))
     headers = _auth_headers(token)
 
     # Set only equipment, no split preference
@@ -237,7 +243,7 @@ def test_workout_default_split_preference():
 
 def test_workout_no_onboarding():
     """User without any onboarding should still get a workout with defaults."""
-    token = _signup_and_get_token("workout_noonboard1@example.com")
+    token = _signup_and_get_token(_unique_email("noonboard1"))
     headers = _auth_headers(token)
 
     # Don't set any onboarding - just call workout endpoint
