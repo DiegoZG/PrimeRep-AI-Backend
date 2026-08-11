@@ -79,11 +79,22 @@ def config():
 
 @pytest.fixture
 def db():
-    """A real session that restores every exercise row the tests can touch."""
+    """A real session with a known-empty media baseline, restored afterwards.
+
+    The media columns are cleared up front rather than assumed empty: these
+    rows hold real URLs as soon as footage is uploaded, and tests that asserted
+    against whatever the dev DB happened to contain would break exactly when
+    the feature started being used.
+    """
     session = SessionLocal()
     rows = session.query(Exercise).filter(Exercise.id.in_(TOUCHED_IDS)).all()
     original = {row.id: (row.demo_video_url, row.image_url) for row in rows}
     assert len(original) == len(TOUCHED_IDS), "expected seed exercises to be present"
+
+    for row in rows:
+        row.demo_video_url = None
+        row.image_url = None
+    session.commit()
 
     try:
         yield session
