@@ -234,6 +234,7 @@ def test_stats_zero_for_new_user():
     assert data["streak"] == 0
     assert data["totalCompleted"] == 0
     assert data["prsThisWeek"] == 0
+    assert data["totalVolumeKg"] == 0
 
 
 def test_stats_increments_after_completion():
@@ -262,3 +263,65 @@ def test_stats_pr_detected_for_new_weight():
     resp = client.get("/v1/workouts/sessions/stats", headers=_auth(token))
     # No prior history → first-ever weight counts as PR
     assert resp.json()["prsThisWeek"] == 1
+
+
+def _log_set(token: str, session_id: str, set_number: int, reps: int, weight_kg=None):
+    payload = {"exerciseId": "push_up", "setNumber": set_number, "reps": reps}
+    if weight_kg is not None:
+        payload["weightKg"] = weight_kg
+    resp = client.post(
+        f"/v1/workouts/sessions/{session_id}/sets", json=payload, headers=_auth(token)
+    )
+    assert resp.status_code == 201
+
+
+def test_stats_volume_sums_weight_times_reps():
+    token = _signup_and_get_token(_unique_email("vol_sum"))
+    session = _create_session(token)
+
+    _log_set(token, session["id"], 1, reps=10, weight_kg=60.0)
+    _log_set(token, session["id"], 2, reps=8, weight_kg=62.5)
+    client.patch(f"/v1/workouts/sessions/{session['id']}/complete", headers=_auth(token))
+
+    resp = client.get("/v1/workouts/sessions/stats", headers=_auth(token))
+    # 60 x 10 + 62.5 x 8 = 1100
+    assert resp.json()["totalVolumeKg"] == 1100
+
+
+def test_stats_volume_excludes_sets_logged_without_weight():
+    """Bodyweight sets carry no weight, so they must not count as zero-weight reps."""
+    token = _signup_and_get_token(_unique_email("vol_bw"))
+    session = _create_session(token)
+
+    _log_set(token, session["id"], 1, reps=20)
+    _log_set(token, session["id"], 2, reps=5, weight_kg=40.0)
+    client.patch(f"/v1/workouts/sessions/{session['id']}/complete", headers=_auth(token))
+
+    resp = client.get("/v1/workouts/sessions/stats", headers=_auth(token))
+    assert resp.json()["totalVolumeKg"] == 200
+
+
+def test_stats_volume_ignores_sessions_that_were_never_completed():
+    token = _signup_and_get_token(_unique_email("vol_open"))
+    session = _create_session(token)
+
+    _log_set(token, session["id"], 1, reps=10, weight_kg=100.0)
+
+    resp = client.get("/v1/workouts/sessions/stats", headers=_auth(token))
+    assert resp.json()["totalVolumeKg"] == 0
+
+
+def test_stats_volume_is_isolated_per_user():
+    token_a = _signup_and_get_token(_unique_email("vol_a"))
+    token_b = _signup_and_get_token(_unique_email("vol_b"))
+
+    session_a = _create_session(token_a)
+    _log_set(token_a, session_a["id"], 1, reps=10, weight_kg=50.0)
+    client.patch(f"/v1/workouts/sessions/{session_a['id']}/complete", headers=_auth(token_a))
+
+    assert client.get("/v1/workouts/sessions/stats", headers=_auth(token_a)).json()[
+        "totalVolumeKg"
+    ] == 500
+    assert client.get("/v1/workouts/sessions/stats", headers=_auth(token_b)).json()[
+        "totalVolumeKg"
+    ] == 0

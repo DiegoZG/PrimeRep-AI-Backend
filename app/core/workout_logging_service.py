@@ -113,6 +113,7 @@ def get_stats(db: Session, user_id: str) -> dict:
         "streak": _calculate_streak(db, user_id),
         "total_completed": _count_completed(db, user_id),
         "prs_this_week": _count_prs_this_week(db, user_id),
+        "total_volume_kg": _total_volume_kg(db, user_id),
     }
 
 
@@ -159,6 +160,27 @@ def _count_completed(db: Session, user_id: str) -> int:
         )
         .count()
     )
+
+
+def _total_volume_kg(db: Session, user_id: str) -> float:
+    """All-time volume load across completed sessions: sum of weight x reps.
+
+    Sets logged without a weight are excluded rather than counted as zero-weight
+    reps. Bodyweight movements would need a per-session bodyweight figure the app
+    does not track, and guessing one would quietly inflate the number.
+    """
+    total = (
+        db.query(func.sum(SetLog.weight_kg * SetLog.reps))
+        .join(WorkoutSession, SetLog.session_id == WorkoutSession.id)
+        .filter(
+            WorkoutSession.user_id == user_id,
+            WorkoutSession.completed_at.isnot(None),
+            SetLog.weight_kg.isnot(None),
+        )
+        .scalar()
+    )
+
+    return round(float(total or 0.0), 2)
 
 
 def _count_prs_this_week(db: Session, user_id: str) -> int:
