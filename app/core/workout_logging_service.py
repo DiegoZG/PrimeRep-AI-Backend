@@ -106,6 +106,57 @@ def get_last_sets(
     )
 
 
+def get_recent_completed_sets_by_session(
+    db: Session,
+    user_id: str,
+    exercise_id: str,
+    session_limit: int = 2,
+) -> list[tuple[WorkoutSession, list[SetLog]]]:
+    """Completed sessions that include `exercise_id`, newest first, with that exercise's sets.
+
+    Same join/filter as `get_last_sets` — grouped by session so progression can
+    judge a whole outing rather than a handful of individual rows.
+    """
+    session_ids = [
+        row[0]
+        for row in (
+            db.query(WorkoutSession.id)
+            .join(SetLog, SetLog.session_id == WorkoutSession.id)
+            .filter(
+                WorkoutSession.user_id == user_id,
+                WorkoutSession.completed_at.isnot(None),
+                SetLog.exercise_id == exercise_id,
+            )
+            .group_by(WorkoutSession.id)
+            .order_by(
+                func.max(WorkoutSession.workout_date).desc(),
+                func.max(WorkoutSession.completed_at).desc(),
+                WorkoutSession.id.desc(),
+            )
+            .limit(session_limit)
+            .all()
+        )
+    ]
+    if not session_ids:
+        return []
+
+    sessions = {
+        session.id: session
+        for session in db.query(WorkoutSession).filter(WorkoutSession.id.in_(session_ids)).all()
+    }
+    sets = (
+        db.query(SetLog)
+        .filter(SetLog.session_id.in_(session_ids), SetLog.exercise_id == exercise_id)
+        .order_by(SetLog.set_number.asc(), SetLog.logged_at.asc())
+        .all()
+    )
+    sets_by_session: dict[str, list[SetLog]] = {sid: [] for sid in session_ids}
+    for set_log in sets:
+        sets_by_session[set_log.session_id].append(set_log)
+
+    return [(sessions[sid], sets_by_session[sid]) for sid in session_ids if sid in sessions]
+
+
 # ── Stats ─────────────────────────────────────────────────────────────────────
 
 def get_stats(db: Session, user_id: str) -> dict:

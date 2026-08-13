@@ -8,9 +8,11 @@ from typing import Any, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 
+from app.core.progression_service import suggest_weight_kg
 from app.core.workout_service import (
     DAY_TYPE_MUSCLES,
     DAY_TYPE_TITLES,
+    LOWER_MUSCLES,
     MAIN_EXERCISE_TYPES,
     ACCESSORY_EXERCISE_TYPES,
     MAIN_PRESCRIPTION,
@@ -25,7 +27,11 @@ from app.core.workout_service import (
     _exercise_to_schema,
 )
 from app.models.workout_week_plan import WorkoutWeekPlan
-from app.schemas.workout import WorkoutBlockItemOut, WorkoutExerciseBlockOut
+from app.schemas.workout import (
+    WorkoutBlockItemOut,
+    WorkoutExerciseBlockOut,
+    WorkoutPrescriptionOut,
+)
 from app.schemas.workout_week import WorkoutDayOut, WorkoutWeekResponseOut
 
 
@@ -82,6 +88,30 @@ def _get_next_day_type_in_rotation(split_preference: str, previous_day_type: Opt
     return day_types[next_index]
 
 
+def _prescription_with_suggestion(
+    db: Optional[Session],
+    *,
+    user_id: Optional[str],
+    exercise,
+    base: WorkoutPrescriptionOut,
+) -> WorkoutPrescriptionOut:
+    """Copy a static prescription and stamp on a suggested load when history exists."""
+    if not user_id or db is None:
+        return base
+
+    suggestion = suggest_weight_kg(
+        db,
+        user_id=user_id,
+        exercise_id=exercise.id,
+        is_lower_body=exercise.primary_muscle in LOWER_MUSCLES,
+        reps_min=base.reps_min,
+        reps_max=base.reps_max,
+    )
+    if suggestion is None:
+        return base
+    return base.model_copy(update={"suggested_weight_kg": suggestion.weight_kg})
+
+
 def _generate_single_workout(
     *,
     rng: random.Random,
@@ -92,6 +122,8 @@ def _generate_single_workout(
     workout_date: date,
     slot_index: int,
     workout_day_id: Optional[str] = None,
+    db: Optional[Session] = None,
+    user_id: Optional[str] = None,
 ) -> dict[str, Any]:
     """
     Generate a single workout day entry for the plan.
@@ -134,7 +166,9 @@ def _generate_single_workout(
         items=[
             WorkoutBlockItemOut(
                 exercise=_exercise_to_schema(ex),
-                prescription=MAIN_PRESCRIPTION,
+                prescription=_prescription_with_suggestion(
+                    db, user_id=user_id, exercise=ex, base=MAIN_PRESCRIPTION
+                ),
             )
             for ex in main_exercises
         ],
@@ -145,7 +179,9 @@ def _generate_single_workout(
         items=[
             WorkoutBlockItemOut(
                 exercise=_exercise_to_schema(ex),
-                prescription=ACCESSORY_PRESCRIPTION,
+                prescription=_prescription_with_suggestion(
+                    db, user_id=user_id, exercise=ex, base=ACCESSORY_PRESCRIPTION
+                ),
             )
             for ex in accessory_exercises
         ],
@@ -250,6 +286,8 @@ def _generate_week_plan(
             workout_date=workout_date,
             slot_index=slot_index,
             workout_day_id=workout_day_id,
+            db=db,
+            user_id=user_id,
         )
         workouts.append(workout)
 
@@ -429,6 +467,8 @@ def skip_workout_day(
         workout_date=new_date,
         slot_index=new_slot_index,
         workout_day_id=None,  # New ID
+        db=db,
+        user_id=user_id,
     )
 
     workouts.append(new_workout)
