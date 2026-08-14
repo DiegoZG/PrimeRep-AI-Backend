@@ -141,10 +141,12 @@ def get_stats_endpoint(
     - streak: consecutive days with a completed workout (ends today or yesterday)
     - totalCompleted: all-time completed session count
     - prsThisWeek: number of exercises where a new weight PR was set this week
+    - totalVolumeKg: all-time weight x reps across completed sessions
     """
     stats = get_stats(db, user_id=str(current_user.id))
     return StatsOut(
         streak=stats["streak"],
         totalCompleted=stats["total_completed"],
         prsThisWeek=stats["prs_this_week"],
+        totalVolumeKg=stats["total_volume_kg"],
     )

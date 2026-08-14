@@ -88,5 +88,6 @@ class StatsOut(BaseModel):
     streak: int
     total_completed: int = Field(..., alias="totalCompleted")
     prs_this_week: int = Field(..., alias="prsThisWeek")
+    total_volume_kg: float = Field(..., alias="totalVolumeKg")
 
     model_config = ConfigDict(populate_by_name=True)

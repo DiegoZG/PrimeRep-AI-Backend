@@ -25,6 +25,7 @@ class WorkoutPrescriptionOut(BaseModel):
     reps_min: int = Field(..., alias="repsMin")
     reps_max: int = Field(..., alias="repsMax")
     rest_seconds: int = Field(..., alias="restSeconds")
+    suggested_weight_kg: Optional[float] = Field(None, alias="suggestedWeightKg")
 
     model_config = ConfigDict(populate_by_name=True)
 
