@@ -217,3 +217,38 @@ def test_another_users_history_does_not_affect_suggestion():
     suggestion_a = _suggest(user_id_a, BENCH, is_lower_body=False)
     assert suggestion_a is not None
     assert suggestion_a.weight_kg == 100.0 + UPPER_INCREMENT_KG
+
+
+def test_stamped_prescription_keeps_reason_alongside_weight():
+    """The week generator must persist reason, not only the kg figure.
+
+    Increase and hold are both a number; without reason, coach copy and the
+    player tag cannot tell them apart.
+    """
+    from app.core.workout_service import MAIN_PRESCRIPTION
+    from app.core.workout_week_service import _prescription_with_suggestion
+    from app.models.exercise import Exercise
+
+    token, user_id = _signup("stamp")
+    _complete_session(
+        token,
+        exercise_id=BENCH,
+        sets=[(10, 60.0), (10, 60.0), (10, 60.0), (10, 60.0)],
+        workout_date=datetime.date.today(),
+    )
+
+    db = SessionLocal()
+    try:
+        exercise = db.query(Exercise).filter(Exercise.id == BENCH).first()
+        assert exercise is not None
+        stamped = _prescription_with_suggestion(
+            db, user_id=user_id, exercise=exercise, base=MAIN_PRESCRIPTION
+        )
+        dumped = stamped.model_dump(by_alias=True)
+        assert dumped["suggestedWeightKg"] == 60.0 + UPPER_INCREMENT_KG
+        assert dumped["suggestedWeightReason"] == "increase"
+        # Shared singleton prescriptions must not be mutated.
+        assert MAIN_PRESCRIPTION.suggested_weight_kg is None
+        assert MAIN_PRESCRIPTION.suggested_weight_reason is None
+    finally:
+        db.close()

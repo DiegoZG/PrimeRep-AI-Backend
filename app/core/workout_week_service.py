@@ -109,7 +109,12 @@ def _prescription_with_suggestion(
     )
     if suggestion is None:
         return base
-    return base.model_copy(update={"suggested_weight_kg": suggestion.weight_kg})
+    return base.model_copy(
+        update={
+            "suggested_weight_kg": suggestion.weight_kg,
+            "suggested_weight_reason": suggestion.reason,
+        }
+    )
 
 
 def _generate_single_workout(
