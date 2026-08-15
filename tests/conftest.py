@@ -18,6 +18,18 @@ from app.core import coach_service
 
 _CANNED_COACH_RESPONSE = json.dumps(
     {
+        "days": [
+            {
+                "workoutDayId": "__stub__",
+                "workoutIntent": "Stub workout intent from conftest.",
+                "exerciseRationale": {},
+            }
+        ]
+    }
+)
+
+_CANNED_SINGLE_COACH_RESPONSE = json.dumps(
+    {
         "workoutIntent": "Stub workout intent from conftest.",
         "exerciseRationale": {},
     }
@@ -26,15 +38,22 @@ _CANNED_COACH_RESPONSE = json.dumps(
 
 @pytest.fixture(autouse=True)
 def stub_coach_anthropic(monkeypatch):
-    """Replace coach_service._call_anthropic with a deterministic stub.
+    """Replace coach_service._call_anthropic and _is_coach_eligible with stubs.
 
-    Tests that want to exercise the real parsing / fallback logic should
-    monkeypatch coach_service._call_anthropic themselves *after* this fixture
-    runs (fixture-level monkeypatches take precedence in the same scope, but
-    per-test monkeypatches applied inside the test body override this one).
+    - _call_anthropic returns a canned response so no live API calls are made.
+    - _is_coach_eligible always returns True so eligibility gating doesn't
+      silently swallow what individual tests are trying to verify.
+
+    Tests that want to exercise parsing / fallback / eligibility logic should
+    monkeypatch these functions themselves inside the test body (those override
+    this fixture-level stub).
     """
 
     def _fake_call(system: str, user_message: str) -> str:
-        return _CANNED_COACH_RESPONSE
+        # Return week-format or single-day format based on prompt shape
+        if '"days"' in user_message or "days" in user_message.lower():
+            return _CANNED_COACH_RESPONSE
+        return _CANNED_SINGLE_COACH_RESPONSE
 
     monkeypatch.setattr(coach_service, "_call_anthropic", _fake_call)
+    monkeypatch.setattr(coach_service, "_is_coach_eligible", lambda db, user_id: True)

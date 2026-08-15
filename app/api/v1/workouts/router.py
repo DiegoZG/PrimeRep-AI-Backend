@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.security.deps import get_current_user
 from app.core.workout_week_service import (
+    _check_and_increment_force_regen,
     get_or_create_week_plan,
     get_week_start,
     select_next_scheduled_workout,
@@ -44,6 +45,12 @@ def get_week_plan_endpoint(
     The week is Monday-based. If weekStart is not provided, uses current week.
     """
     user_id = str(current_user.id)
+
+    if force:
+        try:
+            _check_and_increment_force_regen(db, user_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=429, detail=str(exc))
 
     # Normalize to Monday if provided date is not a Monday
     if week_start is not None:
@@ -148,6 +155,12 @@ def get_next_workout(
     user_id = str(current_user.id)
     today = date.today()
     week_start = get_week_start(today)
+
+    if force:
+        try:
+            _check_and_increment_force_regen(db, user_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=429, detail=str(exc))
 
     # Get or create this week's plan
     week_plan = get_or_create_week_plan(

@@ -11,8 +11,9 @@ import uuid
 import pytest
 from fastapi.testclient import TestClient
 
+import app.core.workout_week_service as workout_week_service
 from app.core import coach_service
-from app.core.coach_service import CoachContent, generate_coach_content
+from app.core.coach_service import CoachContent, WeekCoachContent, generate_coach_content
 from app.core.database import SessionLocal
 from app.main import app
 
@@ -312,30 +313,41 @@ def test_generate_fallback_on_bad_json(monkeypatch):
 
 def test_next_endpoint_includes_workout_intent(monkeypatch):
     """POST /next must return 200 and include workoutIntent in the response."""
-    monkeypatch.setattr(
-        coach_service,
-        "_call_anthropic",
-        lambda s, u: json.dumps({
-            "workoutIntent": "Integration test intent.",
-            "exerciseRationale": {},
-        }),
-    )
+    _INTENT = "Integration test intent."
+
+    def fake_week_coach(db, *, user_id, days):
+        return WeekCoachContent(days={
+            d["workoutDayId"]: CoachContent(
+                workout_intent=_INTENT,
+                exercise_rationale={},
+            )
+            for d in days
+        })
+
+    monkeypatch.setattr(workout_week_service, "generate_week_coach_content", fake_week_coach)
 
     token, _ = _signup_and_get_token(_unique_email("next_intent"))
     _set_onboarding(token, _EQUIPMENT_PAYLOAD)
 
     data = _next_workout(token)
     assert "workoutIntent" in data
-    assert data["workoutIntent"] == "Integration test intent."
+    assert data["workoutIntent"] == _INTENT
 
 
 def test_next_endpoint_returns_200_when_llm_raises(monkeypatch):
     """If the LLM raises, /next must still return 200 with a template workoutIntent."""
-    monkeypatch.setattr(
-        coach_service,
-        "_call_anthropic",
-        lambda s, u: (_ for _ in ()).throw(RuntimeError("anthropic down")),
-    )
+    def fake_week_coach_raises(db, *, user_id, days):
+        # Simulate what generate_week_coach_content does on LLM failure:
+        # never raises, returns template fallback for every day.
+        return WeekCoachContent(days={
+            d["workoutDayId"]: CoachContent(
+                workout_intent=f"Your {d['title']} workout for today.",
+                exercise_rationale={},
+            )
+            for d in days
+        })
+
+    monkeypatch.setattr(workout_week_service, "generate_week_coach_content", fake_week_coach_raises)
 
     token, _ = _signup_and_get_token(_unique_email("next_llm_fail"))
     _set_onboarding(token, _EQUIPMENT_PAYLOAD)
@@ -350,14 +362,18 @@ def test_next_endpoint_returns_200_when_llm_raises(monkeypatch):
 
 def test_week_endpoint_includes_workout_intent(monkeypatch):
     """GET /week must return workoutIntent on each workout day."""
-    monkeypatch.setattr(
-        coach_service,
-        "_call_anthropic",
-        lambda s, u: json.dumps({
-            "workoutIntent": "Week test intent.",
-            "exerciseRationale": {},
-        }),
-    )
+    _WEEK_INTENT = "Week test intent."
+
+    def fake_week_coach(db, *, user_id, days):
+        return WeekCoachContent(days={
+            d["workoutDayId"]: CoachContent(
+                workout_intent=_WEEK_INTENT,
+                exercise_rationale={},
+            )
+            for d in days
+        })
+
+    monkeypatch.setattr(workout_week_service, "generate_week_coach_content", fake_week_coach)
 
     token, _ = _signup_and_get_token(_unique_email("week_intent"))
     _set_onboarding(token, _EQUIPMENT_PAYLOAD)
@@ -370,4 +386,4 @@ def test_week_endpoint_includes_workout_intent(monkeypatch):
     assert len(workouts) > 0
     for w in workouts:
         assert "workoutIntent" in w
-        assert w["workoutIntent"] == "Week test intent."
+        assert w["workoutIntent"] == _WEEK_INTENT
