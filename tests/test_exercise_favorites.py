@@ -7,6 +7,7 @@ import uuid
 
 from fastapi.testclient import TestClient
 
+import app.api.v1.exercises.router as exercises_router
 from app.main import app
 
 
@@ -92,3 +93,64 @@ def test_unfavorite_exercise_idempotent():
     assert "bench_press" not in ids
 
 
+def test_catalog_and_detail_include_authenticated_favorite_state():
+    token = _signup_and_get_token(_unique_email("contract"))
+    headers = _auth_headers(token)
+
+    response = client.post("/v1/exercises/bench_press/favorite", headers=headers)
+    assert response.status_code == 200
+
+    response = client.get("/v1/exercises", headers=headers)
+    assert response.status_code == 200
+    states = {item["id"]: item["is_favorited"] for item in response.json()["items"]}
+    assert states["bench_press"] is True
+    assert states["incline_dumbbell_press"] is False
+
+    response = client.get("/v1/exercises/bench_press", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["is_favorited"] is True
+
+    other_token = _signup_and_get_token(_unique_email("other_user"))
+    response = client.get(
+        "/v1/exercises/bench_press", headers=_auth_headers(other_token)
+    )
+    assert response.status_code == 200
+    assert response.json()["is_favorited"] is False
+
+
+def test_anonymous_catalog_and_detail_return_false():
+    response = client.get("/v1/exercises")
+    assert response.status_code == 200
+    assert all(item["is_favorited"] is False for item in response.json()["items"])
+
+    response = client.get("/v1/exercises/bench_press")
+    assert response.status_code == 200
+    assert response.json()["is_favorited"] is False
+
+
+def test_invalid_optional_auth_token_is_rejected():
+    headers = _auth_headers("not-a-valid-token")
+
+    assert client.get("/v1/exercises", headers=headers).status_code == 401
+    assert client.get("/v1/exercises/bench_press", headers=headers).status_code == 401
+    assert (
+        client.get("/v1/exercises", headers={"Authorization": "invalid"}).status_code
+        == 401
+    )
+
+
+def test_catalog_uses_one_bulk_favorite_lookup(monkeypatch):
+    token = _signup_and_get_token(_unique_email("bulk_lookup"))
+    calls: list[list[str]] = []
+    original = exercises_router.list_favorite_ids
+
+    def track_bulk_lookup(db, user_id: str, exercise_ids: list[str]) -> set[str]:
+        calls.append(exercise_ids)
+        return original(db, user_id, exercise_ids)
+
+    monkeypatch.setattr(exercises_router, "list_favorite_ids", track_bulk_lookup)
+
+    response = client.get("/v1/exercises", headers=_auth_headers(token))
+    assert response.status_code == 200
+    assert len(calls) == 1
+    assert len(calls[0]) == len(response.json()["items"])
