@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.security.deps import get_current_user
 from app.core.workout_week_service import (
+    _check_and_increment_force_regen,
     get_or_create_week_plan,
     get_week_start,
     select_next_scheduled_workout,
@@ -44,6 +45,12 @@ def get_week_plan_endpoint(
     The week is Monday-based. If weekStart is not provided, uses current week.
     """
     user_id = str(current_user.id)
+
+    if force:
+        try:
+            _check_and_increment_force_regen(db, user_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=429, detail=str(exc))
 
     # Normalize to Monday if provided date is not a Monday
     if week_start is not None:
@@ -149,6 +156,12 @@ def get_next_workout(
     today = date.today()
     week_start = get_week_start(today)
 
+    if force:
+        try:
+            _check_and_increment_force_regen(db, user_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=429, detail=str(exc))
+
     # Get or create this week's plan
     week_plan = get_or_create_week_plan(
         db,
@@ -173,6 +186,7 @@ def get_next_workout(
                 "splitKey": w.split_key,
                 "dayType": w.day_type,
                 "estimatedMinutes": w.estimated_minutes,
+                "workoutIntent": w.workout_intent,
                 "exerciseBlocks": [b.model_dump(by_alias=True) for b in w.exercise_blocks],
             }
             for w in week_plan.workouts
@@ -207,6 +221,7 @@ def get_next_workout(
                     "splitKey": w.split_key,
                     "dayType": w.day_type,
                     "estimatedMinutes": w.estimated_minutes,
+                    "workoutIntent": w.workout_intent,
                     "exerciseBlocks": [b.model_dump(by_alias=True) for b in w.exercise_blocks],
                 }
                 for w in next_week_plan.workouts
@@ -234,5 +249,6 @@ def get_next_workout(
         split_key=next_workout["splitKey"],
         day_type=next_workout["dayType"],
         estimated_minutes=next_workout["estimatedMinutes"],
+        workout_intent=next_workout.get("workoutIntent"),
         exercise_blocks=exercise_blocks,
     )

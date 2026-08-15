@@ -19,6 +19,7 @@ class WorkoutDayOut(BaseModel):
     split_key: str = Field(..., alias="splitKey")
     day_type: str = Field(..., alias="dayType")
     estimated_minutes: int = Field(..., alias="estimatedMinutes")
+    workout_intent: Optional[str] = Field(None, alias="workoutIntent")
     exercise_blocks: list[WorkoutExerciseBlockOut] = Field(..., alias="exerciseBlocks")
 
     model_config = ConfigDict(populate_by_name=True)

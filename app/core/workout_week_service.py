@@ -8,6 +8,7 @@ from typing import Any, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 
+from app.core.coach_service import generate_coach_content, generate_week_coach_content
 from app.core.progression_service import suggest_weight_kg
 from app.core.workout_service import (
     DAY_TYPE_MUSCLES,
@@ -26,6 +27,7 @@ from app.core.workout_service import (
     _pick_exercises,
     _exercise_to_schema,
 )
+from app.models.user import UserDailyForceRegen
 from app.models.workout_week_plan import WorkoutWeekPlan
 from app.schemas.workout import (
     WorkoutBlockItemOut,
@@ -53,6 +55,30 @@ DURATION_EXERCISE_COUNTS = {
 }
 
 DEFAULT_DURATION_MINUTES = 35
+DAILY_FORCE_REGEN_LIMIT = 3
+
+
+def _check_and_increment_force_regen(db: Session, user_id: str) -> None:
+    """Increment today's force-regen counter and raise ValueError if limit exceeded.
+
+    Callers should catch ValueError and return HTTP 429.
+    """
+    today = date.today()
+    row = (
+        db.query(UserDailyForceRegen)
+        .filter_by(user_id=user_id, regen_date=today)
+        .first()
+    )
+    if row and row.count >= DAILY_FORCE_REGEN_LIMIT:
+        raise ValueError(
+            f"Force regeneration limit reached ({DAILY_FORCE_REGEN_LIMIT}/day). "
+            "Try again tomorrow."
+        )
+    if row:
+        row.count += 1
+    else:
+        db.add(UserDailyForceRegen(user_id=user_id, regen_date=today, count=1))
+    db.commit()
 
 
 def _get_exercise_counts(duration_minutes: int) -> tuple[int, int]:
@@ -129,10 +155,13 @@ def _generate_single_workout(
     workout_day_id: Optional[str] = None,
     db: Optional[Session] = None,
     user_id: Optional[str] = None,
-) -> dict[str, Any]:
-    """
-    Generate a single workout day entry for the plan.
-    Returns a dict matching the WorkoutDayOut schema structure.
+) -> tuple[dict[str, Any], list[tuple]]:
+    """Generate a single workout day entry.
+
+    Returns:
+        (workout_dict, all_items) where workout_dict matches WorkoutDayOut
+        schema structure (without coach content) and all_items is a list of
+        (exercise_orm, WorkoutPrescriptionOut) for the batch coach call.
     """
     if workout_day_id is None:
         workout_day_id = str(uuid.uuid4())
@@ -146,7 +175,6 @@ def _generate_single_workout(
     main_count, accessory_count = _get_exercise_counts(duration_minutes)
     selected_ids: set[str] = set()
 
-    # Pick main exercises
     main_exercises = _pick_exercises(
         rng,
         day_pool,
@@ -156,7 +184,6 @@ def _generate_single_workout(
     )
     selected_ids.update(ex.id for ex in main_exercises)
 
-    # Pick accessory exercises
     accessory_exercises = _pick_exercises(
         rng,
         day_pool,
@@ -165,36 +192,33 @@ def _generate_single_workout(
         exclude_ids=selected_ids,
     )
 
-    # Build exercise blocks
+    main_items: list[tuple] = [
+        (ex, _prescription_with_suggestion(db, user_id=user_id, exercise=ex, base=MAIN_PRESCRIPTION))
+        for ex in main_exercises
+    ]
+    accessory_items: list[tuple] = [
+        (ex, _prescription_with_suggestion(db, user_id=user_id, exercise=ex, base=ACCESSORY_PRESCRIPTION))
+        for ex in accessory_exercises
+    ]
+    all_items = main_items + accessory_items
+    title = DAY_TYPE_TITLES.get(day_type, "Workout")
+
     main_block = WorkoutExerciseBlockOut(
         block_type="main",
         items=[
-            WorkoutBlockItemOut(
-                exercise=_exercise_to_schema(ex),
-                prescription=_prescription_with_suggestion(
-                    db, user_id=user_id, exercise=ex, base=MAIN_PRESCRIPTION
-                ),
-            )
-            for ex in main_exercises
+            WorkoutBlockItemOut(exercise=_exercise_to_schema(ex), prescription=pres)
+            for ex, pres in main_items
         ],
     )
-
     accessory_block = WorkoutExerciseBlockOut(
         block_type="accessory",
         items=[
-            WorkoutBlockItemOut(
-                exercise=_exercise_to_schema(ex),
-                prescription=_prescription_with_suggestion(
-                    db, user_id=user_id, exercise=ex, base=ACCESSORY_PRESCRIPTION
-                ),
-            )
-            for ex in accessory_exercises
+            WorkoutBlockItemOut(exercise=_exercise_to_schema(ex), prescription=pres)
+            for ex, pres in accessory_items
         ],
     )
 
-    title = DAY_TYPE_TITLES.get(day_type, "Workout")
-
-    return {
+    workout_dict = {
         "workoutDayId": workout_day_id,
         "slotIndex": slot_index,
         "date": workout_date.isoformat(),
@@ -203,11 +227,23 @@ def _generate_single_workout(
         "splitKey": split_preference,
         "dayType": day_type,
         "estimatedMinutes": duration_minutes,
+        "workoutIntent": None,
         "exerciseBlocks": [
             main_block.model_dump(by_alias=True),
             accessory_block.model_dump(by_alias=True),
         ],
     }
+    return workout_dict, all_items
+
+
+def _stamp_coach_content(workout_dict: dict[str, Any], coach) -> None:
+    """Stamp workoutIntent and exerciseRationale from coach onto a workout dict in-place."""
+    workout_dict["workoutIntent"] = coach.workout_intent
+    for block in workout_dict.get("exerciseBlocks", []):
+        for item in block.get("items", []):
+            ex_id = item.get("exercise", {}).get("id")
+            if ex_id and ex_id in coach.exercise_rationale:
+                item["exerciseRationale"] = coach.exercise_rationale[ex_id]
 
 
 def _generate_week_plan(
@@ -260,6 +296,7 @@ def _generate_week_plan(
     all_eligible = get_eligible_exercises(db, owned_equipment_ids=owned_equipment_ids)
 
     workouts: list[dict[str, Any]] = []
+    coach_days_input: list[dict] = []
     previous_day_type: Optional[str] = None
 
     for slot_index, workout_date in enumerate(template_dates):
@@ -282,7 +319,7 @@ def _generate_week_plan(
         if not force_new_ids and existing_workout_day_ids and slot_index in existing_workout_day_ids:
             workout_day_id = existing_workout_day_ids[slot_index]
 
-        workout = _generate_single_workout(
+        workout_dict, all_items = _generate_single_workout(
             rng=rng,
             all_eligible=all_eligible,
             day_type=day_type,
@@ -294,7 +331,20 @@ def _generate_week_plan(
             db=db,
             user_id=user_id,
         )
-        workouts.append(workout)
+        workouts.append(workout_dict)
+        coach_days_input.append({
+            "workoutDayId": workout_dict["workoutDayId"],
+            "day_type": day_type,
+            "title": workout_dict["title"],
+            "exercise_items": all_items,
+        })
+
+    # One batched Anthropic call for the whole week (never raises)
+    week_coach = generate_week_coach_content(db, user_id=user_id, days=coach_days_input)
+    for w in workouts:
+        day_coach = week_coach.days.get(w["workoutDayId"])
+        if day_coach:
+            _stamp_coach_content(w, day_coach)
 
     return {
         "weekStart": week_start.isoformat(),
@@ -463,7 +513,7 @@ def skip_workout_day(
     rng = random.Random(f"{user_id}:{week_start.isoformat()}:{uuid.uuid4()}")
     all_eligible = get_eligible_exercises(db, owned_equipment_ids=owned_equipment_ids)
 
-    new_workout = _generate_single_workout(
+    new_workout, new_items = _generate_single_workout(
         rng=rng,
         all_eligible=all_eligible,
         day_type=new_day_type,
@@ -471,10 +521,21 @@ def skip_workout_day(
         duration_minutes=DEFAULT_DURATION_MINUTES,
         workout_date=new_date,
         slot_index=new_slot_index,
-        workout_day_id=None,  # New ID
+        workout_day_id=None,
         db=db,
         user_id=user_id,
     )
+
+    # Single-day coach call for the replacement workout
+    new_title = DAY_TYPE_TITLES.get(new_day_type, "Workout")
+    coach = generate_coach_content(
+        db,
+        user_id=user_id,
+        day_type=new_day_type,
+        title=new_title,
+        exercise_items=new_items,
+    )
+    _stamp_coach_content(new_workout, coach)
 
     workouts.append(new_workout)
 
@@ -527,6 +588,21 @@ def update_workout_duration(
     if not found:
         return None
 
+    # Snapshot existing coach content by workoutDayId before regeneration
+    old_coach: dict[str, dict] = {
+        w["workoutDayId"]: {
+            "workoutIntent": w.get("workoutIntent"),
+            "exerciseRationale": {
+                item["exercise"]["id"]: item.get("exerciseRationale")
+                for block in w.get("exerciseBlocks", [])
+                for item in block.get("items", [])
+                if item.get("exercise", {}).get("id")
+            },
+        }
+        for w in workouts
+        if w.get("workoutDayId")
+    }
+
     # Extract durations and IDs by slotIndex
     existing_durations: dict[int, int] = {}
     existing_workout_day_ids: dict[int, str] = {}
@@ -554,6 +630,18 @@ def update_workout_duration(
         force_new_ids=False,
         anchor_date=date.today(),
     )
+
+    # Restore cached coach content for unchanged workoutDayIds
+    for w in new_plan_json.get("workouts", []):
+        cached = old_coach.get(w.get("workoutDayId", ""))
+        if cached and cached.get("workoutIntent"):
+            w["workoutIntent"] = cached["workoutIntent"]
+            for block in w.get("exerciseBlocks", []):
+                for item in block.get("items", []):
+                    ex_id = item.get("exercise", {}).get("id")
+                    stored = cached["exerciseRationale"].get(ex_id) if ex_id else None
+                    if stored:
+                        item["exerciseRationale"] = stored
 
     plan.plan_json = new_plan_json
     flag_modified(plan, "plan_json")
@@ -630,6 +718,7 @@ def _plan_json_to_response(plan_json: dict[str, Any]) -> WorkoutWeekResponseOut:
             split_key=w["splitKey"],
             day_type=w["dayType"],
             estimated_minutes=w["estimatedMinutes"],
+            workout_intent=w.get("workoutIntent"),
             exercise_blocks=exercise_blocks,
         )
         workouts.append(workout)

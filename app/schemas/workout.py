@@ -37,6 +37,7 @@ class WorkoutBlockItemOut(BaseModel):
 
     exercise: WorkoutExerciseOut
     prescription: WorkoutPrescriptionOut
+    exercise_rationale: Optional[str] = Field(None, alias="exerciseRationale")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -58,6 +59,7 @@ class WorkoutNextResponseOut(BaseModel):
     split_key: str = Field(..., alias="splitKey")
     day_type: str = Field(..., alias="dayType")
     estimated_minutes: int = Field(..., alias="estimatedMinutes")
+    workout_intent: Optional[str] = Field(None, alias="workoutIntent")
     exercise_blocks: list[WorkoutExerciseBlockOut] = Field(..., alias="exerciseBlocks")
 
     model_config = ConfigDict(populate_by_name=True)
