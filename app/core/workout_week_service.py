@@ -8,6 +8,7 @@ from typing import Any, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 
+from app.core.coach_service import generate_coach_content
 from app.core.progression_service import suggest_weight_kg
 from app.core.workout_service import (
     DAY_TYPE_MUSCLES,
@@ -165,34 +166,50 @@ def _generate_single_workout(
         exclude_ids=selected_ids,
     )
 
-    # Build exercise blocks
+    # Build exercise blocks (collect items for coach content generation)
+    main_items: list[tuple] = []
+    for ex in main_exercises:
+        prescription = _prescription_with_suggestion(
+            db, user_id=user_id, exercise=ex, base=MAIN_PRESCRIPTION
+        )
+        main_items.append((ex, prescription))
+
+    accessory_items: list[tuple] = []
+    for ex in accessory_exercises:
+        prescription = _prescription_with_suggestion(
+            db, user_id=user_id, exercise=ex, base=ACCESSORY_PRESCRIPTION
+        )
+        accessory_items.append((ex, prescription))
+
+    all_items = main_items + accessory_items
+    title = DAY_TYPE_TITLES.get(day_type, "Workout")
+
+    # Generate coach content (never raises; falls back to template on failure)
+    coach = generate_coach_content(
+        db,
+        user_id=user_id,
+        day_type=day_type,
+        title=title,
+        exercise_items=all_items,
+    )
+
+    def _make_item(ex, prescription) -> WorkoutBlockItemOut:
+        rationale = coach.exercise_rationale.get(ex.id)
+        return WorkoutBlockItemOut(
+            exercise=_exercise_to_schema(ex),
+            prescription=prescription,
+            exercise_rationale=rationale,
+        )
+
     main_block = WorkoutExerciseBlockOut(
         block_type="main",
-        items=[
-            WorkoutBlockItemOut(
-                exercise=_exercise_to_schema(ex),
-                prescription=_prescription_with_suggestion(
-                    db, user_id=user_id, exercise=ex, base=MAIN_PRESCRIPTION
-                ),
-            )
-            for ex in main_exercises
-        ],
+        items=[_make_item(ex, pres) for ex, pres in main_items],
     )
 
     accessory_block = WorkoutExerciseBlockOut(
         block_type="accessory",
-        items=[
-            WorkoutBlockItemOut(
-                exercise=_exercise_to_schema(ex),
-                prescription=_prescription_with_suggestion(
-                    db, user_id=user_id, exercise=ex, base=ACCESSORY_PRESCRIPTION
-                ),
-            )
-            for ex in accessory_exercises
-        ],
+        items=[_make_item(ex, pres) for ex, pres in accessory_items],
     )
-
-    title = DAY_TYPE_TITLES.get(day_type, "Workout")
 
     return {
         "workoutDayId": workout_day_id,
@@ -203,6 +220,7 @@ def _generate_single_workout(
         "splitKey": split_preference,
         "dayType": day_type,
         "estimatedMinutes": duration_minutes,
+        "workoutIntent": coach.workout_intent,
         "exerciseBlocks": [
             main_block.model_dump(by_alias=True),
             accessory_block.model_dump(by_alias=True),
@@ -630,6 +648,7 @@ def _plan_json_to_response(plan_json: dict[str, Any]) -> WorkoutWeekResponseOut:
             split_key=w["splitKey"],
             day_type=w["dayType"],
             estimated_minutes=w["estimatedMinutes"],
+            workout_intent=w.get("workoutIntent"),
             exercise_blocks=exercise_blocks,
         )
         workouts.append(workout)

@@ -173,6 +173,7 @@ def get_next_workout(
                 "splitKey": w.split_key,
                 "dayType": w.day_type,
                 "estimatedMinutes": w.estimated_minutes,
+                "workoutIntent": w.workout_intent,
                 "exerciseBlocks": [b.model_dump(by_alias=True) for b in w.exercise_blocks],
             }
             for w in week_plan.workouts
@@ -207,6 +208,7 @@ def get_next_workout(
                     "splitKey": w.split_key,
                     "dayType": w.day_type,
                     "estimatedMinutes": w.estimated_minutes,
+                    "workoutIntent": w.workout_intent,
                     "exerciseBlocks": [b.model_dump(by_alias=True) for b in w.exercise_blocks],
                 }
                 for w in next_week_plan.workouts
@@ -234,5 +236,6 @@ def get_next_workout(
         split_key=next_workout["splitKey"],
         day_type=next_workout["dayType"],
         estimated_minutes=next_workout["estimatedMinutes"],
+        workout_intent=next_workout.get("workoutIntent"),
         exercise_blocks=exercise_blocks,
     )
