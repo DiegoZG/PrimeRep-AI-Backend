@@ -387,3 +387,64 @@ def test_week_endpoint_includes_workout_intent(monkeypatch):
     for w in workouts:
         assert "workoutIntent" in w
         assert w["workoutIntent"] == _WEEK_INTENT
+
+
+# ── Integration: duration change avoids batched week coach call ────────────────
+
+
+def test_duration_change_uses_single_day_coach_not_week_batch(monkeypatch):
+    """Duration updates must not call generate_week_coach_content; only the changed day."""
+    week_calls: list[int] = []
+    day_calls: list[str] = []
+
+    def track_week_coach(db, *, user_id, days):
+        week_calls.append(len(days))
+        return WeekCoachContent(days={
+            d["workoutDayId"]: CoachContent(
+                workout_intent="Week batch should not run.",
+                exercise_rationale={},
+            )
+            for d in days
+        })
+
+    def track_day_coach(db, *, user_id, day_type, title, exercise_items):
+        day_calls.append(day_type)
+        return CoachContent(
+            workout_intent=f"Single-day coach for {title}.",
+            exercise_rationale={},
+        )
+
+    monkeypatch.setattr(workout_week_service, "generate_week_coach_content", track_week_coach)
+    monkeypatch.setattr(workout_week_service, "generate_coach_content", track_day_coach)
+
+    token, _ = _signup_and_get_token(_unique_email("duration_coach"))
+    _set_onboarding(token, {**_EQUIPMENT_PAYLOAD, "days_per_week": 3})
+
+    week_resp = client.get("/v1/workouts/week", headers=_auth(token))
+    assert week_resp.status_code == 200
+    initial = week_resp.json()
+    changed = initial["workouts"][0]
+    workout_id = changed["workoutDayId"]
+    unchanged = initial["workouts"][1]
+    unchanged_intent = unchanged.get("workoutIntent")
+
+    week_calls.clear()
+    day_calls.clear()
+
+    duration_resp = client.patch(
+        "/v1/workouts/week/duration",
+        json={"workoutDayId": workout_id, "durationMinutes": 60},
+        headers=_auth(token),
+    )
+    assert duration_resp.status_code == 200
+    updated = duration_resp.json()
+
+    assert week_calls == [], "duration change must not trigger batched week coach call"
+    assert len(day_calls) == 1, "duration change should coach only the changed day"
+
+    updated_changed = next(w for w in updated["workouts"] if w["workoutDayId"] == workout_id)
+    updated_unchanged = next(w for w in updated["workouts"] if w["workoutDayId"] == unchanged["workoutDayId"])
+
+    assert updated_changed["workoutIntent"] == f"Single-day coach for {updated_changed['title']}."
+    if unchanged_intent:
+        assert updated_unchanged["workoutIntent"] == unchanged_intent

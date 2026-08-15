@@ -258,7 +258,8 @@ def _generate_week_plan(
     existing_workout_day_ids: Optional[dict[int, str]] = None,
     force_new_ids: bool = False,
     anchor_date: Optional[date] = None,
-) -> dict[str, Any]:
+    skip_week_coach: bool = False,
+) -> tuple[dict[str, Any], dict[str, list[tuple]]]:
     """
     Generate a complete week plan.
 
@@ -267,6 +268,11 @@ def _generate_week_plan(
         existing_workout_day_ids: Dict of slotIndex -> workoutDayId to preserve (ignored if force_new_ids)
         force_new_ids: If True, generate new workoutDayIds for all entries
         anchor_date: If provided, the first workout on/after this date starts the rotation
+        skip_week_coach: If True, skip the batched week coach call (caller handles coaching)
+
+    Returns:
+        (plan_json, coach_items_by_workout_id) where coach_items_by_workout_id maps
+        workoutDayId -> exercise_items tuples for single-day coach calls.
     """
     capped_days = max(2, min(5, days_per_week))
     template_dates = _get_template_dates(week_start, capped_days)
@@ -297,6 +303,7 @@ def _generate_week_plan(
 
     workouts: list[dict[str, Any]] = []
     coach_days_input: list[dict] = []
+    coach_items_by_id: dict[str, list[tuple]] = {}
     previous_day_type: Optional[str] = None
 
     for slot_index, workout_date in enumerate(template_dates):
@@ -332,6 +339,7 @@ def _generate_week_plan(
             user_id=user_id,
         )
         workouts.append(workout_dict)
+        coach_items_by_id[workout_dict["workoutDayId"]] = all_items
         coach_days_input.append({
             "workoutDayId": workout_dict["workoutDayId"],
             "day_type": day_type,
@@ -339,20 +347,22 @@ def _generate_week_plan(
             "exercise_items": all_items,
         })
 
-    # One batched Anthropic call for the whole week (never raises)
-    week_coach = generate_week_coach_content(db, user_id=user_id, days=coach_days_input)
-    for w in workouts:
-        day_coach = week_coach.days.get(w["workoutDayId"])
-        if day_coach:
-            _stamp_coach_content(w, day_coach)
+    if not skip_week_coach:
+        # One batched Anthropic call for the whole week (never raises)
+        week_coach = generate_week_coach_content(db, user_id=user_id, days=coach_days_input)
+        for w in workouts:
+            day_coach = week_coach.days.get(w["workoutDayId"])
+            if day_coach:
+                _stamp_coach_content(w, day_coach)
 
-    return {
+    plan_json = {
         "weekStart": week_start.isoformat(),
         "daysPerWeek": capped_days,
         "generatedAt": datetime.utcnow().isoformat() + "Z",
         "seed": seed_str,
         "workouts": workouts,
     }
+    return plan_json, coach_items_by_id
 
 
 def get_week_plan(
@@ -413,7 +423,7 @@ def get_or_create_week_plan(
             existing_durations[slot_idx] = w.get("durationMinutes", DEFAULT_DURATION_MINUTES)
 
     # Generate new plan
-    plan_json = _generate_week_plan(
+    plan_json, _ = _generate_week_plan(
         db,
         user_id=user_id,
         week_start=week_start,
@@ -617,8 +627,8 @@ def update_workout_duration(
     days_per_week = settings.get("days_per_week", DEFAULT_DAYS_PER_WEEK)
     owned_equipment_ids = _get_owned_equipment_ids_from_settings(db, settings)
 
-    # Regenerate week with preserved IDs and durations
-    new_plan_json = _generate_week_plan(
+    # Regenerate week with preserved IDs and durations (no batched coach call)
+    new_plan_json, coach_items_by_id = _generate_week_plan(
         db,
         user_id=user_id,
         week_start=week_start,
@@ -629,11 +639,15 @@ def update_workout_duration(
         existing_workout_day_ids=existing_workout_day_ids,
         force_new_ids=False,
         anchor_date=date.today(),
+        skip_week_coach=True,
     )
 
-    # Restore cached coach content for unchanged workoutDayIds
+    # Restore cached coach content for unchanged days only
     for w in new_plan_json.get("workouts", []):
-        cached = old_coach.get(w.get("workoutDayId", ""))
+        day_id = w.get("workoutDayId")
+        if day_id == workout_day_id:
+            continue
+        cached = old_coach.get(day_id or "")
         if cached and cached.get("workoutIntent"):
             w["workoutIntent"] = cached["workoutIntent"]
             for block in w.get("exerciseBlocks", []):
@@ -642,6 +656,21 @@ def update_workout_duration(
                     stored = cached["exerciseRationale"].get(ex_id) if ex_id else None
                     if stored:
                         item["exerciseRationale"] = stored
+
+    # Single-day coach call for the duration-changed workout only
+    changed_workout = next(
+        (w for w in new_plan_json.get("workouts", []) if w.get("workoutDayId") == workout_day_id),
+        None,
+    )
+    if changed_workout:
+        coach = generate_coach_content(
+            db,
+            user_id=user_id,
+            day_type=changed_workout["dayType"],
+            title=changed_workout["title"],
+            exercise_items=coach_items_by_id.get(workout_day_id, []),
+        )
+        _stamp_coach_content(changed_workout, coach)
 
     plan.plan_json = new_plan_json
     flag_modified(plan, "plan_json")
