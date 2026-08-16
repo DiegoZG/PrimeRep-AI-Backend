@@ -10,8 +10,13 @@ from app.core.exercise_qa_service import (
     ask_question,
     list_questions,
 )
-from app.core.exercise_service import get_exercise, list_exercises
-from app.core.security.deps import get_current_user
+from app.core.exercise_service import (
+    get_exercise,
+    is_favorited,
+    list_exercises,
+    list_favorite_ids,
+)
+from app.core.security.deps import get_current_user, get_current_user_optional
 from app.core.workout_logging_service import get_last_sets
 from app.models.user import User
 from app.schemas.exercise import (
@@ -37,6 +42,7 @@ def list_exercises_endpoint(
     limit: int = 100,
     offset: int = 0,
     db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_current_user_optional),
 ):
     exercises = list_exercises(
         db,
@@ -47,6 +53,15 @@ def list_exercises_endpoint(
         only_active=True,
         limit=limit,
         offset=offset,
+    )
+    favorite_ids = (
+        list_favorite_ids(
+            db,
+            user_id=str(current_user.id),
+            exercise_ids=[exercise.id for exercise in exercises],
+        )
+        if current_user
+        else set()
     )
 
     items: list[ExerciseOut] = []
@@ -61,7 +76,7 @@ def list_exercises_endpoint(
             "demo_video_url": exercise.demo_video_url,
             "image_url": exercise.image_url,
             "is_active": exercise.is_active,
-            "is_favorited": False,
+            "is_favorited": exercise.id in favorite_ids,
         }
         items.append(ExerciseOut.model_validate(exercise_dict))
 
@@ -131,6 +146,7 @@ def get_exercise_question_history_endpoint(
 def get_exercise_endpoint(
     exercise_id: str,
     db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_current_user_optional),
 ):
     exercise = get_exercise(db, exercise_id)
     if not exercise:
@@ -146,12 +162,14 @@ def get_exercise_endpoint(
         "demo_video_url": exercise.demo_video_url,
         "image_url": exercise.image_url,
         "is_active": exercise.is_active,
-        "is_favorited": False,
+        "is_favorited": bool(
+            current_user
+            and is_favorited(db, user_id=str(current_user.id), exercise_id=exercise_id)
+        ),
         "how_to": exercise.how_to,
         "why_it_works": exercise.why_it_works,
         "common_mistakes": exercise.common_mistakes,
         "beginner_notes": exercise.beginner_notes,
     }
     return ExerciseDetailOut.model_validate(exercise_dict)
-
 

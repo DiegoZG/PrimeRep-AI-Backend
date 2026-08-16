@@ -84,6 +84,23 @@ def is_favorited(db: Session, user_id: str, exercise_id: str) -> bool:
     return row is not None
 
 
+def list_favorite_ids(
+    db: Session, user_id: str, exercise_ids: list[str]
+) -> set[str]:
+    if not exercise_ids:
+        return set()
+
+    rows = (
+        db.query(user_exercise_favorites.c.exercise_id)
+        .filter(
+            user_exercise_favorites.c.user_id == user_id,
+            user_exercise_favorites.c.exercise_id.in_(exercise_ids),
+        )
+        .all()
+    )
+    return {row.exercise_id for row in rows}
+
+
 def favorite_exercise(db: Session, user_id: str, exercise_id: str) -> None:
     stmt = (
         pg_insert(user_exercise_favorites)
@@ -124,5 +141,4 @@ def list_favorites(db: Session, user_id: str) -> list[Exercise]:
         )
     )
     return query.all()
-
 
