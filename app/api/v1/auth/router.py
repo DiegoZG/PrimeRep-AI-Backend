@@ -8,6 +8,8 @@ from app.core.user_service import get_user_by_email, create_user, get_user_by_id
 from app.core.security.passwords import hash_password, verify_password
 from app.core.security.jwt import create_access_token, create_refresh_token, decode_refresh_token
 from app.core.onboarding_service import upsert_onboarding
+from app.core.equipment_weights_service import upsert_equipment_weights
+from app.schemas.equipment_weights import EquipmentWeightsPayload
 from app.schemas.auth import SignUpRequest, LoginRequest, TokenResponse, RefreshRequest, RefreshResponse
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -22,20 +24,42 @@ def signup(payload: SignUpRequest, db: Session = Depends(get_db)):
             detail="Email already in use",
         )
 
-    user = create_user(
-        db,
-        email=payload.email,
-        preferred_name=payload.preferred_name,
-        last_name=payload.last_name,
-        password_hash=hash_password(payload.password),
-    )
+    try:
+        user = create_user(
+            db,
+            email=payload.email,
+            preferred_name=payload.preferred_name,
+            last_name=payload.last_name,
+            password_hash=hash_password(payload.password),
+            commit=False,
+        )
 
-    if payload.onboarding is not None:
-        upsert_onboarding(db, str(user.id), payload.onboarding)
-        user.has_completed_onboarding = True
-        db.add(user)
+        if payload.onboarding is not None:
+            upsert_onboarding(
+                db, str(user.id), payload.onboarding, commit=False
+            )
+            if (
+                "dumbbellWeights" in payload.onboarding
+                or "plateWeights" in payload.onboarding
+            ):
+                weights = EquipmentWeightsPayload(
+                    dumbbell_weights=payload.onboarding.get("dumbbellWeights", []),
+                    plate_weights=payload.onboarding.get("plateWeights", []),
+                )
+                upsert_equipment_weights(
+                    db,
+                    str(user.id),
+                    weights.dumbbell_weights,
+                    weights.plate_weights,
+                    commit=False,
+                )
+            user.has_completed_onboarding = True
+            db.add(user)
         db.commit()
         db.refresh(user)
+    except Exception:
+        db.rollback()
+        raise
 
     access_token = create_access_token(subject=user.id)
     refresh_token = create_refresh_token(subject=user.id)

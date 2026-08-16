@@ -2,9 +2,17 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.equipment_weights_service import (
+    get_equipment_weight_arrays,
+    upsert_equipment_weights,
+)
 from app.core.security.deps import get_current_user
 from app.models.user import User
 from app.schemas.user import UserPreferencesRequest, UserResponse
+from app.schemas.equipment_weights import (
+    EquipmentWeightsPayload,
+    EquipmentWeightsResponse,
+)
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -14,6 +22,38 @@ def read_me(
     current_user: User = Depends(get_current_user),
 ):
     return current_user
+
+
+@router.get("/me/equipment-weights", response_model=EquipmentWeightsResponse)
+def read_equipment_weights(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    dumbbell_weights, plate_weights = get_equipment_weight_arrays(
+        db, str(current_user.id)
+    )
+    return EquipmentWeightsResponse(
+        dumbbell_weights=dumbbell_weights,
+        plate_weights=plate_weights,
+    )
+
+
+@router.put("/me/equipment-weights", response_model=EquipmentWeightsResponse)
+def replace_equipment_weights(
+    body: EquipmentWeightsPayload,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    weights = upsert_equipment_weights(
+        db,
+        str(current_user.id),
+        body.dumbbell_weights,
+        body.plate_weights,
+    )
+    return EquipmentWeightsResponse(
+        dumbbell_weights=weights.dumbbell_weights,
+        plate_weights=weights.plate_weights,
+    )
 
 
 @router.patch("/me/preferences", response_model=UserResponse)
@@ -32,4 +72,3 @@ def update_preferences(
     db.commit()
     db.refresh(current_user)
     return current_user
-

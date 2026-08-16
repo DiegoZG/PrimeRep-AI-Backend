@@ -7,3 +7,4 @@ from app.models.workout_day_history import WorkoutDayHistory  # noqa: F401
 from app.models.workout_week_plan import WorkoutWeekPlan  # noqa: F401
 from app.models.workout_session import WorkoutSession  # noqa: F401
 from app.models.set_log import SetLog  # noqa: F401
+from app.models.user_equipment_weights import UserEquipmentWeights  # noqa: F401
