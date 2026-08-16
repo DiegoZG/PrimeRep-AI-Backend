@@ -18,6 +18,7 @@ def create_user(
     preferred_name: str,
     last_name: Optional[str],
     password_hash: str,
+    commit: bool = True,
 ) -> User:
     user = User(
         email=email,
@@ -26,6 +27,9 @@ def create_user(
         password_hash=password_hash,
     )
     db.add(user)
-    db.commit()
-    db.refresh(user)
+    if commit:
+        db.commit()
+        db.refresh(user)
+    else:
+        db.flush()
     return user

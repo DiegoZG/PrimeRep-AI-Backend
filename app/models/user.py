@@ -34,6 +34,12 @@ class User(Base):
         uselist=False,
         back_populates="user",
     )
+    equipment_weights = relationship(
+        "UserEquipmentWeights",
+        uselist=False,
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
 
 
 class UserDailyForceRegen(Base):
