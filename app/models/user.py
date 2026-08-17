@@ -42,6 +42,12 @@ class User(Base):
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
+    push_tokens = relationship(
+        "PushToken",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
 
 class UserDailyForceRegen(Base):

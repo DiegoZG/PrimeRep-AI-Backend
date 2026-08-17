@@ -8,11 +8,17 @@ from app.core.equipment_weights_service import (
 )
 from app.core.security.deps import get_current_user
 from app.core.user_service import delete_user
+from app.core.push_token_service import register_push_token, unregister_push_token
 from app.models.user import User
 from app.schemas.user import UserPreferencesRequest, UserResponse
 from app.schemas.equipment_weights import (
     EquipmentWeightsPayload,
     EquipmentWeightsResponse,
+)
+from app.schemas.push_token import (
+    PushTokenDeletePayload,
+    PushTokenPayload,
+    PushTokenResponse,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -82,3 +88,28 @@ def update_preferences(
     db.commit()
     db.refresh(current_user)
     return current_user
+
+
+@router.post("/me/push-token", response_model=PushTokenResponse)
+def upsert_push_token(
+    body: PushTokenPayload,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    push_token = register_push_token(
+        db,
+        user_id=str(current_user.id),
+        token=body.token,
+        platform=body.platform,
+    )
+    return PushTokenResponse(token=push_token.token, platform=push_token.platform)
+
+
+@router.delete("/me/push-token", status_code=status.HTTP_204_NO_CONTENT)
+def delete_push_token(
+    body: PushTokenDeletePayload,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    unregister_push_token(db, user_id=str(current_user.id), token=body.token)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
