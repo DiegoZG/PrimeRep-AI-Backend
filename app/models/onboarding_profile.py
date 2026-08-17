@@ -10,7 +10,12 @@ from app.core.database import Base
 class OnboardingProfile(Base):
     __tablename__ = "onboarding_profiles"
 
-    user_id = Column(String, ForeignKey("users.id"), primary_key=True, nullable=False)
+    user_id = Column(
+        String,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True,
+        nullable=False,
+    )
     data = Column(JSONB, nullable=False)
 
     created_at = Column(
@@ -26,4 +31,3 @@ class OnboardingProfile(Base):
     )
 
     user = relationship("User", back_populates="onboarding_profile")
-

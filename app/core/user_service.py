@@ -11,6 +11,15 @@ def get_user_by_id(db: Session, user_id: str) -> Optional[User]:
     return db.query(User).filter(User.id == user_id).first()
 
 
+def delete_user(db: Session, user: User) -> None:
+    try:
+        db.delete(user)
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+
+
 def create_user(
     db: Session,
     *,

@@ -33,12 +33,14 @@ class User(Base):
         "OnboardingProfile",
         uselist=False,
         back_populates="user",
+        passive_deletes="all",
     )
     equipment_weights = relationship(
         "UserEquipmentWeights",
         uselist=False,
         back_populates="user",
         cascade="all, delete-orphan",
+        passive_deletes=True,
     )
 
 

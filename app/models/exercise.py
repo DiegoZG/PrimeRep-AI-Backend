@@ -78,7 +78,11 @@ class Exercise(Base):
     beginner_notes = Column(Text, nullable=True)
     is_active = Column(Boolean, nullable=False, server_default=text("true"))
     source = Column(String, nullable=False, server_default=text("'seed'"))
-    owner_user_id = Column(String, ForeignKey("users.id"), nullable=True)
+    owner_user_id = Column(
+        String,
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+    )
     sort_order = Column(Integer, nullable=False, server_default=text("0"))
     created_at = Column(
         DateTime(timezone=True),
@@ -98,4 +102,3 @@ class Exercise(Base):
         lazy="selectin",
     )
     owner = relationship("User", foreign_keys=[owner_user_id])
-
