@@ -8,3 +8,4 @@ from app.models.workout_week_plan import WorkoutWeekPlan  # noqa: F401
 from app.models.workout_session import WorkoutSession  # noqa: F401
 from app.models.set_log import SetLog  # noqa: F401
 from app.models.user_equipment_weights import UserEquipmentWeights  # noqa: F401
+from app.models.push_token import PushToken  # noqa: F401
