@@ -14,6 +14,7 @@ import json
 import pytest
 
 from app.core import coach_service
+from app.core.rate_limit import reset_rate_limits
 
 
 _CANNED_COACH_RESPONSE = json.dumps(
@@ -57,3 +58,4 @@ def stub_coach_anthropic(monkeypatch):
 
     monkeypatch.setattr(coach_service, "_call_anthropic", _fake_call)
     monkeypatch.setattr(coach_service, "_is_coach_eligible", lambda db, user_id: True)
+    reset_rate_limits()

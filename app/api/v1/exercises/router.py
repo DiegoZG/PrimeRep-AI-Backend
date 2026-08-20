@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -19,6 +19,7 @@ from app.core.exercise_service import (
 from app.core.security.deps import get_current_user, get_current_user_optional
 from app.core.workout_logging_service import get_last_sets
 from app.models.user import User
+from app.core.rate_limit import user_limiter
 from app.schemas.exercise import (
     AskQuestionOut,
     AskQuestionRequest,
@@ -103,7 +104,9 @@ def get_last_sets_endpoint(
 
 
 @router.post("/{exercise_id}/ask", response_model=AskQuestionOut)
+@user_limiter.limit("5/minute")
 def ask_exercise_question_endpoint(
+    request: Request,
     exercise_id: str,
     payload: AskQuestionRequest,
     db: Session = Depends(get_db),
@@ -172,4 +175,3 @@ def get_exercise_endpoint(
         "beginner_notes": exercise.beginner_notes,
     }
     return ExerciseDetailOut.model_validate(exercise_dict)
-
