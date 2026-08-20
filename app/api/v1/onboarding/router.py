@@ -30,7 +30,9 @@ def save_my_onboarding(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    profile = upsert_onboarding(db, str(current_user.id), payload.data)
+    profile = upsert_onboarding(
+        db, str(current_user.id), payload.data.model_dump(exclude_unset=True)
+    )
 
     if payload.is_complete and not current_user.has_completed_onboarding:
         current_user.has_completed_onboarding = True
@@ -39,4 +41,3 @@ def save_my_onboarding(
 
     db.refresh(profile)
     return profile
-

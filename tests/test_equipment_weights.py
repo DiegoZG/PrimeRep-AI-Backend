@@ -5,6 +5,9 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.core.equipment_weights_service import _sanitize_legacy_weights
+from app.core.database import SessionLocal
+from app.core.onboarding_service import upsert_onboarding
+from app.core.security.jwt import decode_access_token
 from app.main import app
 
 
@@ -174,7 +177,7 @@ def test_legacy_onboarding_weights_are_used_until_first_write():
 def test_invalid_legacy_onboarding_weight_arrays_are_ignored():
     token = _signup("legacy_invalid")
     headers = _auth(token)
-    onboarding = client.post(
+    malformed_post = client.post(
         "/v1/onboarding/me",
         headers=headers,
         json={
@@ -185,7 +188,17 @@ def test_invalid_legacy_onboarding_weight_arrays_are_ignored():
             "is_complete": True,
         },
     )
-    assert onboarding.status_code == 200
+    assert malformed_post.status_code == 422
+
+    db = SessionLocal()
+    try:
+        upsert_onboarding(
+            db,
+            decode_access_token(token)["sub"],
+            {"dumbbellWeights": [5, True, None], "plateWeights": "45"},
+        )
+    finally:
+        db.close()
 
     response = client.get("/v1/users/me/equipment-weights", headers=headers)
 
