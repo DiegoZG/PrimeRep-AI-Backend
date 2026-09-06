@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from datetime import datetime, timezone
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
 
 from jose import JWTError
@@ -11,12 +12,15 @@ from app.core.onboarding_service import upsert_onboarding
 from app.core.equipment_weights_service import upsert_equipment_weights
 from app.schemas.equipment_weights import EquipmentWeightsPayload
 from app.schemas.auth import SignUpRequest, LoginRequest, TokenResponse, RefreshRequest, RefreshResponse
+from app.core.refresh_token_service import revoke_refresh_token
+from app.core.rate_limit import limiter
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/signup", response_model=TokenResponse, status_code=201)
-def signup(payload: SignUpRequest, db: Session = Depends(get_db)):
+@limiter.limit("3/minute")
+def signup(request: Request, payload: SignUpRequest, db: Session = Depends(get_db)):
     existing = get_user_by_email(db, payload.email)
     if existing:
         raise HTTPException(
@@ -36,15 +40,15 @@ def signup(payload: SignUpRequest, db: Session = Depends(get_db)):
 
         if payload.onboarding is not None:
             upsert_onboarding(
-                db, str(user.id), payload.onboarding, commit=False
+                db, str(user.id), payload.onboarding.model_dump(exclude_unset=True), commit=False
             )
             if (
-                "dumbbellWeights" in payload.onboarding
-                or "plateWeights" in payload.onboarding
+                payload.onboarding.dumbbellWeights is not None
+                or payload.onboarding.plateWeights is not None
             ):
                 weights = EquipmentWeightsPayload(
-                    dumbbell_weights=payload.onboarding.get("dumbbellWeights", []),
-                    plate_weights=payload.onboarding.get("plateWeights", []),
+                    dumbbell_weights=payload.onboarding.dumbbellWeights or [],
+                    plate_weights=payload.onboarding.plateWeights or [],
                 )
                 upsert_equipment_weights(
                     db,
@@ -67,7 +71,8 @@ def signup(payload: SignUpRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(payload: LoginRequest, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def login(request: Request, payload: LoginRequest, db: Session = Depends(get_db)):
     user = get_user_by_email(db, payload.email)
 
     if not user or not verify_password(payload.password, user.password_hash):
@@ -92,7 +97,9 @@ def refresh(payload: RefreshRequest, db: Session = Depends(get_db)):
         )
 
     user_id = payload_data.get("sub")
-    if not user_id:
+    jti = payload_data.get("jti")
+    exp = payload_data.get("exp")
+    if not user_id or not jti or not exp:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid refresh token",
@@ -105,5 +112,39 @@ def refresh(payload: RefreshRequest, db: Session = Depends(get_db)):
             detail="User not found",
         )
 
-    access_token = create_access_token(subject=user.id)
-    return RefreshResponse(access_token=access_token)
+    expires_at = datetime.fromtimestamp(exp, tz=timezone.utc)
+    if not revoke_refresh_token(db, jti=jti, user_id=str(user.id), expires_at=expires_at):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token has been revoked")
+    return RefreshResponse(
+        access_token=create_access_token(subject=user.id),
+        refresh_token=create_refresh_token(subject=user.id),
+    )
+
+
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+def logout(payload: RefreshRequest, db: Session = Depends(get_db)):
+    try:
+        data = decode_refresh_token(payload.refresh_token)
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token",
+        )
+
+    user_id, jti, exp = data.get("sub"), data.get("jti"), data.get("exp")
+    if not user_id or not jti or not exp:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token",
+        )
+
+    # A deleted account has no parent row for a revocation record. Logout is
+    # still idempotent because deletion already invalidates the token.
+    if get_user_by_id(db, user_id):
+        revoke_refresh_token(
+            db,
+            jti=jti,
+            user_id=user_id,
+            expires_at=datetime.fromtimestamp(exp, tz=timezone.utc),
+        )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

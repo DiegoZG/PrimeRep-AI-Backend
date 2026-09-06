@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from typing import Any
+from uuid import uuid4
 from app.core.settings import settings
 
 def create_access_token(subject: str) -> str:
@@ -26,6 +27,7 @@ def create_refresh_token(subject: str) -> str:
         "sub": subject,      # subject = user id
         "exp": expire,
         "type": "refresh",
+        "jti": str(uuid4()),
     }
     return jwt.encode(payload, settings.JWT_REFRESH_SECRET, algorithm=settings.JWT_ALGORITHM)
 

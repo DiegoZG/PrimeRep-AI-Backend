@@ -17,6 +17,7 @@ from app.core.workout_week_service import (
     update_workout_duration,
 )
 from app.models.user import User
+from app.core.rate_limit import check_force_regeneration
 from app.schemas.workout import WorkoutExerciseBlockOut, WorkoutNextResponseOut
 from app.schemas.workout_week import (
     WorkoutWeekDurationPatchRequest,
@@ -47,6 +48,7 @@ def get_week_plan_endpoint(
     user_id = str(current_user.id)
 
     if force:
+        check_force_regeneration(user_id)
         try:
             _check_and_increment_force_regen(db, user_id)
         except ValueError as exc:
@@ -157,6 +159,7 @@ def get_next_workout(
     week_start = get_week_start(today)
 
     if force:
+        check_force_regeneration(user_id)
         try:
             _check_and_increment_force_regen(db, user_id)
         except ValueError as exc:

@@ -12,6 +12,13 @@ class Settings:
 
     JWT_REFRESH_SECRET: str = os.getenv("JWT_REFRESH_SECRET", "")
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("JWT_REFRESH_TOKEN_EXPIRE_DAYS", "30"))
+    RATE_LIMIT_STORAGE_URI: str = os.getenv("RATE_LIMIT_STORAGE_URI", "memory://")
+    CORS_ALLOWED_ORIGINS: list[str] = [
+        origin.strip() for origin in os.getenv(
+            "CORS_ALLOWED_ORIGINS",
+            "http://localhost:8081,http://127.0.0.1:8081",
+        ).split(",") if origin.strip()
+    ]
 
     # Optional — the exercise Q&A feature checks this at call time and returns
     # a 503 if missing, rather than failing the whole app at import time
@@ -24,5 +31,8 @@ class Settings:
 
     if not JWT_REFRESH_SECRET:
         raise RuntimeError("JWT_REFRESH_SECRET is not set in .env")
+
+    if APP_ENV.lower() in {"production", "prod"} and RATE_LIMIT_STORAGE_URI.startswith("memory://"):
+        raise RuntimeError("RATE_LIMIT_STORAGE_URI must use shared non-memory storage in production")
 
 settings = Settings()

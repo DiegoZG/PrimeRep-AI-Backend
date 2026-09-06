@@ -25,3 +25,4 @@ boto3
 
 # Utilities
 uuid7
+slowapi
