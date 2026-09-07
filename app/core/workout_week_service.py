@@ -25,6 +25,7 @@ from app.core.workout_service import (
     WorkoutDayDefinition,
 )
 from app.models.user import UserDailyForceRegen
+from app.models.workout_session import WorkoutSession
 from app.models.workout_week_plan import WorkoutWeekPlan
 from app.schemas.workout import (
     WorkoutBlockItemOut,
@@ -481,12 +482,21 @@ def get_or_create_week_plan(
 
     existing_plan = get_week_plan(db, user_id=user_id, week_start=week_start)
 
+    preferences_refresh_required = bool(
+        existing_plan
+        and existing_plan.plan_json.get("preferencesRefreshRequired")
+    )
     contract_is_current = bool(
         existing_plan
         and existing_plan.plan_json.get("onboardingWorkoutContractVersion")
         == ONBOARDING_WORKOUT_CONTRACT_VERSION
     )
-    if existing_plan and not force_regenerate and contract_is_current:
+    if (
+        existing_plan
+        and not force_regenerate
+        and contract_is_current
+        and not preferences_refresh_required
+    ):
         # Return existing plan
         return _plan_json_to_response(existing_plan.plan_json)
 
@@ -502,6 +512,34 @@ def get_or_create_week_plan(
             workout_day_id = w.get("workoutDayId")
             if isinstance(workout_day_id, str):
                 existing_workout_day_ids[slot_idx] = workout_day_id
+
+    completed_snapshots: dict[str, dict[str, Any]] = {}
+    if existing_plan and preferences_refresh_required:
+        completed_ids = {
+            row[0]
+            for row in (
+                db.query(WorkoutSession.workout_day_id)
+                .filter(
+                    WorkoutSession.user_id == user_id,
+                    WorkoutSession.completed_at.isnot(None),
+                )
+                .all()
+            )
+        }
+        completed_snapshots = {
+            workout_day_id: workout
+            for workout in (
+                existing_plan.plan_json.get("completedWorkoutSnapshots", [])
+                + existing_plan.plan_json.get("workouts", [])
+            )
+            if isinstance((workout_day_id := workout.get("workoutDayId")), str)
+            and workout_day_id in completed_ids
+        }
+        # A slot describes a position in a particular schedule, not a durable
+        # workout identity. Reusing it after a frequency change can attach a
+        # completed Monday workout to a newly scheduled Wednesday (or vice
+        # versa). Historical snapshots remain in the plan metadata instead.
+        existing_workout_day_ids = None
 
     # Generate new plan
     plan_json, _ = _generate_week_plan(
@@ -519,6 +557,9 @@ def get_or_create_week_plan(
         ),
         force_new_ids=force_regenerate,
     )
+
+    if completed_snapshots:
+        plan_json["completedWorkoutSnapshots"] = list(completed_snapshots.values())
 
     # Upsert the plan
     if existing_plan:
