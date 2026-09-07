@@ -6,6 +6,7 @@ Tests for weekly workout plan endpoints:
 
 Note: These tests assume migrations have been run and seed data exists in the dev DB.
 """
+from datetime import date, timedelta
 import uuid
 
 from fastapi.testclient import TestClient
@@ -37,6 +38,25 @@ def _signup_and_get_token(email: str) -> str:
 def _auth_headers(token: str) -> dict[str, str]:
     """Helper to create auth headers."""
     return {"Authorization": f"Bearer {token}"}
+
+
+def _assert_workout_in_current_or_next_week(
+    workout_id: str,
+    current_week: dict,
+    headers: dict[str, str],
+) -> None:
+    current_ids = {workout["workoutDayId"] for workout in current_week["workouts"]}
+    if workout_id in current_ids:
+        return
+
+    next_week_date = date.today() + timedelta(days=7)
+    response = client.get(
+        f"/v1/workouts/week?week_start={next_week_date.isoformat()}",
+        headers=headers,
+    )
+    assert response.status_code == 200
+    next_ids = {workout["workoutDayId"] for workout in response.json()["workouts"]}
+    assert workout_id in next_ids
 
 
 # ============================================================================
@@ -620,8 +640,9 @@ def test_next_creates_week_plan():
     week_plan = response.json()
 
     # /next workout should be one from the week plan
-    week_ids = [w["workoutDayId"] for w in week_plan["workouts"]]
-    assert next_workout["workoutId"] in week_ids
+    _assert_workout_in_current_or_next_week(
+        next_workout["workoutId"], week_plan, headers
+    )
 
 
 def test_next_returns_workout_from_week_plan():
@@ -642,15 +663,15 @@ def test_next_returns_workout_from_week_plan():
     # Create week plan first
     response = client.get("/v1/workouts/week", headers=headers)
     week_plan = response.json()
-    week_ids = [w["workoutDayId"] for w in week_plan["workouts"]]
-
     # Call /next
     response = client.post("/v1/workouts/next", headers=headers)
     assert response.status_code == 200
     next_workout = response.json()
 
     # Workout ID should be from the week plan
-    assert next_workout["workoutId"] in week_ids
+    _assert_workout_in_current_or_next_week(
+        next_workout["workoutId"], week_plan, headers
+    )
 
 
 def test_next_force_regenerates_week():
@@ -686,6 +707,5 @@ def test_next_force_regenerates_week():
     # IDs should be different (force regenerated)
     assert initial_ids != new_ids
 
-    # /next workout should be from the new plan
-    assert next_workout["workoutId"] in new_ids
-
+    # /next workout should be from the regenerated current week or next week
+    _assert_workout_in_current_or_next_week(next_workout["workoutId"], new_plan, headers)
