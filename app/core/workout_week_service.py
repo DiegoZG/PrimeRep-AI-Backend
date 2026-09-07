@@ -165,6 +165,69 @@ def _pick_balanced_full_body_exercises(
     return picked
 
 
+def _pick_custom_coverage_exercises(
+    *,
+    rng: random.Random,
+    pool: list,
+    requested_muscles: tuple[str, ...],
+    main_count: int,
+    accessory_count: int,
+    rotation_offset: int,
+) -> tuple[list, list, list[str], list[str]]:
+    """Cover every requested custom muscle before filling remaining slots."""
+    total_count = main_count + accessory_count
+    if not requested_muscles:
+        return [], [], [], []
+
+    offset = rotation_offset % len(requested_muscles)
+    rotated = requested_muscles[offset:] + requested_muscles[:offset]
+    candidates = {
+        muscle: [exercise for exercise in pool if exercise.primary_muscle == muscle]
+        for muscle in requested_muscles
+    }
+    unavailable = [muscle for muscle in requested_muscles if not candidates[muscle]]
+    available = [muscle for muscle in rotated if candidates[muscle]]
+    coverage_muscles = available[:total_count]
+    deferred = [
+        muscle for muscle in requested_muscles
+        if muscle not in coverage_muscles and muscle not in unavailable
+    ]
+
+    selected: list = []
+    for index, muscle in enumerate(coverage_muscles):
+        preferred_types = MAIN_EXERCISE_TYPES if index < main_count else ACCESSORY_EXERCISE_TYPES
+        choices = [
+            exercise for exercise in candidates[muscle]
+            if exercise.id not in {item.id for item in selected}
+        ]
+        preferred = [exercise for exercise in choices if exercise.exercise_type in preferred_types]
+        fallback = [exercise for exercise in choices if exercise.exercise_type not in preferred_types]
+        rng.shuffle(preferred)
+        rng.shuffle(fallback)
+        if preferred or fallback:
+            selected.append((preferred or fallback)[0])
+
+    main_exercises = selected[:main_count]
+    selected_ids = {exercise.id for exercise in main_exercises}
+    while len(main_exercises) < main_count:
+        addition = _pick_exercises(rng, pool, 1, MAIN_EXERCISE_TYPES, selected_ids)
+        if not addition:
+            break
+        main_exercises.extend(addition)
+        selected_ids.add(addition[0].id)
+
+    accessory_exercises = selected[main_count:]
+    selected_ids.update(exercise.id for exercise in accessory_exercises)
+    while len(accessory_exercises) < accessory_count:
+        addition = _pick_exercises(rng, pool, 1, ACCESSORY_EXERCISE_TYPES, selected_ids)
+        if not addition:
+            break
+        accessory_exercises.extend(addition)
+        selected_ids.add(addition[0].id)
+
+    return main_exercises, accessory_exercises, deferred, unavailable
+
+
 def get_week_start(target_date: date) -> date:
     """Get the Monday of the week containing target_date."""
     return target_date - timedelta(days=target_date.weekday())
@@ -243,7 +306,18 @@ def _generate_single_workout(
 
     main_count, accessory_count = _get_exercise_counts(duration_minutes)
     selected_ids: set[str] = set()
-    if day_type == "full_body":
+    deferred_muscles: list[str] = []
+    unavailable_muscles: list[str] = []
+    if day_definition.restrict_to_muscles:
+        main_exercises, accessory_exercises, deferred_muscles, unavailable_muscles = _pick_custom_coverage_exercises(
+            rng=rng,
+            pool=day_pool,
+            requested_muscles=day_definition.ordered_muscles,
+            main_count=main_count,
+            accessory_count=accessory_count,
+            rotation_offset=workout_date.toordinal() // 7,
+        )
+    elif day_type == "full_body":
         tie_breakers = {exercise.id: rng.random() for exercise in day_pool}
         main_exercises = _pick_balanced_full_body_exercises(
             pool=day_pool,
@@ -313,6 +387,8 @@ def _generate_single_workout(
         "dayType": day_type,
         "estimatedMinutes": duration_minutes,
         "workoutIntent": None,
+        "deferredMuscles": deferred_muscles,
+        "unavailableMuscles": unavailable_muscles,
         "exerciseBlocks": [
             main_block.model_dump(by_alias=True),
             accessory_block.model_dump(by_alias=True),
@@ -896,6 +972,8 @@ def _plan_json_to_response(plan_json: dict[str, Any]) -> WorkoutWeekResponseOut:
             day_type=w["dayType"],
             estimated_minutes=w["estimatedMinutes"],
             workout_intent=w.get("workoutIntent"),
+            deferred_muscles=w.get("deferredMuscles", []),
+            unavailable_muscles=w.get("unavailableMuscles", []),
             exercise_blocks=exercise_blocks,
         )
         workouts.append(workout)

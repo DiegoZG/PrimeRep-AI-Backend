@@ -128,6 +128,7 @@ class WorkoutDayDefinition:
     day_type: str
     title: str
     muscles: frozenset[str]
+    ordered_muscles: tuple[str, ...] = ()
     restrict_to_muscles: bool = False
 
 
@@ -145,7 +146,7 @@ class OnboardingWorkoutSettings:
     @property
     def selection_seed(self) -> str:
         cycle = ";".join(
-            f"{day.day_type}:{','.join(sorted(day.muscles))}" for day in self.day_cycle
+            f"{day.day_type}:{','.join(day.ordered_muscles or sorted(day.muscles))}" for day in self.day_cycle
         )
         return ":".join(
             (
@@ -293,6 +294,7 @@ def _normalize_custom_cycle(value: Any) -> tuple[WorkoutDayDefinition, ...]:
                 day_type=f"custom:{identifier}",
                 title=title,
                 muscles=frozenset(muscles),
+                ordered_muscles=muscles,
                 restrict_to_muscles=True,
             )
         )
