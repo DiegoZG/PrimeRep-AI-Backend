@@ -20,6 +20,14 @@ from app.schemas.push_token import (
     PushTokenPayload,
     PushTokenResponse,
 )
+from app.schemas.training_preferences import (
+    TrainingPreferences,
+    TrainingPreferencesResponse,
+)
+from app.core.training_preferences_service import (
+    get_training_preferences,
+    update_training_preferences,
+)
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -29,6 +37,35 @@ def read_me(
     current_user: User = Depends(get_current_user),
 ):
     return current_user
+
+
+@router.get(
+    "/me/training-preferences",
+    response_model=TrainingPreferencesResponse,
+    response_model_exclude_none=True,
+)
+def read_training_preferences(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return get_training_preferences(db, str(current_user.id))
+
+
+@router.patch(
+    "/me/training-preferences",
+    response_model=TrainingPreferencesResponse,
+    response_model_exclude_none=True,
+)
+def patch_training_preferences(
+    body: TrainingPreferences,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    updates = body.model_dump(exclude_unset=True)
+    try:
+        return update_training_preferences(db, str(current_user.id), updates)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
 
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)

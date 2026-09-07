@@ -10,6 +10,7 @@ from app.core.security.jwt import decode_access_token
 from app.core.workout_service import normalize_onboarding_settings
 from app.core.workout_week_service import (
     _get_cycle_start_index,
+    _pick_custom_coverage_exercises,
     _get_template_dates,
     _pick_balanced_full_body_exercises,
 )
@@ -488,6 +489,83 @@ def test_custom_mobile_workouts_keep_order_and_restrict_muscles():
             }
             for exercise in exercises
         )
+
+
+def test_custom_day_covers_each_requested_muscle_at_default_duration():
+    owned_equipment = ["dumbbells", "plates"]
+    headers = _signup_with_onboarding(
+        _mobile_onboarding(
+            workoutFrequency="1-day",
+            workoutSplit="custom",
+            selectedEquipment=owned_equipment,
+            customWorkouts=[
+                {
+                    "id": "upper-accessories",
+                    "name": "Chest, Shoulders, Biceps",
+                    "type": "custom",
+                    "muscleGroups": ["chest", "shoulders", "biceps"],
+                }
+            ],
+        )
+    )
+
+    response = client.get("/v1/workouts/week?week_start=2026-09-07", headers=headers)
+    assert response.status_code == 200
+    workout = response.json()["workouts"][0]
+    primary_muscles = {
+        item["exercise"]["primaryMuscle"]
+        for block in workout["exerciseBlocks"]
+        for item in block["items"]
+    }
+    assert {"chest", "shoulders", "biceps"} <= primary_muscles
+    assert workout["deferredMuscles"] == []
+    assert workout["unavailableMuscles"] == []
+    assert all(
+        set(item["exercise"]["requiredEquipmentIds"]) <= set(owned_equipment)
+        for block in workout["exerciseBlocks"]
+        for item in block["items"]
+    )
+
+
+def test_custom_coverage_rotates_deferred_muscles_without_duplicates():
+    pool = [
+        SimpleNamespace(id=muscle, primary_muscle=muscle, exercise_type="accessory")
+        for muscle in ("chest", "shoulders", "biceps", "triceps", "abs")
+    ]
+    first = _pick_custom_coverage_exercises(
+        rng=__import__("random").Random(1),
+        pool=pool,
+        requested_muscles=("chest", "shoulders", "biceps", "triceps", "abs"),
+        main_count=2,
+        accessory_count=2,
+        rotation_offset=0,
+    )
+    second = _pick_custom_coverage_exercises(
+        rng=__import__("random").Random(1),
+        pool=pool,
+        requested_muscles=("chest", "shoulders", "biceps", "triceps", "abs"),
+        main_count=2,
+        accessory_count=2,
+        rotation_offset=1,
+    )
+    first_ids = [exercise.id for exercise in first[0] + first[1]]
+    assert len(first_ids) == len(set(first_ids))
+    assert first[2] != second[2]
+    assert first[3] == second[3] == []
+
+
+def test_custom_coverage_reports_muscles_without_eligible_exercises():
+    main, accessories, deferred, unavailable = _pick_custom_coverage_exercises(
+        rng=__import__("random").Random(1),
+        pool=[SimpleNamespace(id="press", primary_muscle="chest", exercise_type="strength")],
+        requested_muscles=("chest", "biceps"),
+        main_count=2,
+        accessory_count=2,
+        rotation_offset=0,
+    )
+    assert [exercise.primary_muscle for exercise in main + accessories] == ["chest"]
+    assert deferred == []
+    assert unavailable == ["biceps"]
 
 
 def test_standard_split_never_fills_a_small_day_with_unrelated_muscles():

@@ -20,6 +20,8 @@ class WorkoutDayOut(BaseModel):
     day_type: str = Field(..., alias="dayType")
     estimated_minutes: int = Field(..., alias="estimatedMinutes")
     workout_intent: Optional[str] = Field(None, alias="workoutIntent")
+    deferred_muscles: list[str] = Field(default_factory=list, alias="deferredMuscles")
+    unavailable_muscles: list[str] = Field(default_factory=list, alias="unavailableMuscles")
     exercise_blocks: list[WorkoutExerciseBlockOut] = Field(..., alias="exerciseBlocks")
 
     model_config = ConfigDict(populate_by_name=True)
@@ -52,4 +54,3 @@ class WorkoutWeekDurationPatchRequest(BaseModel):
     duration_minutes: int = Field(..., alias="durationMinutes", ge=15, le=120)
 
     model_config = ConfigDict(populate_by_name=True)
-

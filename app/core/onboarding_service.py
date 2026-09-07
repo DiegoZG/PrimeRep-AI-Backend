@@ -23,7 +23,9 @@ def upsert_onboarding(
     existing = get_onboarding_by_user_id(db, user_id)
 
     if existing:
-        existing.data = data
+        # Partial saves must retain fields from newer clients that this server
+        # does not yet understand.
+        existing.data = {**existing.data, **data}
         db.add(existing)
         if commit:
             db.commit()

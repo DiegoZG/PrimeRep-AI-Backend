@@ -2,7 +2,7 @@ from datetime import datetime
 import math
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class CustomWorkout(BaseModel):
@@ -18,9 +18,9 @@ class OnboardingData(BaseModel):
     preferredName: Optional[str] = None
     lastName: Optional[str] = None
     email: Optional[str] = None
-    age: Optional[int] = Field(default=None, ge=0)
+    age: Optional[int] = Field(default=None, ge=13, le=120)
     gender: Optional[str] = None
-    weight: Optional[float] = Field(default=None, ge=0)
+    weight: Optional[float] = Field(default=None, gt=0, le=700)
     weightUnit: Optional[str] = None
     reason: Optional[str] = None
     fitnessGoal: Optional[str] = None
@@ -35,9 +35,9 @@ class OnboardingData(BaseModel):
     customWorkouts: Optional[list[CustomWorkout]] = None
     preferredWorkoutTime: Optional[str] = None
     notificationsEnabled: Optional[bool] = None
-    benchPress1RM: Optional[float] = Field(default=None, ge=0)
-    backSquat1RM: Optional[float] = Field(default=None, ge=0)
-    deadlift1RM: Optional[float] = Field(default=None, ge=0)
+    benchPress1RM: Optional[float] = Field(default=None, ge=0, le=1500)
+    backSquat1RM: Optional[float] = Field(default=None, ge=0, le=1500)
+    deadlift1RM: Optional[float] = Field(default=None, ge=0, le=1500)
 
     model_config = ConfigDict(extra="allow")
 
@@ -57,6 +57,12 @@ class OnboardingData(BaseModel):
         ):
             raise ValueError("weights must be non-negative numeric values")
         return values
+
+    @model_validator(mode="after")
+    def validate_custom_split(self) -> "OnboardingData":
+        if self.workoutSplit == "custom" and self.customWorkouts is not None and not self.customWorkouts:
+            raise ValueError("a custom split requires at least one workout")
+        return self
 
 
 class OnboardingUpsertRequest(BaseModel):
