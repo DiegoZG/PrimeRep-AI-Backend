@@ -59,6 +59,9 @@ DAILY_FORCE_REGEN_LIMIT = 3
 CYCLE_EPOCH_WEEK_START = date(2020, 1, 6)
 ONBOARDING_WORKOUT_CONTRACT_VERSION = 1
 
+FULL_BODY_FOUNDATION_ROLES = {"lower", "push", "pull"}
+DIRECT_ISOLATION_MUSCLES = {"abs", "biceps", "triceps", "calves", "forearms"}
+
 
 def _check_and_increment_force_regen(db: Session, user_id: str) -> None:
     """Increment today's force-regen counter and raise ValueError if limit exceeded.
@@ -90,6 +93,75 @@ def _get_exercise_counts(duration_minutes: int) -> tuple[int, int]:
             return counts
     # Fallback for very long durations
     return (3, 4)
+
+
+def _full_body_role(exercise) -> str:
+    if exercise.primary_muscle in {"quads", "hamstrings", "glutes"}:
+        return "lower"
+    if exercise.primary_muscle in {"chest", "shoulders"}:
+        return "push"
+    if exercise.primary_muscle == "back":
+        return "pull"
+    return "isolation"
+
+
+def _pick_balanced_full_body_exercises(
+    *,
+    pool: list,
+    count: int,
+    preferred_types: set[str],
+    selected: list,
+    tie_breakers: dict[str, float],
+) -> list:
+    """Select complementary exercises without stacking direct isolation work."""
+    picked: list = []
+
+    while len(picked) < count:
+        already_selected = selected + picked
+        selected_ids = {exercise.id for exercise in already_selected}
+        selected_primary_muscles = {
+            exercise.primary_muscle for exercise in already_selected
+        }
+        selected_roles = {
+            _full_body_role(exercise) for exercise in already_selected
+        }
+        available = [exercise for exercise in pool if exercise.id not in selected_ids]
+        if not available:
+            break
+
+        def score(exercise) -> int:
+            role = _full_body_role(exercise)
+            primary_muscle = exercise.primary_muscle
+            value = 0
+
+            if role in FULL_BODY_FOUNDATION_ROLES and role not in selected_roles:
+                value += 1_000
+            if primary_muscle in DIRECT_ISOLATION_MUSCLES:
+                if primary_muscle in selected_primary_muscles:
+                    return -10_000
+                if FULL_BODY_FOUNDATION_ROLES - selected_roles:
+                    value -= 500
+                else:
+                    value -= 20
+            if primary_muscle in selected_primary_muscles:
+                value -= 60
+            if exercise.exercise_type in preferred_types:
+                value += 25
+            return value
+
+        chosen = min(
+            available,
+            key=lambda exercise: (
+                -score(exercise),
+                tie_breakers[exercise.id],
+                exercise.id,
+            ),
+        )
+        if score(chosen) <= -10_000:
+            break
+        picked.append(chosen)
+
+    return picked
 
 
 def get_week_start(target_date: date) -> date:
@@ -170,23 +242,39 @@ def _generate_single_workout(
 
     main_count, accessory_count = _get_exercise_counts(duration_minutes)
     selected_ids: set[str] = set()
-
-    main_exercises = _pick_exercises(
-        rng,
-        day_pool,
-        count=main_count,
-        preferred_types=MAIN_EXERCISE_TYPES,
-        exclude_ids=selected_ids,
-    )
-    selected_ids.update(ex.id for ex in main_exercises)
-
-    accessory_exercises = _pick_exercises(
-        rng,
-        day_pool,
-        count=accessory_count,
-        preferred_types=ACCESSORY_EXERCISE_TYPES,
-        exclude_ids=selected_ids,
-    )
+    if day_type == "full_body":
+        tie_breakers = {exercise.id: rng.random() for exercise in day_pool}
+        main_exercises = _pick_balanced_full_body_exercises(
+            pool=day_pool,
+            count=main_count,
+            preferred_types=MAIN_EXERCISE_TYPES,
+            selected=[],
+            tie_breakers=tie_breakers,
+        )
+        selected_ids.update(exercise.id for exercise in main_exercises)
+        accessory_exercises = _pick_balanced_full_body_exercises(
+            pool=day_pool,
+            count=accessory_count,
+            preferred_types=ACCESSORY_EXERCISE_TYPES,
+            selected=main_exercises,
+            tie_breakers=tie_breakers,
+        )
+    else:
+        main_exercises = _pick_exercises(
+            rng,
+            day_pool,
+            count=main_count,
+            preferred_types=MAIN_EXERCISE_TYPES,
+            exclude_ids=selected_ids,
+        )
+        selected_ids.update(exercise.id for exercise in main_exercises)
+        accessory_exercises = _pick_exercises(
+            rng,
+            day_pool,
+            count=accessory_count,
+            preferred_types=ACCESSORY_EXERCISE_TYPES,
+            exclude_ids=selected_ids,
+        )
 
     main_items: list[tuple] = [
         (ex, _prescription_with_suggestion(db, user_id=user_id, exercise=ex, base=MAIN_PRESCRIPTION))

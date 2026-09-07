@@ -1,4 +1,5 @@
 from datetime import date
+from types import SimpleNamespace
 import uuid
 
 import pytest
@@ -7,7 +8,11 @@ from fastapi.testclient import TestClient
 from app.core.database import SessionLocal
 from app.core.security.jwt import decode_access_token
 from app.core.workout_service import normalize_onboarding_settings
-from app.core.workout_week_service import _get_cycle_start_index, _get_template_dates
+from app.core.workout_week_service import (
+    _get_cycle_start_index,
+    _get_template_dates,
+    _pick_balanced_full_body_exercises,
+)
 from app.main import app
 from app.models.workout_week_plan import WorkoutWeekPlan
 
@@ -557,6 +562,97 @@ def test_custom_mobile_muscle_aliases_generate_nonempty_relevant_days():
         assert {exercise["primaryMuscle"] for exercise in exercises} == {
             expected_muscle
         }
+
+
+def test_full_body_picker_covers_foundations_before_duplicate_isolations():
+    pool = [
+        SimpleNamespace(id="press", primary_muscle="chest", exercise_type="strength"),
+        SimpleNamespace(id="row", primary_muscle="back", exercise_type="strength"),
+        SimpleNamespace(id="squat", primary_muscle="quads", exercise_type="strength"),
+        SimpleNamespace(id="plank", primary_muscle="abs", exercise_type="accessory"),
+        SimpleNamespace(id="leg_raise", primary_muscle="abs", exercise_type="bodyweight"),
+        SimpleNamespace(id="dumbbell_curl", primary_muscle="biceps", exercise_type="accessory"),
+        SimpleNamespace(id="barbell_curl", primary_muscle="biceps", exercise_type="accessory"),
+        SimpleNamespace(id="preacher_curl", primary_muscle="biceps", exercise_type="accessory"),
+    ]
+    tie_breakers = {exercise.id: index for index, exercise in enumerate(pool)}
+    main = _pick_balanced_full_body_exercises(
+        pool=pool,
+        count=2,
+        preferred_types={"strength", "bodyweight", "olympic"},
+        selected=[],
+        tie_breakers=tie_breakers,
+    )
+    accessories = _pick_balanced_full_body_exercises(
+        pool=pool,
+        count=5,
+        preferred_types={"accessory"},
+        selected=main,
+        tie_breakers=tie_breakers,
+    )
+
+    selected = main + accessories
+    primary_muscles = [exercise.primary_muscle for exercise in selected]
+    assert {"chest", "back", "quads"} <= set(primary_muscles)
+    assert primary_muscles.count("abs") <= 1
+    assert primary_muscles.count("biceps") <= 1
+
+
+def test_full_body_duration_growth_adds_complementary_exercises():
+    headers = _signup_with_onboarding(
+        _mobile_onboarding(
+            workoutFrequency="3-days",
+            workoutSplit="ai-optimized",
+            selectedEquipment=[
+                "dumbbells",
+                "flat_bench",
+                "olympic_barbell",
+                "plates",
+                "pull_up_bar",
+                "lat_pulldown_cable",
+                "row_cable",
+                "preacher_curl_bench",
+                "short_bar",
+                "squat_rack",
+                "ab_wheel",
+            ],
+        )
+    )
+    week = client.get("/v1/workouts/week", headers=headers)
+    assert week.status_code == 200
+    workout = week.json()["workouts"][0]
+    workout_id = workout["workoutDayId"]
+
+    previous_ids: set[str] = set()
+    for duration, expected_count in ((35, 4), (45, 6), (60, 7)):
+        if duration != 35:
+            response = client.patch(
+                "/v1/workouts/week/duration",
+                json={"workoutDayId": workout_id, "durationMinutes": duration},
+                headers=headers,
+            )
+            assert response.status_code == 200
+            workout = next(
+                item
+                for item in response.json()["workouts"]
+                if item["workoutDayId"] == workout_id
+            )
+
+        exercises = [
+            item["exercise"]
+            for block in workout["exerciseBlocks"]
+            for item in block["items"]
+        ]
+        exercise_ids = {exercise["id"] for exercise in exercises}
+        primary_muscles = [exercise["primaryMuscle"] for exercise in exercises]
+        assert len(exercises) == expected_count
+        assert previous_ids <= exercise_ids
+        assert any(muscle in {"chest", "shoulders"} for muscle in primary_muscles)
+        assert "back" in primary_muscles
+        assert any(muscle in {"quads", "hamstrings", "glutes"} for muscle in primary_muscles)
+        assert primary_muscles.count("abs") <= 1
+        assert primary_muscles.count("biceps") <= 1
+        previous_ids = exercise_ids
 
 
 def test_skip_uses_actual_position_in_split_with_repeated_day_types():
