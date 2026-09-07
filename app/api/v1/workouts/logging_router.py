@@ -1,17 +1,23 @@
 """Workout session logging endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.security.deps import get_current_user
 from app.core.workout_logging_service import (
-    complete_session,
+    ActiveSessionConflict,
+    InvalidSessionTransition,
     create_session,
     get_session,
+    get_session_by_client_id,
+    get_active_session,
     get_stats,
     list_sessions,
     log_set,
+    transition_session,
 )
 from app.models.user import User
 from app.schemas.workout_logging import (
@@ -30,6 +36,7 @@ router = APIRouter(prefix="/workouts", tags=["workout-logging"])
 @router.post("/sessions", response_model=SessionOut, status_code=201)
 def create_session_endpoint(
     request: SessionCreateRequest,
+    response: Response,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -40,14 +47,32 @@ def create_session_endpoint(
     immediately so set logs can be attached to it. Complete it later via
     PATCH /sessions/{id}/complete.
     """
-    session = create_session(
-        db,
-        user_id=str(current_user.id),
-        workout_day_id=request.workout_day_id,
-        workout_date=request.workout_date,
-        day_type=request.day_type,
-    )
+    existing = get_session_by_client_id(db, str(current_user.id), request.client_session_id)
+    try:
+        session = create_session(
+            db,
+            user_id=str(current_user.id),
+            workout_day_id=request.workout_day_id,
+            workout_date=request.workout_date,
+            day_type=request.day_type,
+            client_session_id=request.client_session_id,
+        )
+    except ActiveSessionConflict:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Finish or abandon your active workout before starting another.",
+        )
+    if existing is not None:
+        response.status_code = status.HTTP_200_OK
     return session
+
+
+@router.get("/sessions/active", response_model=Optional[SessionOut])
+def get_active_session_endpoint(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return get_active_session(db, str(current_user.id))
 
 
 @router.post("/sessions/{session_id}/sets", response_model=SetLogOut, status_code=201)
@@ -63,21 +88,29 @@ def log_set_endpoint(
     Can be called multiple times as the user completes each set.
     Weight is optional — omit for bodyweight exercises.
     """
-    session = get_session(db, session_id)
-    if session is None or session.user_id != str(current_user.id):
+    session = get_session(db, session_id, str(current_user.id))
+    if session is None:
         raise HTTPException(status_code=404, detail="Session not found.")
 
-    if session.completed_at is not None:
-        raise HTTPException(status_code=409, detail="Session is already completed.")
+    if session.status != "in_progress":
+        raise HTTPException(status_code=409, detail="Session is no longer active.")
 
-    return log_set(
-        db,
-        session_id=session_id,
-        exercise_id=request.exercise_id,
-        set_number=request.set_number,
-        reps=request.reps,
-        weight_kg=request.weight_kg,
-    )
+    try:
+        logged_set = log_set(
+            db,
+            session_id=session_id,
+            user_id=str(current_user.id),
+            exercise_id=request.exercise_id,
+            set_number=request.set_number,
+            reps=request.reps,
+            weight_kg=request.weight_kg,
+            client_operation_id=request.client_operation_id,
+        )
+    except InvalidSessionTransition:
+        raise HTTPException(status_code=409, detail="Session is no longer active.")
+    if logged_set is None:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    return logged_set
 
 
 @router.patch("/sessions/{session_id}/complete", response_model=SessionOut)
@@ -92,14 +125,28 @@ def complete_session_endpoint(
     Sets completed_at to now. Idempotent — completing an already-completed
     session returns the existing record without error.
     """
-    session = get_session(db, session_id)
-    if session is None or session.user_id != str(current_user.id):
+    try:
+        session = transition_session(db, session_id, str(current_user.id), "completed")
+    except InvalidSessionTransition:
+        raise HTTPException(status_code=409, detail="An abandoned workout cannot be completed.")
+    if session is None:
         raise HTTPException(status_code=404, detail="Session not found.")
+    return session
 
-    if session.completed_at is not None:
-        return session
 
-    return complete_session(db, session)
+@router.patch("/sessions/{session_id}/abandon", response_model=SessionOut)
+def abandon_session_endpoint(
+    session_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        session = transition_session(db, session_id, str(current_user.id), "abandoned")
+    except InvalidSessionTransition:
+        raise HTTPException(status_code=409, detail="A completed workout cannot be abandoned.")
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    return session
 
 
 @router.get("/sessions", response_model=SessionListOut)
@@ -122,6 +169,7 @@ def list_sessions_endpoint(
             workoutDayId=s.workout_day_id,
             workoutDate=s.workout_date,
             dayType=s.day_type,
+            status=s.status,
             completedAt=s.completed_at,
             setCount=len(s.set_logs),
         )
@@ -150,3 +198,15 @@ def get_stats_endpoint(
         prsThisWeek=stats["prs_this_week"],
         totalVolumeKg=stats["total_volume_kg"],
     )
+
+
+@router.get("/sessions/{session_id}", response_model=SessionOut)
+def get_session_endpoint(
+    session_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    session = get_session(db, session_id, str(current_user.id))
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    return session

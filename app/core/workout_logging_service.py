@@ -5,10 +5,19 @@ from datetime import date, timedelta
 from typing import Optional
 
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.set_log import SetLog
 from app.models.workout_session import WorkoutSession
+
+
+class ActiveSessionConflict(Exception):
+    """Raised when a different in-progress workout already belongs to the user."""
+
+
+class InvalidSessionTransition(Exception):
+    """Raised when a terminal session is asked to transition to another state."""
 
 
 # ── Sessions ──────────────────────────────────────────────────────────────────
@@ -19,22 +28,73 @@ def create_session(
     workout_day_id: str,
     workout_date: date,
     day_type: str,
+    client_session_id: str,
 ) -> WorkoutSession:
+    existing = get_session_by_client_id(db, user_id, client_session_id)
+    if existing is not None:
+        return existing
+
+    # The partial unique index is the final concurrency guard. This lock makes
+    # the usual active-session check deterministic when a row already exists.
+    active = (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.user_id == user_id, WorkoutSession.status == "in_progress")
+        .with_for_update()
+        .first()
+    )
+    if active is not None:
+        raise ActiveSessionConflict
+
     session = WorkoutSession(
         id=str(uuid.uuid4()),
         user_id=user_id,
         workout_day_id=workout_day_id,
         workout_date=workout_date,
         day_type=day_type,
+        client_session_id=client_session_id,
     )
     db.add(session)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        # A concurrent start either won using the same idempotency key or
+        # created the user's one allowed active session.
+        db.rollback()
+        existing = get_session_by_client_id(db, user_id, client_session_id)
+        if existing is not None:
+            return existing
+        raise ActiveSessionConflict
     db.refresh(session)
     return session
 
 
-def get_session(db: Session, session_id: str) -> Optional[WorkoutSession]:
-    return db.query(WorkoutSession).filter(WorkoutSession.id == session_id).first()
+def get_session_by_client_id(
+    db: Session, user_id: str, client_session_id: str
+) -> Optional[WorkoutSession]:
+    return (
+        db.query(WorkoutSession)
+        .filter(
+            WorkoutSession.user_id == user_id,
+            WorkoutSession.client_session_id == client_session_id,
+        )
+        .first()
+    )
+
+
+def get_session(db: Session, session_id: str, user_id: Optional[str] = None) -> Optional[WorkoutSession]:
+    query = db.query(WorkoutSession).filter(WorkoutSession.id == session_id)
+    if user_id is not None:
+        query = query.filter(WorkoutSession.user_id == user_id)
+    return query.first()
+
+
+def get_active_session(db: Session, user_id: str) -> Optional[WorkoutSession]:
+    return (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.user_id == user_id, WorkoutSession.status == "in_progress")
+        .order_by(WorkoutSession.started_at.desc())
+        .first()
+    )
 
 
 def list_sessions(
@@ -54,8 +114,22 @@ def list_sessions(
     return items, total
 
 
-def complete_session(db: Session, session: WorkoutSession) -> WorkoutSession:
-    session.completed_at = func.now()
+def transition_session(db: Session, session_id: str, user_id: str, target_status: str) -> WorkoutSession:
+    session = (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.id == session_id, WorkoutSession.user_id == user_id)
+        .with_for_update()
+        .first()
+    )
+    if session is None:
+        return None
+    if session.status == target_status:
+        return session
+    if session.status != "in_progress":
+        raise InvalidSessionTransition
+    session.status = target_status
+    if target_status == "completed":
+        session.completed_at = func.now()
     db.commit()
     db.refresh(session)
     return session
@@ -66,11 +140,33 @@ def complete_session(db: Session, session: WorkoutSession) -> WorkoutSession:
 def log_set(
     db: Session,
     session_id: str,
+    user_id: str,
     exercise_id: str,
     set_number: int,
     reps: int,
     weight_kg: Optional[float],
+    client_operation_id: str,
 ) -> SetLog:
+    session = (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.id == session_id, WorkoutSession.user_id == user_id)
+        .with_for_update()
+        .first()
+    )
+    if session is None:
+        return None
+    if session.status != "in_progress":
+        raise InvalidSessionTransition
+    existing = (
+        db.query(SetLog)
+        .filter(
+            SetLog.session_id == session_id,
+            SetLog.client_operation_id == client_operation_id,
+        )
+        .first()
+    )
+    if existing is not None:
+        return existing
     set_log = SetLog(
         id=str(uuid.uuid4()),
         session_id=session_id,
@@ -78,9 +174,24 @@ def log_set(
         set_number=set_number,
         reps=reps,
         weight_kg=weight_kg,
+        client_operation_id=client_operation_id,
     )
     db.add(set_log)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        existing = (
+            db.query(SetLog)
+            .filter(
+                SetLog.session_id == session_id,
+                SetLog.client_operation_id == client_operation_id,
+            )
+            .first()
+        )
+        if existing is not None:
+            return existing
+        raise
     db.refresh(set_log)
     return set_log
 

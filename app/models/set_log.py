@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Index, Integer, String, func
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Index, Integer, String, UniqueConstraint, func
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -24,6 +24,7 @@ class SetLog(Base):
     reps = Column(Integer, nullable=False)
     # Null for bodyweight exercises
     weight_kg = Column(Float, nullable=True)
+    client_operation_id = Column(String, nullable=False)
     logged_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -36,4 +37,5 @@ class SetLog(Base):
     __table_args__ = (
         Index("ix_set_logs_session_id", "session_id"),
         Index("ix_set_logs_exercise_id", "exercise_id"),
+        UniqueConstraint("session_id", "client_operation_id", name="uq_set_logs_session_client_operation"),
     )
