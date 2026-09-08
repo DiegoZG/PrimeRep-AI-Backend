@@ -155,3 +155,36 @@ def test_only_one_active_session_and_terminal_transitions_are_enforced():
     )
     assert late_set.status_code == 409
     assert client.get("/v1/workouts/sessions/active", headers=_headers(token)).json() is None
+
+
+def test_active_session_keeps_snapshot_after_its_day_is_skipped():
+    token = _token()
+    week = client.get("/v1/workouts/week", headers=_headers(token))
+    assert week.status_code == 200
+    workout = week.json()["workouts"][0]
+    session = client.post(
+        "/v1/workouts/sessions",
+        headers=_headers(token),
+        json={
+            "workoutDayId": workout["workoutDayId"],
+            "workoutDate": workout["date"],
+            "dayType": workout["dayType"],
+            "clientSessionId": str(uuid.uuid4()),
+        },
+    )
+    assert session.status_code == 201
+    assert session.json()["workoutSnapshot"]["title"] == workout["title"]
+    assert session.json()["recoveryRequired"] is False
+
+    skipped = client.post(
+        "/v1/workouts/week/skip",
+        headers=_headers(token),
+        json={"workoutDayId": workout["workoutDayId"]},
+    )
+    assert skipped.status_code == 200
+    assert workout["workoutDayId"] not in {item["workoutDayId"] for item in skipped.json()["workouts"]}
+
+    active = client.get("/v1/workouts/sessions/active", headers=_headers(token))
+    assert active.status_code == 200
+    assert active.json()["id"] == session.json()["id"]
+    assert active.json()["workoutSnapshot"] == session.json()["workoutSnapshot"]

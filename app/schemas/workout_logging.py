@@ -72,6 +72,8 @@ class SessionOut(BaseModel):
     workout_day_id: str = Field(..., alias="workoutDayId")
     workout_date: date = Field(..., alias="workoutDate")
     day_type: str = Field(..., alias="dayType")
+    workout_snapshot: Optional[dict] = Field(None, alias="workoutSnapshot")
+    recovery_required: bool = Field(False, alias="recoveryRequired")
     client_session_id: Optional[str] = Field(None, alias="clientSessionId")
     status: str
     started_at: datetime = Field(..., alias="startedAt")

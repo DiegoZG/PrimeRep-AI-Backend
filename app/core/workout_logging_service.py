@@ -1,5 +1,6 @@
 """Business logic for workout session logging and stats."""
 
+import copy
 import uuid
 from datetime import date, timedelta
 from typing import Optional
@@ -10,6 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.models.set_log import SetLog
 from app.models.workout_session import WorkoutSession
+from app.models.workout_week_plan import WorkoutWeekPlan
 
 
 class ActiveSessionConflict(Exception):
@@ -18,6 +20,33 @@ class ActiveSessionConflict(Exception):
 
 class InvalidSessionTransition(Exception):
     """Raised when a terminal session is asked to transition to another state."""
+
+
+def _find_workout_snapshot(db: Session, user_id: str, workout_day_id: str) -> Optional[dict]:
+    """Return the generated plan entry that owns this opaque workout-day ID."""
+    plans = (
+        db.query(WorkoutWeekPlan)
+        .filter(WorkoutWeekPlan.user_id == user_id)
+        .order_by(WorkoutWeekPlan.updated_at.desc())
+        .all()
+    )
+    for plan in plans:
+        for workout in plan.plan_json.get("workouts", []):
+            if workout.get("workoutDayId") == workout_day_id:
+                return copy.deepcopy(workout)
+    return None
+
+
+def _backfill_snapshot(db: Session, session: Optional[WorkoutSession]) -> Optional[WorkoutSession]:
+    if session is None or session.workout_snapshot is not None:
+        return session
+    snapshot = _find_workout_snapshot(db, session.user_id, session.workout_day_id)
+    if snapshot is None:
+        return session
+    session.workout_snapshot = snapshot
+    db.commit()
+    db.refresh(session)
+    return session
 
 
 # ── Sessions ──────────────────────────────────────────────────────────────────
@@ -32,7 +61,7 @@ def create_session(
 ) -> WorkoutSession:
     existing = get_session_by_client_id(db, user_id, client_session_id)
     if existing is not None:
-        return existing
+        return _backfill_snapshot(db, existing)
 
     # The partial unique index is the final concurrency guard. This lock makes
     # the usual active-session check deterministic when a row already exists.
@@ -45,12 +74,18 @@ def create_session(
     if active is not None:
         raise ActiveSessionConflict
 
+    snapshot = _find_workout_snapshot(db, user_id, workout_day_id)
+    if snapshot is not None:
+        workout_date = date.fromisoformat(snapshot["date"])
+        day_type = snapshot["dayType"]
+
     session = WorkoutSession(
         id=str(uuid.uuid4()),
         user_id=user_id,
         workout_day_id=workout_day_id,
         workout_date=workout_date,
         day_type=day_type,
+        workout_snapshot=snapshot,
         client_session_id=client_session_id,
     )
     db.add(session)
@@ -85,16 +120,16 @@ def get_session(db: Session, session_id: str, user_id: Optional[str] = None) -> 
     query = db.query(WorkoutSession).filter(WorkoutSession.id == session_id)
     if user_id is not None:
         query = query.filter(WorkoutSession.user_id == user_id)
-    return query.first()
+    return _backfill_snapshot(db, query.first())
 
 
 def get_active_session(db: Session, user_id: str) -> Optional[WorkoutSession]:
-    return (
+    return _backfill_snapshot(db, (
         db.query(WorkoutSession)
         .filter(WorkoutSession.user_id == user_id, WorkoutSession.status == "in_progress")
         .order_by(WorkoutSession.started_at.desc())
         .first()
-    )
+    ))
 
 
 def list_sessions(
