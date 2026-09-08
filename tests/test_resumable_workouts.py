@@ -91,6 +91,10 @@ def test_complete_and_abandon_remove_session_from_active_lookup():
     completed = _start(token)
     response = client.patch(f"/v1/workouts/sessions/{completed['id']}/complete", headers=_headers(token))
     assert response.json()["status"] == "completed"
+    repeat = client.patch(f"/v1/workouts/sessions/{completed['id']}/complete", headers=_headers(token))
+    assert repeat.status_code == 200
+    assert repeat.json()["id"] == response.json()["id"]
+    assert repeat.json()["completedAt"] == response.json()["completedAt"]
     assert client.get("/v1/workouts/sessions/active", headers=_headers(token)).json() is None
 
 
