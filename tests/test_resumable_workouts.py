@@ -192,3 +192,46 @@ def test_active_session_keeps_snapshot_after_its_day_is_skipped():
     assert active.status_code == 200
     assert active.json()["id"] == session.json()["id"]
     assert active.json()["workoutSnapshot"] == session.json()["workoutSnapshot"]
+
+
+def test_set_must_belong_to_immutable_workout_snapshot():
+    token = _token()
+    week = client.get("/v1/workouts/week", headers=_headers(token)).json()
+    workout = week["workouts"][0]
+    session = client.post(
+        "/v1/workouts/sessions",
+        headers=_headers(token),
+        json={
+            "workoutDayId": workout["workoutDayId"],
+            "workoutDate": workout["date"],
+            "dayType": workout["dayType"],
+            "clientSessionId": str(uuid.uuid4()),
+        },
+    )
+    assert session.status_code == 201
+    allowed_exercise_id = session.json()["workoutSnapshot"]["exerciseBlocks"][0]["items"][0]["exercise"]["id"]
+
+    allowed = client.post(
+        f"/v1/workouts/sessions/{session.json()['id']}/sets",
+        headers=_headers(token),
+        json={
+            "exerciseId": allowed_exercise_id,
+            "setNumber": 1,
+            "reps": 8,
+            "clientOperationId": str(uuid.uuid4()),
+        },
+    )
+    assert allowed.status_code == 201
+
+    response = client.post(
+        f"/v1/workouts/sessions/{session.json()['id']}/sets",
+        headers=_headers(token),
+        json={
+            "exerciseId": "not-an-exercise-in-this-workout",
+            "setNumber": 1,
+            "reps": 8,
+            "clientOperationId": str(uuid.uuid4()),
+        },
+    )
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Exercise is not part of this workout."

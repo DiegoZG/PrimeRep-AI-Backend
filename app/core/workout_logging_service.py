@@ -22,14 +22,34 @@ class InvalidSessionTransition(Exception):
     """Raised when a terminal session is asked to transition to another state."""
 
 
-def _find_workout_snapshot(db: Session, user_id: str, workout_day_id: str) -> Optional[dict]:
+class ExerciseNotInWorkout(Exception):
+    """Raised when a set does not belong to the session's immutable workout."""
+
+
+def _snapshot_exercise_ids(snapshot: Optional[dict]) -> set[str]:
+    if snapshot is None:
+        return set()
+    return {
+        exercise_id
+        for block in snapshot.get("exerciseBlocks", [])
+        for item in block.get("items", [])
+        if isinstance((exercise_id := item.get("exercise", {}).get("id")), str)
+    }
+
+
+def _find_workout_snapshot(
+    db: Session,
+    user_id: str,
+    workout_day_id: str,
+    workout_date: Optional[date] = None,
+) -> Optional[dict]:
     """Return the generated plan entry that owns this opaque workout-day ID."""
-    plans = (
-        db.query(WorkoutWeekPlan)
-        .filter(WorkoutWeekPlan.user_id == user_id)
-        .order_by(WorkoutWeekPlan.updated_at.desc())
-        .all()
-    )
+    query = db.query(WorkoutWeekPlan).filter(WorkoutWeekPlan.user_id == user_id)
+    if workout_date is not None:
+        query = query.filter(
+            WorkoutWeekPlan.week_start_date == workout_date - timedelta(days=workout_date.weekday())
+        )
+    plans = query.order_by(WorkoutWeekPlan.updated_at.desc()).all()
     for plan in plans:
         for workout in plan.plan_json.get("workouts", []):
             if workout.get("workoutDayId") == workout_day_id:
@@ -40,7 +60,7 @@ def _find_workout_snapshot(db: Session, user_id: str, workout_day_id: str) -> Op
 def _backfill_snapshot(db: Session, session: Optional[WorkoutSession]) -> Optional[WorkoutSession]:
     if session is None or session.workout_snapshot is not None:
         return session
-    snapshot = _find_workout_snapshot(db, session.user_id, session.workout_day_id)
+    snapshot = _find_workout_snapshot(db, session.user_id, session.workout_day_id, session.workout_date)
     if snapshot is None:
         return session
     session.workout_snapshot = snapshot
@@ -74,7 +94,7 @@ def create_session(
     if active is not None:
         raise ActiveSessionConflict
 
-    snapshot = _find_workout_snapshot(db, user_id, workout_day_id)
+    snapshot = _find_workout_snapshot(db, user_id, workout_day_id, workout_date)
     if snapshot is not None:
         workout_date = date.fromisoformat(snapshot["date"])
         day_type = snapshot["dayType"]
@@ -202,6 +222,9 @@ def log_set(
     )
     if existing is not None:
         return existing
+    allowed_exercise_ids = _snapshot_exercise_ids(session.workout_snapshot)
+    if allowed_exercise_ids and exercise_id not in allowed_exercise_ids:
+        raise ExerciseNotInWorkout
     set_log = SetLog(
         id=str(uuid.uuid4()),
         session_id=session_id,

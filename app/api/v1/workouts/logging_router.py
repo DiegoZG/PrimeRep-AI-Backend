@@ -9,6 +9,7 @@ from app.core.database import get_db
 from app.core.security.deps import get_current_user
 from app.core.workout_logging_service import (
     ActiveSessionConflict,
+    ExerciseNotInWorkout,
     InvalidSessionTransition,
     create_session,
     get_session,
@@ -108,6 +109,8 @@ def log_set_endpoint(
         )
     except InvalidSessionTransition:
         raise HTTPException(status_code=409, detail="Session is no longer active.")
+    except ExerciseNotInWorkout:
+        raise HTTPException(status_code=422, detail="Exercise is not part of this workout.")
     if logged_set is None:
         raise HTTPException(status_code=404, detail="Session not found.")
     return logged_set
