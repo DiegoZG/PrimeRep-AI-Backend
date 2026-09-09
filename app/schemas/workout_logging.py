@@ -1,5 +1,6 @@
 """Schemas for workout session logging."""
 
+import uuid
 from datetime import date, datetime
 from typing import Optional
 
@@ -12,6 +13,12 @@ class SessionCreateRequest(BaseModel):
     workout_day_id: str = Field(..., alias="workoutDayId")
     workout_date: date = Field(..., alias="workoutDate")
     day_type: str = Field(..., alias="dayType")
+    client_session_id: str = Field(
+        default_factory=lambda: str(uuid.uuid4()),
+        alias="clientSessionId",
+        min_length=1,
+        max_length=128,
+    )
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -22,6 +29,12 @@ class SetLogRequest(BaseModel):
     reps: int = Field(..., ge=1)
     # None for bodyweight exercises
     weight_kg: Optional[float] = Field(None, alias="weightKg", ge=0)
+    client_operation_id: str = Field(
+        default_factory=lambda: str(uuid.uuid4()),
+        alias="clientOperationId",
+        min_length=1,
+        max_length=128,
+    )
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -59,6 +72,11 @@ class SessionOut(BaseModel):
     workout_day_id: str = Field(..., alias="workoutDayId")
     workout_date: date = Field(..., alias="workoutDate")
     day_type: str = Field(..., alias="dayType")
+    workout_snapshot: Optional[dict] = Field(None, alias="workoutSnapshot")
+    recovery_required: bool = Field(False, alias="recoveryRequired")
+    client_session_id: Optional[str] = Field(None, alias="clientSessionId")
+    status: str
+    started_at: datetime = Field(..., alias="startedAt")
     completed_at: Optional[datetime] = Field(None, alias="completedAt")
     created_at: datetime = Field(..., alias="createdAt")
     set_logs: list[SetLogOut] = Field(default_factory=list, alias="setLogs")
@@ -73,6 +91,7 @@ class SessionSummaryOut(BaseModel):
     workout_day_id: str = Field(..., alias="workoutDayId")
     workout_date: date = Field(..., alias="workoutDate")
     day_type: str = Field(..., alias="dayType")
+    status: str
     completed_at: Optional[datetime] = Field(None, alias="completedAt")
     set_count: int = Field(..., alias="setCount")
 

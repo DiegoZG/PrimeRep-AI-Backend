@@ -1,14 +1,72 @@
 """Business logic for workout session logging and stats."""
 
+import copy
 import uuid
 from datetime import date, timedelta
 from typing import Optional
 
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.set_log import SetLog
 from app.models.workout_session import WorkoutSession
+from app.models.workout_week_plan import WorkoutWeekPlan
+
+
+class ActiveSessionConflict(Exception):
+    """Raised when a different in-progress workout already belongs to the user."""
+
+
+class InvalidSessionTransition(Exception):
+    """Raised when a terminal session is asked to transition to another state."""
+
+
+class ExerciseNotInWorkout(Exception):
+    """Raised when a set does not belong to the session's immutable workout."""
+
+
+def _snapshot_exercise_ids(snapshot: Optional[dict]) -> set[str]:
+    if snapshot is None:
+        return set()
+    return {
+        exercise_id
+        for block in snapshot.get("exerciseBlocks", [])
+        for item in block.get("items", [])
+        if isinstance((exercise_id := item.get("exercise", {}).get("id")), str)
+    }
+
+
+def _find_workout_snapshot(
+    db: Session,
+    user_id: str,
+    workout_day_id: str,
+    workout_date: Optional[date] = None,
+) -> Optional[dict]:
+    """Return the generated plan entry that owns this opaque workout-day ID."""
+    query = db.query(WorkoutWeekPlan).filter(WorkoutWeekPlan.user_id == user_id)
+    if workout_date is not None:
+        query = query.filter(
+            WorkoutWeekPlan.week_start_date == workout_date - timedelta(days=workout_date.weekday())
+        )
+    plans = query.order_by(WorkoutWeekPlan.updated_at.desc()).all()
+    for plan in plans:
+        for workout in plan.plan_json.get("workouts", []):
+            if workout.get("workoutDayId") == workout_day_id:
+                return copy.deepcopy(workout)
+    return None
+
+
+def _backfill_snapshot(db: Session, session: Optional[WorkoutSession]) -> Optional[WorkoutSession]:
+    if session is None or session.workout_snapshot is not None:
+        return session
+    snapshot = _find_workout_snapshot(db, session.user_id, session.workout_day_id, session.workout_date)
+    if snapshot is None:
+        return session
+    session.workout_snapshot = snapshot
+    db.commit()
+    db.refresh(session)
+    return session
 
 
 # ── Sessions ──────────────────────────────────────────────────────────────────
@@ -19,22 +77,79 @@ def create_session(
     workout_day_id: str,
     workout_date: date,
     day_type: str,
+    client_session_id: str,
 ) -> WorkoutSession:
+    existing = get_session_by_client_id(db, user_id, client_session_id)
+    if existing is not None:
+        return _backfill_snapshot(db, existing)
+
+    # The partial unique index is the final concurrency guard. This lock makes
+    # the usual active-session check deterministic when a row already exists.
+    active = (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.user_id == user_id, WorkoutSession.status == "in_progress")
+        .with_for_update()
+        .first()
+    )
+    if active is not None:
+        raise ActiveSessionConflict
+
+    snapshot = _find_workout_snapshot(db, user_id, workout_day_id, workout_date)
+    if snapshot is not None:
+        workout_date = date.fromisoformat(snapshot["date"])
+        day_type = snapshot["dayType"]
+
     session = WorkoutSession(
         id=str(uuid.uuid4()),
         user_id=user_id,
         workout_day_id=workout_day_id,
         workout_date=workout_date,
         day_type=day_type,
+        workout_snapshot=snapshot,
+        client_session_id=client_session_id,
     )
     db.add(session)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        # A concurrent start either won using the same idempotency key or
+        # created the user's one allowed active session.
+        db.rollback()
+        existing = get_session_by_client_id(db, user_id, client_session_id)
+        if existing is not None:
+            return existing
+        raise ActiveSessionConflict
     db.refresh(session)
     return session
 
 
-def get_session(db: Session, session_id: str) -> Optional[WorkoutSession]:
-    return db.query(WorkoutSession).filter(WorkoutSession.id == session_id).first()
+def get_session_by_client_id(
+    db: Session, user_id: str, client_session_id: str
+) -> Optional[WorkoutSession]:
+    return (
+        db.query(WorkoutSession)
+        .filter(
+            WorkoutSession.user_id == user_id,
+            WorkoutSession.client_session_id == client_session_id,
+        )
+        .first()
+    )
+
+
+def get_session(db: Session, session_id: str, user_id: Optional[str] = None) -> Optional[WorkoutSession]:
+    query = db.query(WorkoutSession).filter(WorkoutSession.id == session_id)
+    if user_id is not None:
+        query = query.filter(WorkoutSession.user_id == user_id)
+    return _backfill_snapshot(db, query.first())
+
+
+def get_active_session(db: Session, user_id: str) -> Optional[WorkoutSession]:
+    return _backfill_snapshot(db, (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.user_id == user_id, WorkoutSession.status == "in_progress")
+        .order_by(WorkoutSession.started_at.desc())
+        .first()
+    ))
 
 
 def list_sessions(
@@ -54,8 +169,22 @@ def list_sessions(
     return items, total
 
 
-def complete_session(db: Session, session: WorkoutSession) -> WorkoutSession:
-    session.completed_at = func.now()
+def transition_session(db: Session, session_id: str, user_id: str, target_status: str) -> WorkoutSession:
+    session = (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.id == session_id, WorkoutSession.user_id == user_id)
+        .with_for_update()
+        .first()
+    )
+    if session is None:
+        return None
+    if session.status == target_status:
+        return session
+    if session.status != "in_progress":
+        raise InvalidSessionTransition
+    session.status = target_status
+    if target_status == "completed":
+        session.completed_at = func.now()
     db.commit()
     db.refresh(session)
     return session
@@ -66,11 +195,36 @@ def complete_session(db: Session, session: WorkoutSession) -> WorkoutSession:
 def log_set(
     db: Session,
     session_id: str,
+    user_id: str,
     exercise_id: str,
     set_number: int,
     reps: int,
     weight_kg: Optional[float],
+    client_operation_id: str,
 ) -> SetLog:
+    session = (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.id == session_id, WorkoutSession.user_id == user_id)
+        .with_for_update()
+        .first()
+    )
+    if session is None:
+        return None
+    if session.status != "in_progress":
+        raise InvalidSessionTransition
+    existing = (
+        db.query(SetLog)
+        .filter(
+            SetLog.session_id == session_id,
+            SetLog.client_operation_id == client_operation_id,
+        )
+        .first()
+    )
+    if existing is not None:
+        return existing
+    allowed_exercise_ids = _snapshot_exercise_ids(session.workout_snapshot)
+    if allowed_exercise_ids and exercise_id not in allowed_exercise_ids:
+        raise ExerciseNotInWorkout
     set_log = SetLog(
         id=str(uuid.uuid4()),
         session_id=session_id,
@@ -78,9 +232,24 @@ def log_set(
         set_number=set_number,
         reps=reps,
         weight_kg=weight_kg,
+        client_operation_id=client_operation_id,
     )
     db.add(set_log)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        existing = (
+            db.query(SetLog)
+            .filter(
+                SetLog.session_id == session_id,
+                SetLog.client_operation_id == client_operation_id,
+            )
+            .first()
+        )
+        if existing is not None:
+            return existing
+        raise
     db.refresh(set_log)
     return set_log
 
