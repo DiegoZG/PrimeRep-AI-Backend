@@ -4,12 +4,13 @@ from typing import Any
 from uuid import uuid4
 from app.core.settings import settings
 
-def create_access_token(subject: str) -> str:
+def create_access_token(subject: str, auth_version: int = 0) -> str:
     expire = datetime.now(timezone.utc) + timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {
         "sub": subject,      # subject = user id
         "exp": expire,
         "type": "access",
+        "auth_version": auth_version,
     }
     return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
 
@@ -21,13 +22,14 @@ def decode_access_token(token: str) -> dict[str, Any]:
         raise
 
 
-def create_refresh_token(subject: str) -> str:
+def create_refresh_token(subject: str, auth_version: int = 0) -> str:
     expire = datetime.now(timezone.utc) + timedelta(days=settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS)
     payload = {
         "sub": subject,      # subject = user id
         "exp": expire,
         "type": "refresh",
         "jti": str(uuid4()),
+        "auth_version": auth_version,
     }
     return jwt.encode(payload, settings.JWT_REFRESH_SECRET, algorithm=settings.JWT_ALGORITHM)
 

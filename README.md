@@ -224,13 +224,19 @@ Request body
 "email": "test@primerep.com",
 "password": "StrongPass123",
 "preferred_name": "Diego",
-"last_name": "Zegarra"
+"last_name": "Zegarra",
+"legalAcceptance": {
+  "accepted": true,
+  "termsVersion": "2026-09-12",
+  "privacyVersion": "2026-09-12"
+}
 }
 
 Response
 
 {
 "access_token": "<jwt>",
+"refresh_token": "<jwt>",
 "token_type": "bearer"
 }
 
@@ -241,6 +247,18 @@ Response
 POST /v1/auth/login
 
 Returns a JWT access token on success.
+
+### Password reset
+
+`POST /v1/auth/password-reset/request` accepts `{ "email": "user@example.com" }`
+and always returns a generic `202` response. `POST /v1/auth/password-reset/confirm`
+accepts `{ "token": "<opaque-token>", "newPassword": "..." }` and returns `204`
+when the single-use reset link is valid.
+
+Reset email delivery uses FastAPI `BackgroundTasks` and is intentionally
+best-effort. Provider failures are logged without the recipient or reset link;
+the user can request a fresh link after the one-minute request cooldown. For
+durable delivery retries, move this task to an external queue in a later phase.
 
 ---
 

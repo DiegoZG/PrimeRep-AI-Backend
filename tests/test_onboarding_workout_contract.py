@@ -16,6 +16,7 @@ from app.core.workout_week_service import (
 )
 from app.main import app
 from app.models.workout_week_plan import WorkoutWeekPlan
+from conftest import LEGAL_ACCEPTANCE
 
 
 client = TestClient(app)
@@ -58,6 +59,7 @@ def _signup_with_onboarding(onboarding: dict) -> dict[str, str]:
             "password": "StrongPass123",
             "preferred_name": "Mobile",
             "last_name": "Tester",
+            "legalAcceptance": LEGAL_ACCEPTANCE,
             "onboarding": onboarding,
         },
     )

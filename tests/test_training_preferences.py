@@ -7,6 +7,7 @@ from app.core.database import SessionLocal
 from app.main import app
 from app.models.user import User
 from app.models.workout_week_plan import WorkoutWeekPlan
+from conftest import LEGAL_ACCEPTANCE
 
 
 client = TestClient(app)
@@ -25,6 +26,7 @@ def _signup() -> dict[str, str]:
             "email": email,
             "password": "StrongPass123",
             "preferred_name": "Preferences",
+            "legalAcceptance": LEGAL_ACCEPTANCE,
             "onboarding": {
                 "fitnessGoal": "build-muscle",
                 "experienceLevel": "beginner",

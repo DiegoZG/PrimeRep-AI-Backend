@@ -9,6 +9,7 @@ from app.core.database import SessionLocal
 from app.core.onboarding_service import upsert_onboarding
 from app.core.security.jwt import decode_access_token
 from app.main import app
+from conftest import LEGAL_ACCEPTANCE
 
 
 client = TestClient(app)
@@ -20,6 +21,7 @@ def _signup(prefix: str, onboarding: Optional[dict] = None) -> str:
         "password": "StrongPass123",
         "preferred_name": "Test",
         "last_name": "User",
+        "legalAcceptance": LEGAL_ACCEPTANCE,
     }
     if onboarding is not None:
         payload["onboarding"] = onboarding
@@ -139,6 +141,7 @@ def test_signup_rejects_invalid_onboarding_weights():
             "email": f"weights_invalid_signup_{uuid.uuid4().hex[:8]}@example.com",
             "password": "StrongPass123",
             "preferred_name": "Test",
+            "legalAcceptance": LEGAL_ACCEPTANCE,
             "onboarding": {"dumbbellWeights": [-2.5], "plateWeights": []},
         },
     )
@@ -221,6 +224,7 @@ def test_signup_rolls_back_all_rows_when_weight_seed_fails(monkeypatch):
         "password": "StrongPass123",
         "preferred_name": "Test",
         "last_name": "User",
+        "legalAcceptance": LEGAL_ACCEPTANCE,
         "onboarding": {
             "fitnessGoal": "strength",
             "dumbbellWeights": [10],

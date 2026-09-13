@@ -1,10 +1,13 @@
 from typing import Optional
+from sqlalchemy import func
 from sqlalchemy.orm import Session
+from app.core.security.emails import normalize_email
 from app.models.user import User
 
 
 def get_user_by_email(db: Session, email: str) -> Optional[User]:
-    return db.query(User).filter(User.email == email).first()
+    normalized_email = normalize_email(str(email))
+    return db.query(User).filter(func.lower(User.email) == normalized_email).first()
 
 
 def get_user_by_id(db: Session, user_id: str) -> Optional[User]:
@@ -30,7 +33,7 @@ def create_user(
     commit: bool = True,
 ) -> User:
     user = User(
-        email=email,
+        email=normalize_email(email),
         preferred_name=preferred_name,
         last_name=last_name,
         password_hash=password_hash,
