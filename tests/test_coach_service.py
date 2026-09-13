@@ -16,6 +16,7 @@ from app.core import coach_service
 from app.core.coach_service import CoachContent, WeekCoachContent, generate_coach_content
 from app.core.database import SessionLocal
 from app.main import app
+from conftest import LEGAL_ACCEPTANCE
 
 client = TestClient(app)
 
@@ -33,6 +34,7 @@ def _signup_and_get_token(email: str) -> tuple[str, str]:
         "password": "StrongPass123",
         "preferred_name": "Coach",
         "last_name": "Tester",
+        "legalAcceptance": LEGAL_ACCEPTANCE,
     }
     resp = client.post("/v1/auth/signup", json=payload)
     assert resp.status_code == 201

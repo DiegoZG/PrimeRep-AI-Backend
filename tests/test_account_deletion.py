@@ -14,6 +14,7 @@ from app.models.user_equipment_weights import UserEquipmentWeights
 from app.models.workout_day_history import WorkoutDayHistory
 from app.models.workout_session import WorkoutSession
 from app.models.workout_week_plan import WorkoutWeekPlan
+from conftest import LEGAL_ACCEPTANCE
 
 
 client = TestClient(app)
@@ -28,6 +29,7 @@ def _signup(prefix: str, onboarding=None):
             "preferred_name": "Delete",
             "last_name": "Test",
             "onboarding": onboarding,
+            "legalAcceptance": LEGAL_ACCEPTANCE,
         },
     )
     assert response.status_code == 201
