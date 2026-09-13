@@ -498,6 +498,100 @@ def test_duration_preserves_workout_day_ids():
     assert initial_ids == updated_ids
 
 
+def test_duration_and_skip_target_explicit_week_start():
+    """Week mutations must affect the requested plan, not the server's current week."""
+    token = _signup_and_get_token(_unique_email("explicit_week_mutations"))
+    headers = _auth_headers(token)
+
+    current_response = client.get("/v1/workouts/week", headers=headers)
+    assert current_response.status_code == 200
+    current_plan = current_response.json()
+    current_ids = [workout["workoutDayId"] for workout in current_plan["workouts"]]
+
+    future_date = date.today() + timedelta(days=7)
+    future_response = client.get(
+        f"/v1/workouts/week?weekStart={future_date.isoformat()}", headers=headers
+    )
+    assert future_response.status_code == 200
+    future_plan = future_response.json()
+    future_week_start = future_plan["weekStart"]
+    future_workout = future_plan["workouts"][0]
+
+    duration_response = client.patch(
+        "/v1/workouts/week/duration",
+        json={
+            "workoutDayId": future_workout["workoutDayId"],
+            "durationMinutes": 25,
+            "weekStart": future_week_start,
+        },
+        headers=headers,
+    )
+    assert duration_response.status_code == 200
+    duration_plan = duration_response.json()
+    assert duration_plan["weekStart"] == future_week_start
+    assert any(
+        workout["workoutDayId"] == future_workout["workoutDayId"]
+        and workout["durationMinutes"] == 25
+        for workout in duration_plan["workouts"]
+    )
+
+    skip_response = client.post(
+        "/v1/workouts/week/skip",
+        json={
+            "workoutDayId": future_workout["workoutDayId"],
+            "weekStart": future_week_start,
+        },
+        headers=headers,
+    )
+    assert skip_response.status_code == 200
+    assert skip_response.json()["weekStart"] == future_week_start
+    assert future_workout["workoutDayId"] not in {
+        workout["workoutDayId"] for workout in skip_response.json()["workouts"]
+    }
+
+    current_after = client.get("/v1/workouts/week", headers=headers)
+    assert current_after.status_code == 200
+    assert [workout["workoutDayId"] for workout in current_after.json()["workouts"]] == current_ids
+
+
+def test_duration_recovers_when_client_week_is_stale():
+    """An exact workout ID may recover its own user plan when the client has a stale week."""
+    token = _signup_and_get_token(_unique_email("stale_week_duration"))
+    headers = _auth_headers(token)
+
+    current_plan = client.get("/v1/workouts/week", headers=headers).json()
+    current_week_start = current_plan["weekStart"]
+    current_ids = [workout["workoutDayId"] for workout in current_plan["workouts"]]
+
+    future_plan = client.get(
+        f"/v1/workouts/week?weekStart={(date.today() + timedelta(days=7)).isoformat()}",
+        headers=headers,
+    ).json()
+    future_workout = future_plan["workouts"][0]
+
+    response = client.patch(
+        "/v1/workouts/week/duration",
+        json={
+            "workoutDayId": future_workout["workoutDayId"],
+            "durationMinutes": 25,
+            "weekStart": current_week_start,
+        },
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+    repaired_plan = response.json()
+    assert repaired_plan["weekStart"] == future_plan["weekStart"]
+    assert any(
+        workout["workoutDayId"] == future_workout["workoutDayId"]
+        and workout["durationMinutes"] == 25
+        for workout in repaired_plan["workouts"]
+    )
+    assert [workout["workoutDayId"] for workout in client.get(
+        "/v1/workouts/week", headers=headers
+    ).json()["workouts"]] == current_ids
+
+
 def test_duration_preserves_all_durations():
     """Duration update should preserve durations for all workouts."""
     token = _signup_and_get_token(_unique_email("duration_preserve1"))

@@ -10,6 +10,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.set_log import SetLog
+from app.models.user_exercise_note import UserExerciseNote
+from app.models.workout_session_exercise_feedback import WorkoutSessionExerciseFeedback
+from app.models.workout_session_operation import WorkoutSessionOperation
 from app.models.workout_session import WorkoutSession
 from app.models.workout_week_plan import WorkoutWeekPlan
 
@@ -24,6 +27,22 @@ class InvalidSessionTransition(Exception):
 
 class ExerciseNotInWorkout(Exception):
     """Raised when a set does not belong to the session's immutable workout."""
+
+
+class InvalidSessionMutation(Exception):
+    """Raised when a correction is not allowed for the session state."""
+
+
+class StaleSetMutation(Exception):
+    """Raised when a correction would overwrite a newer set value."""
+
+
+class InvalidOperationReuse(Exception):
+    """Raised when one client operation ID is reused for a different mutation."""
+
+
+class DuplicateSetSlot(Exception):
+    """Raised when an active set already owns the requested exercise slot."""
 
 
 def _snapshot_exercise_ids(snapshot: Optional[dict]) -> set[str]:
@@ -157,8 +176,11 @@ def list_sessions(
     user_id: str,
     limit: int = 20,
     offset: int = 0,
+    completed_only: bool = False,
 ) -> tuple[list[WorkoutSession], int]:
     base = db.query(WorkoutSession).filter(WorkoutSession.user_id == user_id)
+    if completed_only:
+        base = base.filter(WorkoutSession.status == "completed")
     total = base.count()
     items = (
         base.order_by(WorkoutSession.workout_date.desc())
@@ -190,6 +212,68 @@ def transition_session(db: Session, session_id: str, user_id: str, target_status
     return session
 
 
+def _editable_session(db: Session, session_id: str, user_id: str) -> Optional[WorkoutSession]:
+    session = (
+        db.query(WorkoutSession)
+        .filter(WorkoutSession.id == session_id, WorkoutSession.user_id == user_id)
+        .with_for_update()
+        .first()
+    )
+    if session is None:
+        return None
+    if session.status == "abandoned":
+        raise InvalidSessionMutation
+    return session
+
+
+def _operation(
+    db: Session,
+    session_id: str,
+    client_operation_id: str,
+    operation_type: str,
+    *,
+    set_log_id: Optional[str] = None,
+    exercise_id: Optional[str] = None,
+) -> Optional[WorkoutSessionOperation]:
+    existing = (
+        db.query(WorkoutSessionOperation)
+        .filter(
+            WorkoutSessionOperation.session_id == session_id,
+            WorkoutSessionOperation.client_operation_id == client_operation_id,
+        )
+        .first()
+    )
+    if existing is not None:
+        if (
+            existing.operation_type != operation_type
+            or existing.target_set_log_id != set_log_id
+            or existing.target_exercise_id != exercise_id
+        ):
+            raise InvalidOperationReuse
+    return existing
+
+
+def _record_operation(
+    db: Session,
+    session_id: str,
+    client_operation_id: str,
+    operation_type: str,
+    *,
+    set_log_id: Optional[str] = None,
+    exercise_id: Optional[str] = None,
+) -> WorkoutSessionOperation:
+    operation = WorkoutSessionOperation(
+        id=str(uuid.uuid4()),
+        session_id=session_id,
+        client_operation_id=client_operation_id,
+        operation_type=operation_type,
+        target_set_log_id=set_log_id,
+        target_exercise_id=exercise_id,
+    )
+    db.add(operation)
+    return operation
+
+
 # ── Set Logs ──────────────────────────────────────────────────────────────────
 
 def log_set(
@@ -210,8 +294,8 @@ def log_set(
     )
     if session is None:
         return None
-    if session.status != "in_progress":
-        raise InvalidSessionTransition
+    if session.status == "abandoned":
+        raise InvalidSessionMutation
     existing = (
         db.query(SetLog)
         .filter(
@@ -249,9 +333,187 @@ def log_set(
         )
         if existing is not None:
             return existing
-        raise
+        raise DuplicateSetSlot
     db.refresh(set_log)
     return set_log
+
+
+def update_set(
+    db: Session,
+    session_id: str,
+    user_id: str,
+    set_log_id: str,
+    reps: Optional[int],
+    weight_kg: Optional[float],
+    weight_was_provided: bool,
+    expected_version: int,
+    client_operation_id: str,
+) -> Optional[SetLog]:
+    session = _editable_session(db, session_id, user_id)
+    if session is None:
+        return None
+    existing = _operation(
+        db, session_id, client_operation_id, "update_set", set_log_id=set_log_id
+    )
+    if existing is not None:
+        return db.query(SetLog).filter(SetLog.id == existing.target_set_log_id).first()
+    set_log = (
+        db.query(SetLog)
+        .filter(SetLog.id == set_log_id, SetLog.session_id == session_id, SetLog.deleted_at.is_(None))
+        .with_for_update()
+        .first()
+    )
+    if set_log is None:
+        return None
+    if set_log.version != expected_version:
+        raise StaleSetMutation
+    if reps is not None:
+        set_log.reps = reps
+    if weight_was_provided:
+        set_log.weight_kg = weight_kg
+    set_log.version += 1
+    _record_operation(db, session_id, client_operation_id, "update_set", set_log_id=set_log.id)
+    db.commit()
+    db.refresh(set_log)
+    return set_log
+
+
+def delete_set(db: Session, session_id: str, user_id: str, set_log_id: str, client_operation_id: str) -> bool:
+    session = _editable_session(db, session_id, user_id)
+    if session is None:
+        return False
+    existing = _operation(
+        db, session_id, client_operation_id, "delete_set", set_log_id=set_log_id
+    )
+    if existing is not None:
+        return True
+    set_log = (
+        db.query(SetLog)
+        .filter(SetLog.id == set_log_id, SetLog.session_id == session_id)
+        .with_for_update()
+        .first()
+    )
+    if set_log is None:
+        return False
+    set_log.deleted_at = func.now()
+    _record_operation(db, session_id, client_operation_id, "delete_set", set_log_id=set_log.id)
+    db.commit()
+    return True
+
+
+def restore_set(db: Session, session_id: str, user_id: str, set_log_id: str, client_operation_id: str) -> Optional[SetLog]:
+    session = _editable_session(db, session_id, user_id)
+    if session is None:
+        return None
+    existing = _operation(
+        db, session_id, client_operation_id, "restore_set", set_log_id=set_log_id
+    )
+    if existing is not None:
+        return db.query(SetLog).filter(SetLog.id == existing.target_set_log_id).first()
+    set_log = (
+        db.query(SetLog)
+        .filter(SetLog.id == set_log_id, SetLog.session_id == session_id)
+        .with_for_update()
+        .first()
+    )
+    if set_log is None:
+        return None
+    set_log.deleted_at = None
+    _record_operation(db, session_id, client_operation_id, "restore_set", set_log_id=set_log.id)
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise InvalidSessionMutation
+    db.refresh(set_log)
+    return set_log
+
+
+def update_workout_note(
+    db: Session, session_id: str, user_id: str, note: Optional[str], client_operation_id: str
+) -> Optional[WorkoutSession]:
+    session = _editable_session(db, session_id, user_id)
+    if session is None:
+        return None
+    if _operation(db, session_id, client_operation_id, "update_workout_note") is not None:
+        return session
+    session.workout_note = note
+    _record_operation(db, session_id, client_operation_id, "update_workout_note")
+    db.commit()
+    db.refresh(session)
+    return session
+
+
+def update_exercise_feedback(
+    db: Session,
+    session_id: str,
+    user_id: str,
+    exercise_id: str,
+    effort: Optional[str],
+    rir: Optional[int],
+    client_operation_id: str,
+) -> Optional[WorkoutSessionExerciseFeedback]:
+    session = _editable_session(db, session_id, user_id)
+    if session is None:
+        return None
+    if exercise_id not in _snapshot_exercise_ids(session.workout_snapshot):
+        raise ExerciseNotInWorkout
+    existing = _operation(
+        db,
+        session_id,
+        client_operation_id,
+        "update_exercise_feedback",
+        exercise_id=exercise_id,
+    )
+    if existing is not None:
+        return (
+            db.query(WorkoutSessionExerciseFeedback)
+            .filter(WorkoutSessionExerciseFeedback.session_id == session_id, WorkoutSessionExerciseFeedback.exercise_id == exercise_id)
+            .first()
+        )
+    feedback = (
+        db.query(WorkoutSessionExerciseFeedback)
+        .filter(WorkoutSessionExerciseFeedback.session_id == session_id, WorkoutSessionExerciseFeedback.exercise_id == exercise_id)
+        .first()
+    )
+    if feedback is None:
+        feedback = WorkoutSessionExerciseFeedback(id=str(uuid.uuid4()), session_id=session_id, exercise_id=exercise_id)
+        db.add(feedback)
+    feedback.effort = effort
+    feedback.rir = rir
+    _record_operation(db, session_id, client_operation_id, "update_exercise_feedback", exercise_id=exercise_id)
+    db.commit()
+    db.refresh(feedback)
+    return feedback
+
+
+def update_user_exercise_note(db: Session, user_id: str, exercise_id: str, note: Optional[str]) -> Optional[UserExerciseNote]:
+    existing = (
+        db.query(UserExerciseNote)
+        .filter(UserExerciseNote.user_id == user_id, UserExerciseNote.exercise_id == exercise_id)
+        .first()
+    )
+    if note is None or not note.strip():
+        if existing is not None:
+            db.delete(existing)
+            db.commit()
+        return None
+    if existing is None:
+        existing = UserExerciseNote(id=str(uuid.uuid4()), user_id=user_id, exercise_id=exercise_id, note=note.strip())
+        db.add(existing)
+    else:
+        existing.note = note.strip()
+    db.commit()
+    db.refresh(existing)
+    return existing
+
+
+def get_user_exercise_note(db: Session, user_id: str, exercise_id: str) -> Optional[UserExerciseNote]:
+    return (
+        db.query(UserExerciseNote)
+        .filter(UserExerciseNote.user_id == user_id, UserExerciseNote.exercise_id == exercise_id)
+        .first()
+    )
 
 
 def get_last_sets(
@@ -268,6 +530,7 @@ def get_last_sets(
             WorkoutSession.user_id == user_id,
             WorkoutSession.completed_at.isnot(None),
             SetLog.exercise_id == exercise_id,
+            SetLog.deleted_at.is_(None),
         )
         .order_by(SetLog.logged_at.desc(), SetLog.id.desc())
         .limit(limit)
@@ -295,6 +558,7 @@ def get_recent_completed_sets_by_session(
                 WorkoutSession.user_id == user_id,
                 WorkoutSession.completed_at.isnot(None),
                 SetLog.exercise_id == exercise_id,
+                SetLog.deleted_at.is_(None),
             )
             .group_by(WorkoutSession.id)
             .order_by(
@@ -315,7 +579,7 @@ def get_recent_completed_sets_by_session(
     }
     sets = (
         db.query(SetLog)
-        .filter(SetLog.session_id.in_(session_ids), SetLog.exercise_id == exercise_id)
+        .filter(SetLog.session_id.in_(session_ids), SetLog.exercise_id == exercise_id, SetLog.deleted_at.is_(None))
         .order_by(SetLog.set_number.asc(), SetLog.logged_at.asc())
         .all()
     )
@@ -396,6 +660,7 @@ def _total_volume_kg(db: Session, user_id: str) -> float:
             WorkoutSession.user_id == user_id,
             WorkoutSession.completed_at.isnot(None),
             SetLog.weight_kg.isnot(None),
+            SetLog.deleted_at.is_(None),
         )
         .scalar()
     )
@@ -416,6 +681,7 @@ def _count_prs_this_week(db: Session, user_id: str) -> int:
             WorkoutSession.completed_at.isnot(None),
             WorkoutSession.workout_date >= week_start,
             SetLog.weight_kg.isnot(None),
+            SetLog.deleted_at.is_(None),
         )
         .group_by(SetLog.exercise_id)
         .all()
@@ -435,6 +701,7 @@ def _count_prs_this_week(db: Session, user_id: str) -> int:
                 WorkoutSession.workout_date < week_start,
                 SetLog.exercise_id == exercise_id,
                 SetLog.weight_kg.isnot(None),
+                SetLog.deleted_at.is_(None),
             )
             .scalar()
         )

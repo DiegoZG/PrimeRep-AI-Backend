@@ -51,6 +51,7 @@ class User(Base):
     revoked_refresh_tokens = relationship(
         "RevokedRefreshToken", back_populates="user", cascade="all, delete-orphan", passive_deletes=True
     )
+    exercise_notes = relationship("UserExerciseNote", cascade="all, delete-orphan", passive_deletes=True)
 
 
 class UserDailyForceRegen(Base):

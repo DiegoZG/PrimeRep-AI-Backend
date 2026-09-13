@@ -31,7 +31,8 @@ router = APIRouter(prefix="/workouts", tags=["workouts"])
 
 @router.get("/week", response_model=WorkoutWeekResponseOut)
 def get_week_plan_endpoint(
-    week_start: Optional[date] = Query(None, description="Monday of the week (YYYY-MM-DD). Defaults to current week."),
+    week_start: Optional[date] = Query(None, alias="weekStart", description="Monday of the week (YYYY-MM-DD). Defaults to current week."),
+    legacy_week_start: Optional[date] = Query(None, alias="week_start", include_in_schema=False),
     force: bool = Query(False, description="Force regenerate the week plan with new workoutDayIds"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -53,6 +54,10 @@ def get_week_plan_endpoint(
             _check_and_increment_force_regen(db, user_id)
         except ValueError as exc:
             raise HTTPException(status_code=429, detail=str(exc))
+
+    if week_start is not None and legacy_week_start is not None and week_start != legacy_week_start:
+        raise HTTPException(status_code=422, detail="weekStart and week_start must match when both are supplied.")
+    week_start = week_start or legacy_week_start
 
     # Normalize to Monday if provided date is not a Monday
     if week_start is not None:
@@ -82,7 +87,7 @@ def skip_workout_endpoint(
     Returns 404 if the workoutDayId is not found in the current week plan.
     """
     user_id = str(current_user.id)
-    week_start = get_week_start(date.today())
+    week_start = get_week_start(request.week_start or date.today())
 
     result = skip_workout_day(
         db,
@@ -117,7 +122,7 @@ def update_duration_endpoint(
     Returns 404 if the workoutDayId is not found in the current week plan.
     """
     user_id = str(current_user.id)
-    week_start = get_week_start(date.today())
+    week_start = get_week_start(request.week_start or date.today())
 
     result = update_workout_duration(
         db,
