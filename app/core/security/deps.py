@@ -46,6 +46,18 @@ def get_current_user(
             detail="User not found",
         )
 
+    token_auth_version = payload.get("auth_version", 0)
+    if not isinstance(token_auth_version, int) or isinstance(token_auth_version, bool):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+        )
+    if token_auth_version != user.auth_version:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+        )
+
     return user
 
 

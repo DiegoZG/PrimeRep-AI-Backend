@@ -13,6 +13,11 @@ class Settings:
     JWT_REFRESH_SECRET: str = os.getenv("JWT_REFRESH_SECRET", "")
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("JWT_REFRESH_TOKEN_EXPIRE_DAYS", "30"))
     RATE_LIMIT_STORAGE_URI: str = os.getenv("RATE_LIMIT_STORAGE_URI", "memory://")
+    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
+    EMAIL_FROM: str = os.getenv("EMAIL_FROM", "")
+    PASSWORD_RESET_URL_BASE: str = os.getenv(
+        "PASSWORD_RESET_URL_BASE", "http://localhost:8081/reset-password"
+    )
     CORS_ALLOWED_ORIGINS: list[str] = [
         origin.strip() for origin in os.getenv(
             "CORS_ALLOWED_ORIGINS",
@@ -34,5 +39,23 @@ class Settings:
 
     if APP_ENV.lower() in {"production", "prod"} and RATE_LIMIT_STORAGE_URI.startswith("memory://"):
         raise RuntimeError("RATE_LIMIT_STORAGE_URI must use shared non-memory storage in production")
+
+    if APP_ENV.lower() in {"production", "prod"}:
+        missing_email_settings = [
+            name
+            for name, value in (
+                ("RESEND_API_KEY", RESEND_API_KEY),
+                ("EMAIL_FROM", EMAIL_FROM),
+                ("PASSWORD_RESET_URL_BASE", PASSWORD_RESET_URL_BASE),
+            )
+            if not value
+        ]
+        if missing_email_settings:
+            raise RuntimeError(
+                "Password reset email settings are missing: "
+                + ", ".join(missing_email_settings)
+            )
+        if not PASSWORD_RESET_URL_BASE.startswith("https://"):
+            raise RuntimeError("PASSWORD_RESET_URL_BASE must use HTTPS in production")
 
 settings = Settings()

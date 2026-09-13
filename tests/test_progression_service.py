@@ -19,6 +19,7 @@ from app.core.progression_service import (
     suggest_weight_kg,
 )
 from app.main import app
+from conftest import LEGAL_ACCEPTANCE
 
 client = TestClient(app)
 
@@ -41,6 +42,7 @@ def _signup(prefix: str) -> tuple[str, str]:
             "password": "StrongPass123",
             "preferred_name": "Test",
             "last_name": "User",
+            "legalAcceptance": LEGAL_ACCEPTANCE,
         },
     )
     assert resp.status_code == 201

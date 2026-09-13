@@ -21,6 +21,7 @@ from app.core.database import SessionLocal
 from app.main import app
 from app.models.exercise import Exercise
 from app.models.exercise_question import ExerciseQuestion
+from conftest import LEGAL_ACCEPTANCE
 
 client = TestClient(app)
 
@@ -35,6 +36,7 @@ def _signup_and_get_token(email: str) -> tuple[str, str]:
         "password": "StrongPass123",
         "preferred_name": "Test",
         "last_name": "User",
+        "legalAcceptance": LEGAL_ACCEPTANCE,
     }
     resp = client.post("/v1/auth/signup", json=payload)
     assert resp.status_code == 201

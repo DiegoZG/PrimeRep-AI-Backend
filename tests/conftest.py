@@ -17,6 +17,13 @@ from app.core import coach_service
 from app.core.rate_limit import reset_rate_limits
 
 
+LEGAL_ACCEPTANCE = {
+    "accepted": True,
+    "termsVersion": "2026-09-12",
+    "privacyVersion": "2026-09-12",
+}
+
+
 _CANNED_COACH_RESPONSE = json.dumps(
     {
         "days": [

@@ -12,6 +12,7 @@ import uuid
 from fastapi.testclient import TestClient
 
 from app.main import app
+from conftest import LEGAL_ACCEPTANCE
 
 
 client = TestClient(app)
@@ -28,6 +29,7 @@ def _signup_and_get_token(email: str) -> str:
         "password": "StrongPass123",
         "preferred_name": "Test",
         "last_name": "User",
+        "legalAcceptance": LEGAL_ACCEPTANCE,
     }
     response = client.post("/v1/auth/signup", json=payload)
     assert response.status_code == 201

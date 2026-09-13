@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 from app.core.database import SessionLocal
 from app.main import app
 from app.models.push_token import PushToken
+from conftest import LEGAL_ACCEPTANCE
 
 
 client = TestClient(app)
@@ -18,6 +19,7 @@ def _signup(prefix: str):
             "password": "StrongPass123",
             "preferred_name": "Push",
             "last_name": "Test",
+            "legalAcceptance": LEGAL_ACCEPTANCE,
         },
     )
     assert response.status_code == 201

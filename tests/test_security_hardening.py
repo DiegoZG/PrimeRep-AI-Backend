@@ -9,6 +9,7 @@ from app.core.rate_limit import reset_rate_limits
 from app.core.security.jwt import decode_refresh_token
 from app.core.settings import settings
 from app.main import app
+from conftest import LEGAL_ACCEPTANCE
 
 
 client = TestClient(app)
@@ -23,6 +24,7 @@ def _signup(prefix="security", onboarding=None):
             "password": "StrongPass123",
             "preferred_name": "Security",
             "onboarding": onboarding,
+            "legalAcceptance": LEGAL_ACCEPTANCE,
         },
     )
     assert response.status_code == 201
@@ -36,7 +38,7 @@ def test_signup_limit_is_ip_scoped():
         assert _signup().get("access_token")
     response = client.post(
         "/v1/auth/signup",
-        json={"email": f"limited_{uuid.uuid4().hex}@example.com", "password": "StrongPass123", "preferred_name": "Limited"},
+        json={"email": f"limited_{uuid.uuid4().hex}@example.com", "password": "StrongPass123", "preferred_name": "Limited", "legalAcceptance": LEGAL_ACCEPTANCE},
     )
     assert response.status_code == 429
 
@@ -146,6 +148,7 @@ def test_onboarding_rejects_malformed_weight_arrays_for_save_and_signup():
                 "email": f"bad_{field}_{uuid.uuid4().hex}@example.com",
                 "password": "StrongPass123",
                 "preferred_name": "Bad",
+                "legalAcceptance": LEGAL_ACCEPTANCE,
                 "onboarding": {field: [5, "bad"]},
             },
         )
