@@ -137,8 +137,8 @@ def test_log_set_to_another_users_session_returns_404():
     assert resp.status_code == 404
 
 
-def test_log_set_to_completed_session_returns_409():
-    """Cannot add sets to an already-completed session."""
+def test_log_set_to_completed_session_is_allowed_for_late_corrections():
+    """Completed workouts remain correctable without reopening a session."""
     token = _signup_and_get_token(_unique_email("completed"))
     session = _create_session(token)
     session_id = session["id"]
@@ -152,7 +152,7 @@ def test_log_set_to_completed_session_returns_409():
         json={"exerciseId": "push_up", "setNumber": 1, "reps": 5},
         headers=_auth(token),
     )
-    assert resp.status_code == 409
+    assert resp.status_code == 201
 
 
 # ── Session completion ────────────────────────────────────────────────────────

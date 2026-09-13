@@ -43,6 +43,7 @@ class WorkoutWeekSkipRequest(BaseModel):
     """Request body for POST /v1/workouts/week/skip."""
 
     workout_day_id: str = Field(..., alias="workoutDayId")
+    week_start: Optional[date] = Field(None, alias="weekStart")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -52,5 +53,6 @@ class WorkoutWeekDurationPatchRequest(BaseModel):
 
     workout_day_id: str = Field(..., alias="workoutDayId")
     duration_minutes: int = Field(..., alias="durationMinutes", ge=15, le=120)
+    week_start: Optional[date] = Field(None, alias="weekStart")
 
     model_config = ConfigDict(populate_by_name=True)

@@ -1,6 +1,8 @@
 import uuid
 
-from sqlalchemy import Column, Date, DateTime, ForeignKey, Index, String, UniqueConstraint, func, text
+from datetime import datetime, timezone
+
+from sqlalchemy import Column, Date, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, func, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
@@ -28,6 +30,7 @@ class WorkoutSession(Base):
     status = Column(String, nullable=False, default="in_progress")
     started_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     completed_at = Column(DateTime(timezone=True), nullable=True)
+    workout_note = Column(Text, nullable=True)
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -35,11 +38,39 @@ class WorkoutSession(Base):
     )
 
     user = relationship("User", foreign_keys=[user_id])
-    set_logs = relationship("SetLog", back_populates="session", cascade="all, delete-orphan")
+    set_logs = relationship(
+        "SetLog",
+        primaryjoin="and_(WorkoutSession.id == SetLog.session_id, SetLog.deleted_at.is_(None))",
+        back_populates="session",
+        cascade="all, delete-orphan",
+    )
+    deleted_set_logs = relationship(
+        "SetLog",
+        primaryjoin="and_(WorkoutSession.id == SetLog.session_id, SetLog.deleted_at.isnot(None))",
+        viewonly=True,
+    )
+    exercise_feedback = relationship("WorkoutSessionExerciseFeedback", cascade="all, delete-orphan")
 
     @property
     def recovery_required(self) -> bool:
         return self.status == "in_progress" and self.workout_snapshot is None
+
+    @property
+    def summary(self) -> dict:
+        snapshot = self.workout_snapshot or {}
+        title = snapshot.get("title") or self.day_type.replace("_", " ").title()
+        elapsed_end = self.completed_at or datetime.now(timezone.utc)
+        duration_seconds = max(0, int((elapsed_end - self.started_at).total_seconds()))
+        total_volume_kg = sum(
+            float(set_log.weight_kg or 0) * set_log.reps
+            for set_log in self.set_logs
+        )
+        return {
+            "title": title,
+            "duration_seconds": duration_seconds,
+            "completed_set_count": len(self.set_logs),
+            "total_volume_kg": round(total_volume_kg, 2),
+        }
 
     __table_args__ = (
         Index("ix_workout_sessions_user_id", "user_id"),

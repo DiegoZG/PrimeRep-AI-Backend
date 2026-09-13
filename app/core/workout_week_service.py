@@ -533,6 +533,38 @@ def get_week_plan(
     )
 
 
+def _resolve_plan_for_workout_day(
+    db: Session,
+    *,
+    user_id: str,
+    workout_day_id: str,
+    week_start: date,
+) -> Optional[WorkoutWeekPlan]:
+    """Find the requested plan first, then recover a stale client week safely."""
+    requested_plan = get_week_plan(db, user_id=user_id, week_start=week_start)
+    if requested_plan and any(
+        workout.get("workoutDayId") == workout_day_id
+        for workout in requested_plan.plan_json.get("workouts", [])
+    ):
+        return requested_plan
+
+    # Workout IDs are UUIDs generated per user plan. This exceptional fallback
+    # lets a detail route recover if its in-memory week was refreshed, without
+    # ever touching another user's plan.
+    for plan in (
+        db.query(WorkoutWeekPlan)
+        .filter(WorkoutWeekPlan.user_id == user_id)
+        .all()
+    ):
+        if any(
+            workout.get("workoutDayId") == workout_day_id
+            for workout in plan.plan_json.get("workouts", [])
+        ):
+            return plan
+
+    return None
+
+
 def get_or_create_week_plan(
     db: Session,
     *,
@@ -675,9 +707,16 @@ def skip_workout_day(
     if week_start is None:
         week_start = get_week_start(date.today())
 
-    plan = get_week_plan(db, user_id=user_id, week_start=week_start)
+    plan = _resolve_plan_for_workout_day(
+        db,
+        user_id=user_id,
+        workout_day_id=workout_day_id,
+        week_start=week_start,
+    )
     if not plan:
         return None
+
+    week_start = plan.week_start_date
 
     workouts = plan.plan_json.get("workouts", [])
 
@@ -802,9 +841,16 @@ def update_workout_duration(
     if week_start is None:
         week_start = get_week_start(date.today())
 
-    plan = get_week_plan(db, user_id=user_id, week_start=week_start)
+    plan = _resolve_plan_for_workout_day(
+        db,
+        user_id=user_id,
+        workout_day_id=workout_day_id,
+        week_start=week_start,
+    )
     if not plan:
         return None
+
+    week_start = plan.week_start_date
 
     workouts = plan.plan_json.get("workouts", [])
 

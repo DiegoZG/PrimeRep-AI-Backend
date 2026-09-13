@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
@@ -6,11 +8,14 @@ from app.core.equipment_weights_service import (
     get_equipment_weight_arrays,
     upsert_equipment_weights,
 )
+from app.core.exercise_service import get_exercise
 from app.core.security.deps import get_current_user
 from app.core.user_service import delete_user
+from app.core.workout_logging_service import get_user_exercise_note, update_user_exercise_note
 from app.core.push_token_service import register_push_token, unregister_push_token
 from app.models.user import User
 from app.schemas.user import UserPreferencesRequest, UserResponse
+from app.schemas.workout_logging import UserExerciseNoteOut, UserExerciseNoteRequest
 from app.schemas.equipment_weights import (
     EquipmentWeightsPayload,
     EquipmentWeightsResponse,
@@ -150,3 +155,32 @@ def delete_push_token(
 ):
     unregister_push_token(db, user_id=str(current_user.id), token=body.token)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.put("/me/exercises/{exercise_id}/note", response_model=Optional[UserExerciseNoteOut])
+def replace_user_exercise_note(
+    exercise_id: str,
+    body: UserExerciseNoteRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if get_exercise(db, exercise_id) is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found.")
+    note = update_user_exercise_note(db, str(current_user.id), exercise_id, body.note)
+    if note is None:
+        return None
+    return UserExerciseNoteOut(exerciseId=note.exercise_id, note=note.note)
+
+
+@router.get("/me/exercises/{exercise_id}/note", response_model=Optional[UserExerciseNoteOut])
+def read_user_exercise_note(
+    exercise_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if get_exercise(db, exercise_id) is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found.")
+    note = get_user_exercise_note(db, str(current_user.id), exercise_id)
+    if note is None:
+        return None
+    return UserExerciseNoteOut(exerciseId=note.exercise_id, note=note.note)
