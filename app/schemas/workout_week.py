@@ -23,6 +23,11 @@ class WorkoutDayOut(BaseModel):
     deferred_muscles: list[str] = Field(default_factory=list, alias="deferredMuscles")
     unavailable_muscles: list[str] = Field(default_factory=list, alias="unavailableMuscles")
     exercise_blocks: list[WorkoutExerciseBlockOut] = Field(..., alias="exerciseBlocks")
+    program_activation_id: Optional[str] = Field(None, alias="programActivationId")
+    template_id: Optional[str] = Field(None, alias="templateId")
+    template_version: Optional[int] = Field(None, alias="templateVersion")
+    template_day_id: Optional[str] = Field(None, alias="templateDayId")
+    template_day_position: Optional[int] = Field(None, alias="templateDayPosition")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -35,6 +40,9 @@ class WorkoutWeekResponseOut(BaseModel):
     generated_at: datetime = Field(..., alias="generatedAt")
     seed: str
     workouts: list[WorkoutDayOut]
+    program_activation_id: Optional[str] = Field(None, alias="programActivationId")
+    template_id: Optional[str] = Field(None, alias="templateId")
+    template_version: Optional[int] = Field(None, alias="templateVersion")
 
     model_config = ConfigDict(populate_by_name=True)
 

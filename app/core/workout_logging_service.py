@@ -9,6 +9,7 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.core.schedule_lock import lock_user_schedule
 from app.models.set_log import SetLog
 from app.models.user_exercise_note import UserExerciseNote
 from app.models.workout_session_exercise_feedback import WorkoutSessionExerciseFeedback
@@ -45,6 +46,10 @@ class DuplicateSetSlot(Exception):
     """Raised when an active set already owns the requested exercise slot."""
 
 
+class WorkoutNotAvailable(Exception):
+    """Raised when a workout ID is no longer present in its server-owned week."""
+
+
 def _snapshot_exercise_ids(snapshot: Optional[dict]) -> set[str]:
     if snapshot is None:
         return set()
@@ -70,7 +75,10 @@ def _find_workout_snapshot(
         )
     plans = query.order_by(WorkoutWeekPlan.updated_at.desc()).all()
     for plan in plans:
-        for workout in plan.plan_json.get("workouts", []):
+        for workout in (
+            plan.plan_json.get("workouts", [])
+            + plan.plan_json.get("completedWorkoutSnapshots", [])
+        ):
             if workout.get("workoutDayId") == workout_day_id:
                 return copy.deepcopy(workout)
     return None
@@ -98,6 +106,7 @@ def create_session(
     day_type: str,
     client_session_id: str,
 ) -> WorkoutSession:
+    lock_user_schedule(db, user_id)
     existing = get_session_by_client_id(db, user_id, client_session_id)
     if existing is not None:
         return _backfill_snapshot(db, existing)
@@ -113,10 +122,39 @@ def create_session(
     if active is not None:
         raise ActiveSessionConflict
 
-    snapshot = _find_workout_snapshot(db, user_id, workout_day_id, workout_date)
-    if snapshot is not None:
-        workout_date = date.fromisoformat(snapshot["date"])
-        day_type = snapshot["dayType"]
+    from app.core.workout_week_service import get_or_create_week_plan, get_week_start
+
+    week_start = get_week_start(workout_date)
+    plan = (
+        db.query(WorkoutWeekPlan)
+        .filter_by(user_id=user_id, week_start_date=week_start)
+        .first()
+    )
+    if plan is None:
+        get_or_create_week_plan(
+            db,
+            user_id=user_id,
+            week_start=week_start,
+            commit=False,
+        )
+        plan = (
+            db.query(WorkoutWeekPlan)
+            .filter_by(user_id=user_id, week_start_date=week_start)
+            .first()
+        )
+    snapshot = next(
+        (
+            copy.deepcopy(workout)
+            for workout in plan.plan_json.get("workouts", [])
+            if workout.get("workoutDayId") == workout_day_id
+        ),
+        None,
+    )
+    if snapshot is None:
+        db.rollback()
+        raise WorkoutNotAvailable
+    workout_date = date.fromisoformat(snapshot["date"])
+    day_type = snapshot["dayType"]
 
     session = WorkoutSession(
         id=str(uuid.uuid4()),

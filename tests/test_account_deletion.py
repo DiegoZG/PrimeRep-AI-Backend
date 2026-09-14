@@ -168,6 +168,7 @@ def test_delete_account_cascades_dependents_and_anonymizes_owned_exercises():
         owned_exercise = db.get(Exercise, owned_exercise_id)
         assert owned_exercise is not None
         assert owned_exercise.owner_user_id is None
+        assert owned_exercise.is_active is False
         assert db.get(User, other_user_id) is not None
         assert db.get(OnboardingProfile, other_user_id) is not None
         assert db.get(UserEquipmentWeights, other_user_id) is not None

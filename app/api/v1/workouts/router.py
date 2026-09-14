@@ -9,12 +9,14 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.security.deps import get_current_user
 from app.core.workout_week_service import (
+    HistoricalProgramPlanLockedError,
     _check_and_increment_force_regen,
     get_or_create_week_plan,
     get_week_start,
     select_next_scheduled_workout,
     skip_workout_day,
     update_workout_duration,
+    ProgramDurationLockedError,
 )
 from app.models.user import User
 from app.core.rate_limit import check_force_regeneration
@@ -89,12 +91,18 @@ def skip_workout_endpoint(
     user_id = str(current_user.id)
     week_start = get_week_start(request.week_start or date.today())
 
-    result = skip_workout_day(
-        db,
-        user_id=user_id,
-        workout_day_id=request.workout_day_id,
-        week_start=week_start,
-    )
+    try:
+        result = skip_workout_day(
+            db,
+            user_id=user_id,
+            workout_day_id=request.workout_day_id,
+            week_start=week_start,
+        )
+    except HistoricalProgramPlanLockedError as error:
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "historical_program_locked", "message": str(error)},
+        ) from error
 
     if result is None:
         raise HTTPException(
@@ -124,13 +132,24 @@ def update_duration_endpoint(
     user_id = str(current_user.id)
     week_start = get_week_start(request.week_start or date.today())
 
-    result = update_workout_duration(
-        db,
-        user_id=user_id,
-        workout_day_id=request.workout_day_id,
-        duration_minutes=request.duration_minutes,
-        week_start=week_start,
-    )
+    try:
+        result = update_workout_duration(
+            db,
+            user_id=user_id,
+            workout_day_id=request.workout_day_id,
+            duration_minutes=request.duration_minutes,
+            week_start=week_start,
+        )
+    except (ProgramDurationLockedError, HistoricalProgramPlanLockedError) as error:
+        code = (
+            "historical_program_locked"
+            if isinstance(error, HistoricalProgramPlanLockedError)
+            else "program_duration_locked"
+        )
+        raise HTTPException(
+            status_code=409,
+            detail={"code": code, "message": str(error)},
+        ) from error
 
     if result is None:
         raise HTTPException(

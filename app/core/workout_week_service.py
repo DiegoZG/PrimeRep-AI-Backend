@@ -1,15 +1,17 @@
 """Weekly workout plan service: persisted weekly plans with skip/duration/regen."""
 
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 import random
 import uuid
 from typing import Any, Optional
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.attributes import flag_modified
 
 from app.core.coach_service import generate_coach_content, generate_week_coach_content
 from app.core.progression_service import suggest_weight_kg
+from app.core.schedule_lock import lock_user_schedule
 from app.core.workout_service import (
     LOWER_MUSCLES,
     MAIN_EXERCISE_TYPES,
@@ -21,6 +23,7 @@ from app.core.workout_service import (
     _filter_by_day_type,
     _pick_exercises,
     _exercise_to_schema,
+    _standard_day,
     OnboardingWorkoutSettings,
     WorkoutDayDefinition,
 )
@@ -59,6 +62,14 @@ DEFAULT_DURATION_MINUTES = 35
 DAILY_FORCE_REGEN_LIMIT = 3
 CYCLE_EPOCH_WEEK_START = date(2020, 1, 6)
 ONBOARDING_WORKOUT_CONTRACT_VERSION = 1
+
+
+class ProgramDurationLockedError(Exception):
+    pass
+
+
+class HistoricalProgramPlanLockedError(Exception):
+    pass
 
 FULL_BODY_FOUNDATION_ROLES = {"lower", "push", "pull"}
 DIRECT_ISOLATION_MUSCLES = {"abs", "biceps", "triceps", "calves", "forearms"}
@@ -446,7 +457,9 @@ def _generate_week_plan(
     rng = random.Random(seed_str)
 
     # Fetch eligible exercises once for the entire week
-    all_eligible = get_eligible_exercises(db, owned_equipment_ids=owned_equipment_ids)
+    all_eligible = get_eligible_exercises(
+        db, owned_equipment_ids=owned_equipment_ids, user_id=user_id
+    )
 
     workouts: list[dict[str, Any]] = []
     coach_days_input: list[dict] = []
@@ -571,6 +584,7 @@ def get_or_create_week_plan(
     user_id: str,
     week_start: Optional[date] = None,
     force_regenerate: bool = False,
+    commit: bool = True,
 ) -> WorkoutWeekResponseOut:
     """
     Get existing week plan or create a new one.
@@ -581,6 +595,48 @@ def get_or_create_week_plan(
     """
     if week_start is None:
         week_start = get_week_start(date.today())
+    week_start = get_week_start(week_start)
+    lock_user_schedule(db, user_id)
+
+    # An active program owns current/future schedule generation. Its immutable
+    # activation snapshot is deliberately independent of later preference edits.
+    from app.core.workout_template_service import (
+        get_effective_program,
+        install_activation_week,
+    )
+
+    existing_program_plan = get_week_plan(
+        db, user_id=user_id, week_start=week_start
+    )
+    server_today = datetime.now(timezone.utc).date()
+    earliest_current_week = min(
+        get_week_start(server_today + timedelta(days=offset)) for offset in (-1, 0, 1)
+    )
+    if (
+        existing_program_plan
+        and existing_program_plan.plan_json.get("programActivationId")
+        and week_start < earliest_current_week
+    ):
+        return _plan_json_to_response(existing_program_plan.plan_json)
+    effective_program = get_effective_program(
+        db, user_id, week_start + timedelta(days=6)
+    )
+    if effective_program and effective_program.effective_date <= week_start + timedelta(days=6):
+        if (
+            existing_program_plan
+            and existing_program_plan.plan_json.get("programActivationId") == effective_program.id
+            and not force_regenerate
+        ):
+            return _plan_json_to_response(existing_program_plan.plan_json)
+        return install_activation_week(db, effective_program, week_start, commit=commit)
+    if existing_program_plan and existing_program_plan.plan_json.get(
+        "programActivationId"
+    ):
+        # Program weeks are immutable historical records once no current or
+        # scheduled activation applies to them. Superseding/deactivating an
+        # activation must not reinterpret a stored program week using current
+        # onboarding preferences, even when its contract version differs.
+        return _plan_json_to_response(existing_program_plan.plan_json)
 
     # Load onboarding settings
     settings = get_onboarding_settings(db, user_id=user_id)
@@ -623,13 +679,19 @@ def get_or_create_week_plan(
 
     completed_snapshots: dict[str, dict[str, Any]] = {}
     if existing_plan and preferences_refresh_required:
+        existing_plan_ids = {
+            workout.get("workoutDayId")
+            for workout in existing_plan.plan_json.get("workouts", [])
+            if isinstance(workout.get("workoutDayId"), str)
+        }
         completed_ids = {
             row[0]
             for row in (
                 db.query(WorkoutSession.workout_day_id)
                 .filter(
                     WorkoutSession.user_id == user_id,
-                    WorkoutSession.completed_at.isnot(None),
+                    WorkoutSession.workout_day_id.in_(existing_plan_ids),
+                    WorkoutSession.status == "completed",
                 )
                 .all()
             )
@@ -675,8 +737,11 @@ def get_or_create_week_plan(
         existing_plan.days_per_week = days_per_week
         flag_modified(existing_plan, "plan_json")
         db.add(existing_plan)
-        db.commit()
-        db.refresh(existing_plan)
+        if commit:
+            db.commit()
+            db.refresh(existing_plan)
+        else:
+            db.flush()
         return _plan_json_to_response(existing_plan.plan_json)
     else:
         new_plan = WorkoutWeekPlan(
@@ -686,9 +751,18 @@ def get_or_create_week_plan(
             days_per_week=days_per_week,
             plan_json=plan_json,
         )
-        db.add(new_plan)
-        db.commit()
-        db.refresh(new_plan)
+        try:
+            with db.begin_nested():
+                db.add(new_plan)
+                db.flush()
+        except IntegrityError:
+            existing_plan = get_week_plan(db, user_id=user_id, week_start=week_start)
+            if existing_plan is None:
+                raise
+            return _plan_json_to_response(existing_plan.plan_json)
+        if commit:
+            db.commit()
+            db.refresh(new_plan)
         return _plan_json_to_response(new_plan.plan_json)
 
 
@@ -706,6 +780,7 @@ def skip_workout_day(
     """
     if week_start is None:
         week_start = get_week_start(date.today())
+    lock_user_schedule(db, user_id)
 
     plan = _resolve_plan_for_workout_day(
         db,
@@ -715,6 +790,19 @@ def skip_workout_day(
     )
     if not plan:
         return None
+
+    if plan.plan_json.get("programActivationId"):
+        server_today = datetime.now(timezone.utc).date()
+        earliest_current_week = min(
+            get_week_start(server_today + timedelta(days=offset)) for offset in (-1, 0, 1)
+        )
+        if plan.week_start_date < earliest_current_week:
+            raise HistoricalProgramPlanLockedError(
+                "Historical program weeks cannot be changed"
+            )
+        from app.core.workout_template_service import skip_program_workout_day
+
+        return skip_program_workout_day(db, plan, workout_day_id)
 
     week_start = plan.week_start_date
 
@@ -779,7 +867,9 @@ def skip_workout_day(
 
     # Use a random seed for the new workout
     rng = random.Random(f"{user_id}:{week_start.isoformat()}:{uuid.uuid4()}")
-    all_eligible = get_eligible_exercises(db, owned_equipment_ids=owned_equipment_ids)
+    all_eligible = get_eligible_exercises(
+        db, owned_equipment_ids=owned_equipment_ids, user_id=user_id
+    )
 
     new_workout, new_items = _generate_single_workout(
         rng=rng,
@@ -840,6 +930,7 @@ def update_workout_duration(
     """
     if week_start is None:
         week_start = get_week_start(date.today())
+    lock_user_schedule(db, user_id)
 
     plan = _resolve_plan_for_workout_day(
         db,
@@ -854,16 +945,76 @@ def update_workout_duration(
 
     workouts = plan.plan_json.get("workouts", [])
 
-    # Find the workout and update its duration
-    found = False
-    for w in workouts:
-        if w.get("workoutDayId") == workout_day_id:
-            w["durationMinutes"] = duration_minutes
-            found = True
-            break
-
-    if not found:
+    workout = next(
+        (item for item in workouts if item.get("workoutDayId") == workout_day_id),
+        None,
+    )
+    if workout is None:
         return None
+    if workout.get("programActivationId"):
+        server_today = datetime.now(timezone.utc).date()
+        earliest_current_week = min(
+            get_week_start(server_today + timedelta(days=offset)) for offset in (-1, 0, 1)
+        )
+        if plan.week_start_date < earliest_current_week:
+            raise HistoricalProgramPlanLockedError(
+                "Historical program weeks cannot be changed"
+            )
+        raise ProgramDurationLockedError(
+            "Program workout duration is fixed by the active program"
+        )
+    workout["durationMinutes"] = duration_minutes
+
+    if any(item.get("programActivationId") for item in workouts):
+        settings = get_onboarding_settings(db, user_id=user_id)
+        owned_equipment_ids = _get_owned_equipment_ids_from_settings(db, settings)
+        day_definition = next(
+            (
+                item
+                for item in settings.day_cycle
+                if item.day_type == workout.get("dayType")
+            ),
+            _standard_day(workout.get("dayType", "full_body")),
+        )
+        regenerated, exercise_items = _generate_single_workout(
+            rng=random.Random(
+                f"{user_id}:{week_start.isoformat()}:{settings.selection_seed}:"
+                f"duration:{workout_day_id}:{duration_minutes}"
+            ),
+            all_eligible=get_eligible_exercises(
+                db,
+                owned_equipment_ids=owned_equipment_ids,
+                user_id=user_id,
+            ),
+            day_type=day_definition.day_type,
+            split_preference=settings.split_preference,
+            day_definition=day_definition,
+            duration_minutes=duration_minutes,
+            workout_date=date.fromisoformat(workout["date"]),
+            slot_index=workout.get("slotIndex", 0),
+            workout_day_id=workout_day_id,
+            db=db,
+            user_id=user_id,
+        )
+        coach = generate_coach_content(
+            db,
+            user_id=user_id,
+            day_type=regenerated["dayType"],
+            title=regenerated["title"],
+            exercise_items=exercise_items,
+        )
+        _stamp_coach_content(regenerated, coach)
+        workouts[workouts.index(workout)] = regenerated
+        updated_plan = dict(plan.plan_json)
+        updated_plan["workouts"] = workouts
+        updated_plan["generatedAt"] = datetime.now(timezone.utc).isoformat().replace(
+            "+00:00", "Z"
+        )
+        plan.plan_json = updated_plan
+        flag_modified(plan, "plan_json")
+        db.commit()
+        db.refresh(plan)
+        return _plan_json_to_response(plan.plan_json)
 
     # Snapshot existing coach content by workoutDayId before regeneration
     old_coach: dict[str, dict] = {
@@ -1021,6 +1172,11 @@ def _plan_json_to_response(plan_json: dict[str, Any]) -> WorkoutWeekResponseOut:
             deferred_muscles=w.get("deferredMuscles", []),
             unavailable_muscles=w.get("unavailableMuscles", []),
             exercise_blocks=exercise_blocks,
+            program_activation_id=w.get("programActivationId"),
+            template_id=w.get("templateId"),
+            template_version=w.get("templateVersion"),
+            template_day_id=w.get("templateDayId"),
+            template_day_position=w.get("templateDayPosition"),
         )
         workouts.append(workout)
 
@@ -1030,4 +1186,7 @@ def _plan_json_to_response(plan_json: dict[str, Any]) -> WorkoutWeekResponseOut:
         generated_at=datetime.fromisoformat(plan_json["generatedAt"].rstrip("Z")),
         seed=plan_json["seed"],
         workouts=workouts,
+        program_activation_id=plan_json.get("programActivationId"),
+        template_id=plan_json.get("templateId"),
+        template_version=plan_json.get("templateVersion"),
     )

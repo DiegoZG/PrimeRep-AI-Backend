@@ -85,6 +85,10 @@ docker compose up -d
 
 alembic upgrade head
 
+The workout-program search migration enables PostgreSQL's trusted `pg_trgm`
+extension. In production, install it ahead of deployment or grant the migration
+role permission to run `CREATE EXTENSION IF NOT EXISTS pg_trgm`.
+
 ---
 
 ### 6. Start the API server
@@ -209,6 +213,31 @@ curl -H "Authorization: Bearer <token>" \
 ```
 
 Response shape matches the exercise catalog list, with `is_favorited` set to `true` on all items.
+
+---
+
+### Explore Programs (Authenticated)
+
+`GET /v1/workout-templates` lists system and owned private programs. Program
+activation uses `POST /v1/workout-templates/{templateId}/activate`; its
+`clientOperationId` is permanently bound to the complete canonical request, so
+reusing that key with different activation inputs returns `409`.
+
+`GET /v1/workout-templates/active?effectiveDate=YYYY-MM-DD` promotes a scheduled
+revision only when `effectiveDate` is the caller's current local date. The API
+accepts UTC today plus or minus one day for timezone boundaries and rejects
+arbitrary future dates.
+
+`PATCH /v1/users/me/training-preferences` keeps its preference fields in the JSON
+body. Updated clients also send `weekStart` and `effectiveDate` query parameters:
+
+```text
+PATCH /v1/users/me/training-preferences?weekStart=2026-09-14&effectiveDate=2026-09-14
+```
+
+The parameters must be supplied together. `effectiveDate` is the caller's local
+today and `weekStart` identifies the containing Monday. Older clients may omit
+both and use the server's current UTC week.
 
 ---
 
