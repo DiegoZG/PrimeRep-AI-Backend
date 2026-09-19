@@ -188,12 +188,22 @@ def test_workout_ppl_split():
     response = client.post("/v1/onboarding/me", json=onboarding_payload, headers=headers)
     assert response.status_code == 200
 
-    # First workout: should be "push" (first day of PPL)
+    # The calendar-anchored cycle may begin on any PPL day, but each scheduled
+    # workout must advance through the PPL rotation in order.
     response = client.post("/v1/workouts/next", headers=headers)
     assert response.status_code == 200
     data = response.json()
-    assert data["dayType"] == "push", "First PPL workout should be push"
+    cycle = ("push", "pull", "legs")
+    assert data["dayType"] in cycle
     assert data["splitKey"] == "ppl"
+
+    week_response = client.get("/v1/workouts/week", headers=headers)
+    assert week_response.status_code == 200
+    workouts = week_response.json()["workouts"]
+    day_types = [workout["dayType"] for workout in workouts]
+    start_index = cycle.index(day_types[0])
+    assert day_types == [cycle[(start_index + index) % len(cycle)] for index in range(len(day_types))]
+    assert data["workoutId"] in {workout["workoutDayId"] for workout in workouts}
 
 
 def test_workout_full_body_split():

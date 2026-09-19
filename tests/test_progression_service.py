@@ -20,6 +20,7 @@ from app.core.progression_service import (
 )
 from app.main import app
 from conftest import LEGAL_ACCEPTANCE
+from workout_test_utils import install_startable_workout
 
 client = TestClient(app)
 
@@ -64,10 +65,17 @@ def _complete_session(
     workout_date: datetime.date,
     day_type: str = "upper",
 ) -> None:
+    workout = install_startable_workout(
+        client,
+        token,
+        workout_date=workout_date,
+        day_type=day_type,
+        exercise_ids=(exercise_id,),
+    )
     payload = {
-        "workoutDayId": f"day-{uuid.uuid4().hex[:8]}",
-        "workoutDate": workout_date.isoformat(),
-        "dayType": day_type,
+        "workoutDayId": workout["workoutDayId"],
+        "workoutDate": workout["date"],
+        "dayType": workout["dayType"],
     }
     session = client.post("/v1/workouts/sessions", json=payload, headers=_auth(token))
     assert session.status_code == 201
@@ -190,10 +198,11 @@ def test_in_range_but_not_top_holds():
 
 def test_bodyweight_session_returns_none():
     token, user_id = _signup("bw")
+    workout = install_startable_workout(client, token, exercise_ids=("push_up",))
     payload = {
-        "workoutDayId": f"day-{uuid.uuid4().hex[:8]}",
-        "workoutDate": datetime.date.today().isoformat(),
-        "dayType": "upper",
+        "workoutDayId": workout["workoutDayId"],
+        "workoutDate": workout["date"],
+        "dayType": workout["dayType"],
     }
     session = client.post("/v1/workouts/sessions", json=payload, headers=_auth(token))
     session_id = session.json()["id"]

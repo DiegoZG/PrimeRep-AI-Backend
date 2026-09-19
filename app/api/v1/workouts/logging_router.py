@@ -15,6 +15,7 @@ from app.core.workout_logging_service import (
     InvalidSessionMutation,
     StaleSetMutation,
     InvalidOperationReuse,
+    WorkoutNotAvailable,
     create_session,
     delete_set,
     get_session,
@@ -76,6 +77,11 @@ def create_session_endpoint(
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Finish or abandon your active workout before starting another.",
+        )
+    except WorkoutNotAvailable:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="This workout is no longer available in your schedule.",
         )
     if existing is not None:
         response.status_code = status.HTTP_200_OK

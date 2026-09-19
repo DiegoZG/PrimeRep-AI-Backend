@@ -1,12 +1,16 @@
 """Contract tests for resumable, idempotent workout sessions."""
 import datetime
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
 from fastapi.testclient import TestClient
 
+from app.core.database import SessionLocal
 from app.main import app
+from app.models.workout_session import WorkoutSession
 from conftest import LEGAL_ACCEPTANCE
+from workout_test_utils import install_startable_workout
 
 client = TestClient(app)
 
@@ -31,13 +35,16 @@ def _headers(token: str) -> dict[str, str]:
 
 
 def _start(token: str, client_session_id: Optional[str] = None) -> dict:
+    workout = install_startable_workout(
+        client, token, workout_day_id="resumable-day"
+    )
     response = client.post(
         "/v1/workouts/sessions",
         headers=_headers(token),
         json={
             "workoutDayId": "resumable-day",
-            "workoutDate": datetime.date.today().isoformat(),
-            "dayType": "upper",
+            "workoutDate": workout["date"],
+            "dayType": workout["dayType"],
             "clientSessionId": client_session_id or str(uuid.uuid4()),
         },
     )
@@ -237,3 +244,103 @@ def test_set_must_belong_to_immutable_workout_snapshot():
     )
     assert response.status_code == 422
     assert response.json()["detail"] == "Exercise is not part of this workout."
+
+
+def test_stale_workout_id_cannot_create_a_snapshotless_session():
+    token = _token()
+    headers = _headers(token)
+    workout = install_startable_workout(
+        client, token, workout_day_id="replaced-workout"
+    )
+    refreshed = client.get(
+        "/v1/workouts/week",
+        headers=headers,
+        params={"weekStart": workout["date"], "force": "true"},
+    )
+    assert refreshed.status_code == 200
+    response = client.post(
+        "/v1/workouts/sessions",
+        headers=headers,
+        json={
+            "workoutDayId": workout["workoutDayId"],
+            "workoutDate": workout["date"],
+            "dayType": "client-controlled-value",
+            "clientSessionId": str(uuid.uuid4()),
+        },
+    )
+    assert response.status_code == 404
+    assert "no longer available" in response.json()["detail"]
+    user_id = client.get("/v1/users/me", headers=headers).json()["id"]
+    with SessionLocal() as db:
+        assert db.query(WorkoutSession).filter_by(user_id=user_id).count() == 0
+
+
+def test_start_and_activation_share_schedule_lock_and_never_create_null_snapshot():
+    token = _token()
+    headers = _headers(token)
+    assert client.post(
+        "/v1/onboarding/me",
+        headers=headers,
+        json={
+            "data": {
+                "selectedEquipment": ["dumbbells", "pull_up_bar", "dip_bar"]
+            },
+            "is_complete": True,
+        },
+    ).status_code == 200
+    week = client.get("/v1/workouts/week", headers=headers).json()
+    workout = week["workouts"][0]
+    monday = datetime.date.fromisoformat(week["weekStart"])
+    preview_payload = {
+        "weekStart": week["weekStart"],
+        "effectiveDate": monday.isoformat(),
+        "weekdays": [0, 2, 4],
+        "applyMode": "now",
+    }
+    preview = client.post(
+        "/v1/workout-templates/system-minimal-equipment/activation-preview",
+        headers=headers,
+        json=preview_payload,
+    )
+    assert preview.status_code == 200
+    substitutions = {
+        item["templateExerciseId"]: item["suggestedExerciseId"]
+        for item in preview.json()["equipmentConflicts"]
+        if item["suggestedExerciseId"]
+    }
+
+    def start():
+        return client.post(
+            "/v1/workouts/sessions",
+            headers=headers,
+            json={
+                "workoutDayId": workout["workoutDayId"],
+                "workoutDate": workout["date"],
+                "dayType": workout["dayType"],
+                "clientSessionId": str(uuid.uuid4()),
+            },
+        )
+
+    def activate():
+        return client.post(
+            "/v1/workout-templates/system-minimal-equipment/activate",
+            headers=headers,
+            json={
+                **preview_payload,
+                "templateVersion": 1,
+                "substitutions": substitutions,
+                "clientOperationId": str(uuid.uuid4()),
+            },
+        )
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        start_future = executor.submit(start)
+        activate_future = executor.submit(activate)
+        started = start_future.result(timeout=10)
+        activated = activate_future.result(timeout=10)
+    assert activated.status_code == 200, activated.json()
+    assert started.status_code in {201, 404}, started.json()
+    user_id = client.get("/v1/users/me", headers=headers).json()["id"]
+    with SessionLocal() as db:
+        sessions = db.query(WorkoutSession).filter_by(user_id=user_id).all()
+        assert all(session.workout_snapshot is not None for session in sessions)

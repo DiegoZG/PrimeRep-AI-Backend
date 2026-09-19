@@ -14,3 +14,12 @@ from app.models.password_reset_token import PasswordResetToken  # noqa: F401
 from app.models.workout_session_operation import WorkoutSessionOperation  # noqa: F401
 from app.models.workout_session_exercise_feedback import WorkoutSessionExerciseFeedback  # noqa: F401
 from app.models.user_exercise_note import UserExerciseNote  # noqa: F401
+from app.models.workout_template import (  # noqa: F401
+    ExerciseAlias,
+    UserProgramActivation,
+    WorkoutTemplate,
+    WorkoutTemplateAlias,
+    WorkoutTemplateDay,
+    WorkoutTemplateEquipment,
+    WorkoutTemplateExercise,
+)

@@ -15,6 +15,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from conftest import LEGAL_ACCEPTANCE
+from workout_test_utils import install_startable_workout
 
 client = TestClient(app)
 
@@ -42,10 +43,13 @@ def _auth(token: str) -> dict:
 
 
 def _create_session(token: str, workout_day_id: str = "day-001") -> dict:
+    workout = install_startable_workout(
+        client, token, workout_day_id=workout_day_id
+    )
     payload = {
         "workoutDayId": workout_day_id,
-        "workoutDate": datetime.date.today().isoformat(),
-        "dayType": "upper",
+        "workoutDate": workout["date"],
+        "dayType": workout["dayType"],
     }
     resp = client.post("/v1/workouts/sessions", json=payload, headers=_auth(token))
     assert resp.status_code == 201

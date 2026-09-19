@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from conftest import LEGAL_ACCEPTANCE
+from workout_test_utils import install_startable_workout
 
 client = TestClient(app)
 
@@ -30,13 +31,16 @@ def _headers(token: str) -> dict[str, str]:
 
 
 def _session(token: str) -> dict:
+    workout = install_startable_workout(
+        client, token, workout_day_id="editing-day"
+    )
     response = client.post(
         "/v1/workouts/sessions",
         headers=_headers(token),
         json={
             "workoutDayId": "editing-day",
-            "workoutDate": datetime.date.today().isoformat(),
-            "dayType": "upper",
+            "workoutDate": workout["date"],
+            "dayType": workout["dayType"],
             "clientSessionId": str(uuid.uuid4()),
         },
     )

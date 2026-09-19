@@ -259,3 +259,59 @@ def test_preferences_reject_unknown_equipment_and_invalid_known_values():
     )
     assert response.status_code == 200
     assert response.json()["selectedEquipment"] == ["olympic_barbell", "flat_bench"]
+
+
+def test_preference_mutation_uses_explicit_caller_local_week():
+    tokens = _signup()
+    headers = _headers(tokens)
+    today = date.today()
+    monday = today - timedelta(days=today.weekday())
+    before = client.get(
+        "/v1/workouts/week",
+        headers=headers,
+        params={"weekStart": monday.isoformat()},
+    ).json()
+    changed = client.patch(
+        "/v1/users/me/training-preferences",
+        headers=headers,
+        params={
+            "weekStart": monday.isoformat(),
+            "effectiveDate": today.isoformat(),
+        },
+        json={"workoutFrequency": "1-day"},
+    )
+    assert changed.status_code == 200
+    after = client.get(
+        "/v1/workouts/week",
+        headers=headers,
+        params={"weekStart": monday.isoformat()},
+    ).json()
+    assert after["daysPerWeek"] == 1
+    assert after["workouts"] != before["workouts"]
+
+
+def test_preference_mutation_validates_explicit_calendar_context():
+    tokens = _signup()
+    headers = _headers(tokens)
+    today = date.today()
+    monday = today - timedelta(days=today.weekday())
+    missing_pair = client.patch(
+        "/v1/users/me/training-preferences",
+        headers=headers,
+        params={"weekStart": monday.isoformat()},
+        json={"fitnessGoal": "get-stronger"},
+    )
+    assert missing_pair.status_code == 422
+    assert "supplied together" in missing_pair.json()["detail"]
+
+    arbitrary_future = client.patch(
+        "/v1/users/me/training-preferences",
+        headers=headers,
+        params={
+            "weekStart": (monday + timedelta(days=14)).isoformat(),
+            "effectiveDate": (today + timedelta(days=14)).isoformat(),
+        },
+        json={"fitnessGoal": "get-stronger"},
+    )
+    assert arbitrary_future.status_code == 422
+    assert "current local date" in arbitrary_future.json()["detail"]

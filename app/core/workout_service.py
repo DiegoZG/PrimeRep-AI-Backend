@@ -13,6 +13,7 @@ from app.models.equipment import Equipment
 from app.models.exercise import Exercise
 from app.models.onboarding_profile import OnboardingProfile
 from app.models.workout_day_history import WorkoutDayHistory
+from app.core.exercise_service import exercise_visibility_filter
 from app.schemas.workout import (
     WorkoutBlockItemOut,
     WorkoutExerciseBlockOut,
@@ -488,6 +489,7 @@ def get_eligible_exercises(
     db: Session,
     *,
     owned_equipment_ids: set[str],
+    user_id: Optional[str] = None,
 ) -> list[Exercise]:
     """
     Return active exercises that the user can perform based on their equipment.
@@ -497,6 +499,7 @@ def get_eligible_exercises(
         db.query(Exercise)
         .options(selectinload(Exercise.equipment))
         .filter(Exercise.is_active.is_(True))
+        .filter(exercise_visibility_filter(user_id))
         .order_by(Exercise.id.asc())
         .all()
     )
@@ -608,7 +611,9 @@ def generate_next_workout(
     split_key = split_preference
 
     # Get eligible exercises
-    all_eligible = get_eligible_exercises(db, owned_equipment_ids=owned_equipment_ids)
+    all_eligible = get_eligible_exercises(
+        db, owned_equipment_ids=owned_equipment_ids, user_id=user_id
+    )
     day_pool = _filter_by_day_type(all_eligible, day_type, day.muscles)
 
     # Deterministic random for stable output per user per day

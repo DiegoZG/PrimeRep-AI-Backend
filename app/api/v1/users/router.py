@@ -1,6 +1,7 @@
+from datetime import date
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -12,6 +13,14 @@ from app.core.exercise_service import get_exercise
 from app.core.security.deps import get_current_user
 from app.core.user_service import delete_user
 from app.core.workout_logging_service import get_user_exercise_note, update_user_exercise_note
+from app.core.exercise_service import exercise_to_dict
+from app.core.workout_template_service import (
+    TemplateNotFoundError,
+    TemplateValidationError,
+    archive_custom_exercise,
+    create_custom_exercise,
+    update_custom_exercise,
+)
 from app.core.push_token_service import register_push_token, unregister_push_token
 from app.models.user import User
 from app.schemas.user import UserPreferencesRequest, UserResponse
@@ -25,6 +34,7 @@ from app.schemas.push_token import (
     PushTokenPayload,
     PushTokenResponse,
 )
+from app.schemas.exercise import CustomExerciseOut, CustomExerciseWrite
 from app.schemas.training_preferences import (
     TrainingPreferences,
     TrainingPreferencesResponse,
@@ -35,6 +45,52 @@ from app.core.training_preferences_service import (
 )
 
 router = APIRouter(prefix="/users", tags=["users"])
+
+
+@router.post("/me/exercises", response_model=CustomExerciseOut, status_code=201)
+def create_private_exercise(
+    body: CustomExerciseWrite,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        exercise = create_custom_exercise(db, str(current_user.id), body)
+    except TemplateValidationError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return CustomExerciseOut.model_validate(
+        exercise_to_dict(exercise, user_id=str(current_user.id))
+    )
+
+
+@router.put("/me/exercises/{exercise_id}", response_model=CustomExerciseOut)
+def replace_private_exercise(
+    exercise_id: str,
+    body: CustomExerciseWrite,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        exercise = update_custom_exercise(db, str(current_user.id), exercise_id, body)
+    except TemplateNotFoundError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+    except TemplateValidationError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return CustomExerciseOut.model_validate(
+        exercise_to_dict(exercise, user_id=str(current_user.id))
+    )
+
+
+@router.delete("/me/exercises/{exercise_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_private_exercise(
+    exercise_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        archive_custom_exercise(db, str(current_user.id), exercise_id)
+    except TemplateNotFoundError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+    return Response(status_code=204)
 
 
 @router.get("/me", response_model=UserResponse)
@@ -63,12 +119,20 @@ def read_training_preferences(
 )
 def patch_training_preferences(
     body: TrainingPreferences,
+    week_start: Optional[date] = Query(None, alias="weekStart"),
+    effective_date: Optional[date] = Query(None, alias="effectiveDate"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     updates = body.model_dump(exclude_unset=True)
     try:
-        return update_training_preferences(db, str(current_user.id), updates)
+        return update_training_preferences(
+            db,
+            str(current_user.id),
+            updates,
+            week_start=week_start,
+            effective_date=effective_date,
+        )
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
 
@@ -164,7 +228,7 @@ def replace_user_exercise_note(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    if get_exercise(db, exercise_id) is None:
+    if get_exercise(db, exercise_id, user_id=str(current_user.id)) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found.")
     note = update_user_exercise_note(db, str(current_user.id), exercise_id, body.note)
     if note is None:
@@ -178,7 +242,7 @@ def read_user_exercise_note(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    if get_exercise(db, exercise_id) is None:
+    if get_exercise(db, exercise_id, user_id=str(current_user.id)) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Exercise not found.")
     note = get_user_exercise_note(db, str(current_user.id), exercise_id)
     if note is None:

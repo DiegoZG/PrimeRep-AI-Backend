@@ -1,12 +1,14 @@
-from datetime import date
-from typing import Any
+from datetime import date, datetime, timedelta, timezone
+from typing import Any, Optional
 
 from sqlalchemy.orm import Session
 
 from app.core.onboarding_service import get_onboarding_by_user_id, upsert_onboarding
+from app.core.schedule_lock import lock_user_schedule
 from app.models.equipment import Equipment
 from app.models.workout_session import WorkoutSession
 from app.models.workout_week_plan import WorkoutWeekPlan
+from app.models.workout_template import UserProgramActivation
 
 
 PREFERENCE_FIELDS = (
@@ -77,8 +79,17 @@ def get_training_preferences(db: Session, user_id: str) -> dict[str, Any]:
 
 
 def update_training_preferences(
-    db: Session, user_id: str, updates: dict[str, Any]
+    db: Session,
+    user_id: str,
+    updates: dict[str, Any],
+    *,
+    week_start: Optional[date] = None,
+    effective_date: Optional[date] = None,
 ) -> dict[str, Any]:
+    mutation_week_start, _ = _resolve_mutation_calendar(
+        week_start=week_start, effective_date=effective_date
+    )
+    lock_user_schedule(db, user_id)
     profile = get_onboarding_by_user_id(db, user_id)
     current = dict(profile.data) if profile else {}
     if not updates:
@@ -92,7 +103,33 @@ def update_training_preferences(
         return _canonical_preferences(current)
 
     upsert_onboarding(db, user_id, current, commit=False)
-    _invalidate_uncompleted_current_and_future_plans(db, user_id)
+    active_programs = (
+        db.query(UserProgramActivation)
+        .filter(
+            UserProgramActivation.user_id == user_id,
+            UserProgramActivation.status.in_(["active", "scheduled"]),
+        )
+        .all()
+    )
+    current_programs = [item for item in active_programs if item.status == "active"]
+    scheduled_programs = [item for item in active_programs if item.status == "scheduled"]
+    if "selectedEquipment" in updates:
+        for active_program in active_programs:
+            active_program.requires_review = True
+    if not current_programs:
+        scheduled_week_start = min(
+            (
+                item.effective_date - timedelta(days=item.effective_date.weekday())
+                for item in scheduled_programs
+            ),
+            default=None,
+        )
+        _invalidate_uncompleted_current_and_future_plans(
+            db,
+            user_id,
+            week_start=mutation_week_start,
+            before_week_start=scheduled_week_start,
+        )
     db.commit()
     return _canonical_preferences(current)
 
@@ -174,10 +211,14 @@ def _canonical_preference_value(field: str, value: Any) -> Any:
     return None
 
 
-def _invalidate_uncompleted_current_and_future_plans(db: Session, user_id: str) -> None:
+def _invalidate_uncompleted_current_and_future_plans(
+    db: Session,
+    user_id: str,
+    *,
+    week_start: date,
+    before_week_start: Optional[date] = None,
+) -> None:
     """Refresh uncompleted plans while retaining completed current-week snapshots."""
-    today = date.today()
-    week_start = today.fromordinal(today.toordinal() - today.weekday())
     plans = (
         db.query(WorkoutWeekPlan)
         .filter(
@@ -186,18 +227,29 @@ def _invalidate_uncompleted_current_and_future_plans(db: Session, user_id: str) 
         )
         .all()
     )
+    plan_workout_day_ids = {
+        workout.get("workoutDayId")
+        for plan in plans
+        for workout in plan.plan_json.get("workouts", [])
+        if isinstance(workout.get("workoutDayId"), str)
+    }
     completed_day_ids = {
         row[0]
         for row in (
             db.query(WorkoutSession.workout_day_id)
             .filter(
                 WorkoutSession.user_id == user_id,
-                WorkoutSession.completed_at.isnot(None),
+                WorkoutSession.workout_day_id.in_(plan_workout_day_ids),
+                WorkoutSession.status == "completed",
             )
             .all()
         )
     }
     for plan in plans:
+        if before_week_start is not None and plan.week_start_date >= before_week_start:
+            continue
+        if plan.plan_json.get("programActivationId"):
+            continue
         if plan.week_start_date > week_start:
             db.delete(plan)
             continue
@@ -215,6 +267,29 @@ def _invalidate_uncompleted_current_and_future_plans(db: Session, user_id: str) 
                 and workout["workoutDayId"] in completed_day_ids
             }.values()),
         }
+
+
+def _resolve_mutation_calendar(
+    *, week_start: Optional[date], effective_date: Optional[date]
+) -> tuple[date, date]:
+    if (week_start is None) != (effective_date is None):
+        raise ValueError("weekStart and effectiveDate must be supplied together")
+    server_today = datetime.now(timezone.utc).date()
+    if effective_date is None:
+        effective_date = server_today
+        week_start = effective_date - timedelta(days=effective_date.weekday())
+        return week_start, effective_date
+    if effective_date not in {
+        server_today - timedelta(days=1),
+        server_today,
+        server_today + timedelta(days=1),
+    }:
+        raise ValueError("effectiveDate must be the caller's current local date")
+    normalized_week_start = week_start - timedelta(days=week_start.weekday())
+    effective_week_start = effective_date - timedelta(days=effective_date.weekday())
+    if normalized_week_start != effective_week_start:
+        raise ValueError("weekStart must contain effectiveDate")
+    return normalized_week_start, effective_date
 
 
 def _validate_equipment_ids(db: Session, equipment_ids: Any) -> None:
