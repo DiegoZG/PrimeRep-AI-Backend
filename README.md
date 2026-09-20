@@ -98,6 +98,21 @@ uvicorn app.main:app --reload
 API URL  
 http://127.0.0.1:8000
 
+### Coach notification worker
+
+Run the durable Coach notification outbox every five minutes from the deployment
+platform's cron scheduler:
+
+```bash
+python scripts/run_coach_worker.py
+```
+
+The command reconciles enabled users, claims due jobs with PostgreSQL
+`FOR UPDATE SKIP LOCKED`, sends Expo push tickets in batches of at most 100,
+polls mature receipts, retries transient failures, removes unregistered device
+tokens, and purges Coach data after its 30-day retention window. Set the optional
+`EXPO_ACCESS_TOKEN` environment variable for authenticated Expo push requests.
+
 API Docs  
 http://127.0.0.1:8000/docs
 

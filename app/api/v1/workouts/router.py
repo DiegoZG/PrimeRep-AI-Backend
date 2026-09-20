@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.coach_feed_service import reconcile_after_mutation
 from app.core.security.deps import get_current_user
 from app.core.workout_week_service import (
     HistoricalProgramPlanLockedError,
@@ -65,12 +66,15 @@ def get_week_plan_endpoint(
     if week_start is not None:
         week_start = get_week_start(week_start)
 
-    return get_or_create_week_plan(
+    result = get_or_create_week_plan(
         db,
         user_id=user_id,
         week_start=week_start,
         force_regenerate=force,
     )
+    if force:
+        reconcile_after_mutation(db, user_id, invalidate_plan_items=True)
+    return result
 
 
 @router.post("/week/skip", response_model=WorkoutWeekResponseOut)
@@ -110,6 +114,9 @@ def skip_workout_endpoint(
             detail="Workout day not found in current plan. Refresh your week plan.",
         )
 
+    reconcile_after_mutation(
+        db, user_id, workout_day_ids=[request.workout_day_id]
+    )
     return result
 
 
@@ -157,6 +164,9 @@ def update_duration_endpoint(
             detail="Workout day not found in current plan. Refresh your week plan.",
         )
 
+    reconcile_after_mutation(
+        db, user_id, workout_day_ids=[request.workout_day_id]
+    )
     return result
 
 
@@ -196,6 +206,8 @@ def get_next_workout(
         week_start=week_start,
         force_regenerate=force,
     )
+    if force:
+        reconcile_after_mutation(db, user_id, invalidate_plan_items=True)
 
     # Convert to dict for selection
     plan_dict = {

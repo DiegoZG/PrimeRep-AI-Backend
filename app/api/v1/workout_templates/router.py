@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.coach_feed_service import reconcile_after_mutation
 from app.core.exercise_service import exercise_to_dict, list_favorite_ids
 from app.core.security.deps import get_current_user
 from app.core.workout_template_service import (
@@ -119,12 +120,19 @@ def remove_active_program(
     db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
 ):
     try:
-        return deactivate_program(
+        week = deactivate_program(
             db,
             str(current_user.id),
             week_start=week_start,
             effective_date=effective_date,
         )
+        reconcile_after_mutation(
+            db,
+            str(current_user.id),
+            invalidate_plan_items=True,
+            invalidate_program_items=True,
+        )
+        return week
     except TemplateValidationError as error:
         _raise_domain(error)
 
@@ -139,6 +147,11 @@ def remove_scheduled_program(
             db,
             str(current_user.id),
             effective_date=effective_date,
+        )
+        reconcile_after_mutation(
+            db,
+            str(current_user.id),
+            invalidate_program_items=True,
         )
     except TemplateValidationError as error:
         _raise_domain(error)
@@ -268,6 +281,14 @@ def activate(
             substitutions=payload.substitutions,
             apply_mode=payload.apply_mode,
             client_operation_id=payload.client_operation_id,
+        )
+        reconcile_after_mutation(
+            db,
+            str(current_user.id),
+            activation_ids=[activation.id],
+            template_ids=[activation.template_id] if activation.template_id else [],
+            invalidate_plan_items=True,
+            invalidate_program_items=True,
         )
         return ActivateProgramOut(activeProgram=active_program_to_out(activation), weekPlan=week)
     except (TemplateValidationError, TemplateConflictError, TemplateNotFoundError) as error:

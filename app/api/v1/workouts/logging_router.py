@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.coach_feed_service import reconcile_after_mutation
 from app.core.security.deps import get_current_user
 from app.core.workout_logging_service import (
     ActiveSessionConflict,
@@ -31,6 +32,7 @@ from app.core.workout_logging_service import (
     update_workout_note,
 )
 from app.models.user import User
+from app.models.set_log import SetLog
 from app.schemas.workout_logging import (
     SessionCreateRequest,
     SessionListOut,
@@ -85,6 +87,11 @@ def create_session_endpoint(
         )
     if existing is not None:
         response.status_code = status.HTTP_200_OK
+    reconcile_after_mutation(
+        db,
+        str(current_user.id),
+        workout_day_ids=[session.workout_day_id],
+    )
     return session
 
 
@@ -135,6 +142,12 @@ def log_set_endpoint(
         raise HTTPException(status_code=409, detail="That set number already exists for this exercise.")
     if logged_set is None:
         raise HTTPException(status_code=404, detail="Session not found.")
+    reconcile_after_mutation(
+        db,
+        str(current_user.id),
+        metric_session_ids=[session_id],
+        exercise_ids=[request.exercise_id],
+    )
     return logged_set
 
 
@@ -156,6 +169,14 @@ def complete_session_endpoint(
         raise HTTPException(status_code=409, detail="An abandoned workout cannot be completed.")
     if session is None:
         raise HTTPException(status_code=404, detail="Session not found.")
+    reconcile_after_mutation(
+        db,
+        str(current_user.id),
+        metric_session_ids=[session.id],
+        status_session_ids=[session.id],
+        exercise_ids=list({row.exercise_id for row in session.set_logs}),
+        workout_day_ids=[session.workout_day_id],
+    )
     return session
 
 
@@ -171,6 +192,12 @@ def abandon_session_endpoint(
         raise HTTPException(status_code=409, detail="A completed workout cannot be abandoned.")
     if session is None:
         raise HTTPException(status_code=404, detail="Session not found.")
+    reconcile_after_mutation(
+        db,
+        str(current_user.id),
+        status_session_ids=[session.id],
+        workout_day_ids=[session.workout_day_id],
+    )
     return session
 
 
@@ -267,6 +294,12 @@ def update_set_endpoint(
         raise _mutation_error(error)
     if set_log is None:
         raise HTTPException(status_code=404, detail="Set not found.")
+    reconcile_after_mutation(
+        db,
+        str(current_user.id),
+        metric_session_ids=[session_id],
+        exercise_ids=[set_log.exercise_id],
+    )
     return set_log
 
 
@@ -284,6 +317,13 @@ def delete_set_endpoint(
         raise _mutation_error(error)
     if not deleted:
         raise HTTPException(status_code=404, detail="Set not found.")
+    set_log = db.get(SetLog, set_log_id)
+    reconcile_after_mutation(
+        db,
+        str(current_user.id),
+        metric_session_ids=[session_id],
+        exercise_ids=[set_log.exercise_id] if set_log is not None else [],
+    )
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
@@ -301,6 +341,12 @@ def restore_set_endpoint(
         raise _mutation_error(error)
     if set_log is None:
         raise HTTPException(status_code=404, detail="Set not found.")
+    reconcile_after_mutation(
+        db,
+        str(current_user.id),
+        metric_session_ids=[session_id],
+        exercise_ids=[set_log.exercise_id],
+    )
     return set_log
 
 
@@ -336,6 +382,12 @@ def update_exercise_feedback_endpoint(
         raise _mutation_error(error)
     if feedback is None:
         raise HTTPException(status_code=404, detail="Session not found.")
+    reconcile_after_mutation(
+        db,
+        str(current_user.id),
+        metric_session_ids=[session_id],
+        exercise_ids=[exercise_id],
+    )
     return feedback
 
 

@@ -30,6 +30,7 @@ class Settings:
     # (keeps local dev / tests working without an API key).
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
     ANTHROPIC_QA_MODEL: str = os.getenv("ANTHROPIC_QA_MODEL", "claude-haiku-4-5-20251001")
+    EXPO_ACCESS_TOKEN: str = os.getenv("EXPO_ACCESS_TOKEN", "")
 
     if not JWT_SECRET:
         raise RuntimeError("JWT_SECRET is not set in .env")
