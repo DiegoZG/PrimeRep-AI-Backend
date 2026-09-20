@@ -101,6 +101,7 @@ def ask_question(
         exercise_id=exercise.id,
         question=question,
         answer=answer,
+        content_version=exercise.content_version,
     )
     db.add(qa)
     db.commit()

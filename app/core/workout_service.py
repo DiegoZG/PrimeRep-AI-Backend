@@ -499,6 +499,7 @@ def get_eligible_exercises(
         db.query(Exercise)
         .options(selectinload(Exercise.equipment))
         .filter(Exercise.is_active.is_(True))
+        .filter(Exercise.generation_eligible.is_(True))
         .filter(exercise_visibility_filter(user_id))
         .order_by(Exercise.id.asc())
         .all()
@@ -568,6 +569,8 @@ def _exercise_to_schema(exercise: Exercise) -> WorkoutExerciseOut:
         image_url=exercise.image_url,
         demo_video_url=exercise.demo_video_url,
         required_equipment_ids=[e.id for e in exercise.equipment],
+        load_profile=exercise.load_profile,
+        content_version=exercise.content_version,
     )
 
 

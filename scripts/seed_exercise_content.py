@@ -1,12 +1,8 @@
 """
-Seed / update long-form exercise content (how_to, why_it_works,
-common_mistakes, beginner_notes) used by the exercise detail screen and the
-AI exercise Q&A feature.
+Legacy exercise draft generator. Direct publishing is retired.
 
-This is OFFLINE TOOLING — it is not run automatically by the app or by
-Alembic migrations. Migrations only add the (nullable) content columns;
-populating them is a deliberate, human-reviewed step run separately so that
-shipped content is never unreviewed LLM output.
+Use exercise_catalog.py for validated imports and actual trainer/publication
+reviews tied to immutable hashes. Existing content has legacy provenance.
 
 Usage
 -----
@@ -14,22 +10,9 @@ Usage
     #    ANTHROPIC_API_KEY. Writes scripts/data/exercise_content_draft.json.
     python scripts/seed_exercise_content.py generate
 
-    # 2. Review the draft carefully, edit as needed, then save/rename it as
-    #    the reviewed file:
-    cp scripts/data/exercise_content_draft.json scripts/data/exercise_content.json
-    #    (edit scripts/data/exercise_content.json by hand)
+    # 2. Adapt drafts to the CatalogEntry schema and use exercise_catalog.py.
 
-    # 3. Upsert the reviewed content into the database (requires DATABASE_URL,
-    #    and that `alembic upgrade head` has already been run so the content
-    #    columns exist):
-    python scripts/seed_exercise_content.py upsert
-
-`scripts/data/exercise_content.json` already ships with hand-reviewed,
-high-quality content for every exercise seeded in Alembic revision
-b7c8d9e0f1a2 (SEED_EXERCISES), so most setups can skip straight to step 3.
-
-`upsert` refuses to load a `*_draft.json` file by default, since drafts are
-unreviewed LLM output and should never be loaded straight into the database.
+Renaming files is not an approval. The former upsert command always fails.
 """
 import argparse
 import importlib.util
@@ -112,52 +95,12 @@ def cmd_generate(_args: argparse.Namespace) -> None:
         json.dump({"exercises": drafts}, f, indent=2)
 
     print(f"\nWrote {len(drafts)} draft(s) to {DRAFT_PATH}")
-    print("Review this file carefully, then save/rename it to exercise_content.json before running 'upsert'.")
+    print("Adapt this draft to the CatalogEntry schema, then use exercise_catalog.py for review and publication.")
 
 
 def cmd_upsert(args: argparse.Namespace) -> None:
-    """Load reviewed content JSON and UPDATE matching rows in `exercises`. Idempotent."""
-    path = Path(args.file) if args.file else REVIEWED_PATH
-
-    if path.name.endswith("_draft.json") and not args.allow_draft:
-        raise SystemExit(
-            f"Refusing to upsert from '{path.name}' — this looks like an unreviewed draft. "
-            "Review it, save it as exercise_content.json, and re-run. "
-            "Pass --allow-draft to override (not recommended)."
-        )
-
-    if not path.exists():
-        raise SystemExit(f"Content file not found: {path}")
-
-    with open(path) as f:
-        payload = json.load(f)
-
-    from app.core.database import SessionLocal
-    from app.models.exercise import Exercise
-
-    db = SessionLocal()
-    updated = 0
-    skipped: list[str] = []
-    try:
-        for item in payload.get("exercises", []):
-            exercise = db.query(Exercise).filter(Exercise.id == item["id"]).first()
-            if not exercise:
-                skipped.append(item["id"])
-                continue
-
-            for field in CONTENT_FIELDS:
-                if field in item:
-                    setattr(exercise, field, item[field])
-
-            updated += 1
-
-        db.commit()
-    finally:
-        db.close()
-
-    print(f"Upserted content for {updated} exercise(s) from {path}.")
-    if skipped:
-        print(f"Skipped {len(skipped)} unknown exercise id(s): {', '.join(skipped)}")
+    """Reject the retired direct-publishing command with migration guidance."""
+    raise SystemExit("Direct content upsert is retired. Use scripts/exercise_catalog.py import, submit, review, and publish; filenames are not approvals.")
 
 
 def main() -> None:
@@ -172,15 +115,15 @@ def main() -> None:
     )
     generate_parser.set_defaults(func=cmd_generate)
 
-    upsert_parser = subparsers.add_parser("upsert", help="Load reviewed content into the database")
+    upsert_parser = subparsers.add_parser("upsert", help="Retired: use exercise_catalog.py review and publish")
     upsert_parser.add_argument(
         "--file",
-        help="Path to the reviewed content JSON (default: scripts/data/exercise_content.json)",
+        help="Legacy argument accepted only to display migration guidance; no content is loaded",
     )
     upsert_parser.add_argument(
         "--allow-draft",
         action="store_true",
-        help="Allow loading a *_draft.json file directly (not recommended)",
+        help="Retired compatibility argument; cannot bypass actual review approvals",
     )
     upsert_parser.set_defaults(func=cmd_upsert)
 

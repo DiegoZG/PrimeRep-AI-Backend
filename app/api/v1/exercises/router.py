@@ -11,12 +11,14 @@ from app.core.exercise_qa_service import (
     list_questions,
 )
 from app.core.exercise_service import (
+    count_exercises,
     exercise_to_dict,
     get_exercise,
     is_favorited,
     list_exercises,
     list_favorite_ids,
 )
+from app.core.exercise_catalog_service import catalog_version
 from app.core.workout_template_service import (
     TemplateNotFoundError,
     list_substitutions,
@@ -73,8 +75,8 @@ def list_exercises_endpoint(
     muscle: Optional[str] = None,
     equipment_id: Optional[str] = None,
     type: Optional[str] = Query(None, alias="type"),
-    limit: int = 100,
-    offset: int = 0,
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
     current_user: Optional[User] = Depends(get_current_user_optional),
 ):
@@ -108,7 +110,11 @@ def list_exercises_endpoint(
         )
         items.append(ExerciseOut.model_validate(exercise_dict))
 
-    return {"items": items}
+    total = count_exercises(db, q=q, muscle=muscle, equipment_id=equipment_id, exercise_type=type, user_id=str(current_user.id) if current_user else None)
+    if q and total == 0:
+        import logging
+        logging.getLogger("primerep.catalog").info("catalog_zero_results", extra={"catalog_endpoint": "exercises"})
+    return {"items": items, "limit": limit, "offset": offset, "total": total, "has_more": offset + len(items) < total, "catalog_version": catalog_version(db)}
 
 
 @router.get("/{exercise_id}/last-sets", response_model=LastSetsOut)

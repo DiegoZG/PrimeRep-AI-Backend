@@ -1,0 +1,1215 @@
+{
+  "schema_version": 1,
+  "exercises": [
+    {
+      "id": "dumbbell_overhead_extension",
+      "name": "Two-Hand Dumbbell Overhead Extension",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one secure dumbbell with both hands above the head.",
+          "Bend the elbows to lower it behind the head, then extend without moving the ribs."
+        ],
+        "cues": [
+          "Maintain a firm two-hand grip."
+        ],
+        "mistakes": [
+          "Letting the dumbbell contact the head."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "single_arm_dumbbell_extension",
+      "name": "Single-Arm Dumbbell Overhead Extension",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one light dumbbell overhead with the elbow pointing generally upward.",
+          "Lower behind the head through elbow bending and straighten it again."
+        ],
+        "cues": [
+          "Use the free hand only as a light position guide."
+        ],
+        "mistakes": [
+          "Forcing the elbow into a narrow position that hurts."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_kickback",
+      "name": "Dumbbell Triceps Kickback",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "dumbbells",
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Support one hand on a bench and hold the opposite upper arm beside the inclined torso.",
+          "Straighten the elbow backward and return to a right-angle bend."
+        ],
+        "cues": [
+          "Keep the upper arm lifted and still."
+        ],
+        "mistakes": [
+          "Swinging the whole arm behind the body."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "cable_kickback",
+      "name": "Cable Triceps Kickback",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hinge facing a low pulley with the upper arm beside the torso.",
+          "Extend the elbow backward against the cable and return slowly."
+        ],
+        "cues": [
+          "Keep the shoulder fixed."
+        ],
+        "mistakes": [
+          "Standing up as the arm straightens."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "lying_dumbbell_extension",
+      "name": "Lying Dumbbell Triceps Extension",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "flat_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on a bench with two dumbbells above the shoulders and palms facing inward.",
+          "Bend the elbows beside the head, then extend while keeping upper arms steady."
+        ],
+        "cues": [
+          "Keep weights clear of the face."
+        ],
+        "mistakes": [
+          "Dropping the elbows outward to turn it into a press."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "machine_triceps_extension",
+      "name": "Machine Triceps Extension",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "triceps_extension_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the seat and arm pad to align elbows with the machine pivot.",
+          "Straighten the elbows against the handle and return smoothly."
+        ],
+        "cues": [
+          "Keep upper arms on the support."
+        ],
+        "mistakes": [
+          "Lifting off the pad to force the final range."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "assisted_dip",
+      "name": "Assisted Dip Machine",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "assisted_weight_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "assistance",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set assistance and mount the machine using its steps and support platform.",
+          "Bend the elbows through a comfortable depth and press back up."
+        ],
+        "cues": [
+          "Keep the shoulder range comfortable."
+        ],
+        "mistakes": [
+          "Dropping too deeply because the machine provides assistance."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "close_grip_push_up",
+      "name": "Close-Grip Push-Up",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Place hands slightly narrower than a standard push-up and form a straight body line.",
+          "Lower the chest with elbows near the ribs and press away from the floor."
+        ],
+        "cues": [
+          "Use a comfortable hand spacing."
+        ],
+        "mistakes": [
+          "Forcing the hands into a diamond shape that strains the wrists."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "bodyweight_squat",
+      "name": "Bodyweight Squat",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand with a comfortable foot width and toes angled slightly outward.",
+          "Bend hips and knees together, then stand while keeping feet planted."
+        ],
+        "cues": [
+          "Keep pressure across the whole foot."
+        ],
+        "mistakes": [
+          "Lifting the heels to reach a deeper squat."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "goblet_squat",
+      "name": "Dumbbell Goblet Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one dumbbell upright against the chest and set a comfortable stance.",
+          "Sit down between the hips and stand while keeping the weight close."
+        ],
+        "cues": [
+          "Keep the load against the chest."
+        ],
+        "mistakes": [
+          "Holding the dumbbell far ahead of the body."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "kettlebell_goblet_squat",
+      "name": "Kettlebell Goblet Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "kettlebells"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "kettlebell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one kettlebell by the horns against the chest.",
+          "Squat between the hips and stand with the bell close to the torso."
+        ],
+        "cues": [
+          "Keep forearms under the bell."
+        ],
+        "mistakes": [
+          "Resting the elbows on the knees to bounce upward."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_front_squat",
+      "name": "Double Dumbbell Front Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Hold two dumbbells at shoulder height in a stable front-rack position.",
+          "Squat to a controlled depth and stand while keeping the elbows forward."
+        ],
+        "cues": [
+          "Keep the weights supported near the shoulders."
+        ],
+        "mistakes": [
+          "Letting the dumbbells pull the chest downward."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_suitcase_squat",
+      "name": "Dumbbell Suitcase Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Hold a dumbbell beside each thigh and stand with room for them outside the knees.",
+          "Bend hips and knees, lower between the weights and stand."
+        ],
+        "cues": [
+          "Keep the dumbbells beside the body."
+        ],
+        "mistakes": [
+          "Hitting the knees with the weights."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "box_squat",
+      "name": "Barbell Box Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "squat_rack",
+        "olympic_barbell",
+        "plates",
+        "plyo_box"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set a stable box behind you inside a rack and hold a bar across the upper back.",
+          "Squat until seated lightly on the box, keep tension and stand."
+        ],
+        "cues": [
+          "Check box height before adding load."
+        ],
+        "mistakes": [
+          "Rocking backward on the box to gain momentum."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "goblet_box_squat",
+      "name": "Goblet Box Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "dumbbells",
+        "plyo_box"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one dumbbell at the chest with a stable box behind the legs.",
+          "Lower until the hips touch the box lightly, then stand."
+        ],
+        "cues": [
+          "Touch down softly."
+        ],
+        "mistakes": [
+          "Dropping the final distance onto the box."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "smith_squat",
+      "name": "Smith Machine Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "smith_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set stops and position the feet so the fixed bar path feels balanced.",
+          "Unhook the bar, squat with heels planted and stand before reracking."
+        ],
+        "cues": [
+          "Test stance under the unloaded bar."
+        ],
+        "mistakes": [
+          "Forcing the feet into the same position as a free-bar squat."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "hack_squat",
+      "name": "Hack Squat Machine",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "hack_squat_machine_selectorized"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the machine and place shoulders under the pads with feet on the platform.",
+          "Release the stop, lower through a controlled depth and press back up."
+        ],
+        "cues": [
+          "Keep pelvis and back against the pad."
+        ],
+        "mistakes": [
+          "Letting the hips lift off the support at the bottom."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "heel_elevated_goblet_squat",
+      "name": "Heel-Elevated Goblet Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "dumbbells",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one dumbbell at the chest and place heels on two equal low stable plates.",
+          "Squat while keeping heels supported, then stand through the whole foot."
+        ],
+        "cues": [
+          "Use only a small heel elevation."
+        ],
+        "mistakes": [
+          "Balancing on loose stacks of plates."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "belt_squat",
+      "name": "Belt Squat Machine",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "belt_squat_machine",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Fit the machine belt around the hips and connect it as specified by the manufacturer.",
+          "Squat while the belt pulls at the hips, then stand without tugging on the handles."
+        ],
+        "cues": [
+          "Keep the belt below the waist."
+        ],
+        "mistakes": [
+          "Loading a loose or incorrectly attached belt."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "pendulum_squat",
+      "name": "Pendulum Squat Machine",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "pendulum_squat_machine",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set the stops and place the back and shoulders firmly against the support.",
+          "Lower with the machine arc and press back through the feet."
+        ],
+        "cues": [
+          "Stay against the back pad."
+        ],
+        "mistakes": [
+          "Letting the heels rise as the sled descends."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "cable_pull_through",
+      "name": "Cable Pull-Through",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face away from a low pulley holding a suitable rope between the legs.",
+          "Hinge the hips back, then stand by extending the hips as hands remain near the thighs."
+        ],
+        "cues": [
+          "Let the hips drive the movement."
+        ],
+        "mistakes": [
+          "Pulling the rope forward with the arms."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "single_leg_press",
+      "name": "Single-Leg Machine Leg Press",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "leg_press_machine_selectorized"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "machine",
+      "difficulty": "intermediate",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set a light resistance and place one foot centrally on a machine designed for unilateral use.",
+          "Bend the working knee and press back without rotating the pelvis."
+        ],
+        "cues": [
+          "Keep both sides of the pelvis supported."
+        ],
+        "mistakes": [
+          "Starting with half of a heavy two-leg load without testing control."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "split_squat",
+      "name": "Bodyweight Split Squat",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand in a long split stance with both feet staying in place.",
+          "Bend both knees to lower vertically, then push through the front foot to rise."
+        ],
+        "cues": [
+          "Keep the front heel planted."
+        ],
+        "mistakes": [
+          "Walking the feet along a narrow tightrope line."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_split_squat",
+      "name": "Dumbbell Split Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand in a split stance with a dumbbell beside each hip.",
+          "Lower the rear knee toward the floor and stand through the front leg."
+        ],
+        "cues": [
+          "Keep the weights beside the body."
+        ],
+        "mistakes": [
+          "Allowing the front knee to collapse inward."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "rear_foot_elevated_split_squat",
+      "name": "Rear-Foot-Elevated Split Squat",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "flat_bench",
+        "dumbbells"
+      ],
+      "aliases": [
+        "bulgarian split squat"
+      ],
+      "movement_pattern": "lunge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Place the rear foot on a low stable bench and hold dumbbells beside the hips.",
+          "Lower through the front hip and knee, then stand while the rear foot provides support."
+        ],
+        "cues": [
+          "Use a bench height that permits balance."
+        ],
+        "mistakes": [
+          "Pushing mostly through the rear leg."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    }
+  ]
+}

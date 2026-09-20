@@ -1,0 +1,1211 @@
+{
+  "schema_version": 1,
+  "exercises": [
+    {
+      "id": "reverse_lunge",
+      "name": "Bodyweight Reverse Lunge",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand upright with enough clear space behind you.",
+          "Step one foot backward, lower both knees and return through the front leg."
+        ],
+        "cues": [
+          "Keep the front foot planted."
+        ],
+        "mistakes": [
+          "Reaching so far back that balance is lost."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_reverse_lunge",
+      "name": "Dumbbell Reverse Lunge",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Hold two dumbbells at the sides and begin standing tall.",
+          "Step backward into a lunge and drive through the stationary front foot to return."
+        ],
+        "cues": [
+          "Move the weights with the torso."
+        ],
+        "mistakes": [
+          "Swinging dumbbells during the step."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "forward_lunge",
+      "name": "Bodyweight Forward Lunge",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand with feet near hip width and clear floor ahead.",
+          "Step forward, lower both knees and push back to the starting stance."
+        ],
+        "cues": [
+          "Land the whole front foot softly."
+        ],
+        "mistakes": [
+          "Taking a very short step and falling onto the toes."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "lateral_lunge",
+      "name": "Bodyweight Lateral Lunge",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand tall with space to step sideways.",
+          "Step out, bend the stepping knee while the other leg stays long, then return."
+        ],
+        "cues": [
+          "Send the hips toward the stepping side."
+        ],
+        "mistakes": [
+          "Turning the movement into a forward lunge."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_lateral_lunge",
+      "name": "Dumbbell Lateral Lunge",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one dumbbell at the chest and stand with clear space at each side.",
+          "Step laterally, sit into that hip and push back to center."
+        ],
+        "cues": [
+          "Keep the load close."
+        ],
+        "mistakes": [
+          "Allowing the supporting foot to roll inward."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "step_up",
+      "name": "Dumbbell Step-Up",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "plyo_box",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand facing a stable low box with dumbbells beside the hips.",
+          "Place the whole working foot on the box, step up and lower under control."
+        ],
+        "cues": [
+          "Use the elevated leg to lift the body."
+        ],
+        "mistakes": [
+          "Jumping from the trailing foot."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "lateral_step_up",
+      "name": "Lateral Step-Up",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "plyo_box"
+      ],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand beside a low stable box and place the nearer foot on it.",
+          "Drive through that foot to rise sideways, then lower slowly."
+        ],
+        "cues": [
+          "Keep the knee aligned over the foot."
+        ],
+        "mistakes": [
+          "Pushing off the floor leg to bypass the working leg."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "single_leg_box_squat",
+      "name": "Single-Leg Box Squat",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "abs"
+      ],
+      "equipment_ids": [
+        "plyo_box"
+      ],
+      "aliases": [],
+      "movement_pattern": "squat",
+      "resistance_modality": "bodyweight",
+      "difficulty": "advanced",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand on one leg in front of a high box, with the other foot held clear.",
+          "Sit back to touch the box, then stand on the same leg."
+        ],
+        "cues": [
+          "Begin with a high target."
+        ],
+        "mistakes": [
+          "Dropping onto a box too low for your current control."
+        ],
+        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
+        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bodyweight Squat",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/135/bodyweight-squat/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Squats bend and extend the knees and hips with the feet supported."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_romanian_deadlift",
+      "name": "Dumbbell Romanian Deadlift",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand holding two dumbbells in front of the thighs with knees softly bent.",
+          "Send hips backward as weights slide near the legs, then stand by extending the hips."
+        ],
+        "cues": [
+          "Keep the weights close."
+        ],
+        "mistakes": [
+          "Squatting down rather than hinging back."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "single_leg_romanian_deadlift",
+      "name": "Single-Leg Dumbbell Romanian Deadlift",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "intermediate",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one dumbbell opposite the standing leg and soften that knee.",
+          "Hinge over the standing hip as the free leg reaches back, then return upright."
+        ],
+        "cues": [
+          "Keep both hip points facing down."
+        ],
+        "mistakes": [
+          "Opening the lifted hip toward the ceiling."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "kickstand_romanian_deadlift",
+      "name": "Kickstand Dumbbell Romanian Deadlift",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Hold two dumbbells with one foot slightly behind and only its toes lightly supporting you.",
+          "Hinge over the front hip, then stand while keeping most pressure in the front foot."
+        ],
+        "cues": [
+          "Use the rear foot as a balance aid."
+        ],
+        "mistakes": [
+          "Sharing the load evenly despite the staggered setup."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "trap_bar_deadlift",
+      "name": "Trap-Bar Deadlift",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "trap_bar",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand centered inside a trap bar and grip the handles with knees and hips bent.",
+          "Push the floor away to stand, then bend hips and knees to set it down."
+        ],
+        "cues": [
+          "Keep the handles level."
+        ],
+        "mistakes": [
+          "Starting off-center inside the frame."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "sumo_deadlift",
+      "name": "Sumo Barbell Deadlift",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Use a wide stance with toes angled outward and grip the bar inside the legs.",
+          "Extend knees and hips to stand and return the bar close to the body."
+        ],
+        "cues": [
+          "Keep knees tracking with toes."
+        ],
+        "mistakes": [
+          "Choosing a stance so wide that the feet roll inward."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "kettlebell_deadlift",
+      "name": "Kettlebell Deadlift",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "kettlebells"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "kettlebell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Place one kettlebell between the feet and hinge to grasp its handle.",
+          "Stand with the bell below the shoulders and return it between the feet."
+        ],
+        "cues": [
+          "Keep the bell over the middle of the stance."
+        ],
+        "mistakes": [
+          "Reaching far forward for the handle."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "barbell_good_morning",
+      "name": "Barbell Good Morning",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "olympic_barbell",
+        "plates",
+        "squat_rack"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Place a light bar across the upper back inside a rack and soften the knees.",
+          "Hinge the hips back to a controlled torso angle, then stand."
+        ],
+        "cues": [
+          "Keep the load light while learning."
+        ],
+        "mistakes": [
+          "Rounding to reach a lower torso position."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "back_extension",
+      "name": "Back Extension Bench",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [
+        "glutes",
+        "back"
+      ],
+      "equipment_ids": [
+        "back_extension_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "hinge",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set the pad just below the hip crease and secure the feet.",
+          "Fold through the hips and return to a straight body line without leaning beyond it."
+        ],
+        "cues": [
+          "Move at the hips."
+        ],
+        "mistakes": [
+          "Finishing by arching far past neutral."
+        ],
+        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
+        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Deadlifts use hip and knee extension to lift a load."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "seated_leg_curl",
+      "name": "Seated Leg Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "seated_leg_curl_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Align knees with the machine pivot and secure the thigh pad.",
+          "Bend the knees to pull the pad beneath the seat, then return slowly."
+        ],
+        "cues": [
+          "Keep thighs beneath the restraint."
+        ],
+        "mistakes": [
+          "Allowing the hips to slide forward."
+        ],
+        "benefits": "Trains the hamstrings by bending the knee against resistance.",
+        "beginner_guidance": "Use a short controlled range initially and increase it only while the pelvis remains steady."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies posterior-chain anatomy only; knee-flexion variant needs trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "single_leg_lying_curl",
+      "name": "Single-Leg Lying Leg Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "leg_curl_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "machine",
+      "difficulty": "intermediate",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on a suitable curl machine with one ankle under the roller and hips supported.",
+          "Bend one knee and lower the roller without lifting the pelvis."
+        ],
+        "cues": [
+          "Keep both hips against the pad."
+        ],
+        "mistakes": [
+          "Arching the back as the heel approaches the hips."
+        ],
+        "benefits": "Trains the hamstrings by bending the knee against resistance.",
+        "beginner_guidance": "Use a short controlled range initially and increase it only while the pelvis remains steady."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies posterior-chain anatomy only; knee-flexion variant needs trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "standing_leg_curl",
+      "name": "Standing Leg Curl Machine",
+      "exercise_type": "accessory",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "plate_loaded_standing_leg_curl",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the roller above the ankle and brace against the machine support.",
+          "Curl the heel upward and lower with the working thigh steady."
+        ],
+        "cues": [
+          "Keep the knee pointing downward."
+        ],
+        "mistakes": [
+          "Moving the whole thigh backward to lift the lever."
+        ],
+        "benefits": "Trains the hamstrings by bending the knee against resistance.",
+        "beginner_guidance": "Use a short controlled range initially and increase it only while the pelvis remains steady."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies posterior-chain anatomy only; knee-flexion variant needs trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "stability_ball_leg_curl",
+      "name": "Stability-Ball Leg Curl",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "stability_ball"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on the back with heels on a ball and lift the hips into a bridge.",
+          "Roll the ball toward the hips by bending the knees, then extend slowly."
+        ],
+        "cues": [
+          "Keep the hips lifted only as high as you control."
+        ],
+        "mistakes": [
+          "Letting the ball escape sideways."
+        ],
+        "benefits": "Trains the hamstrings by bending the knee against resistance.",
+        "beginner_guidance": "Use a short controlled range initially and increase it only while the pelvis remains steady."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies posterior-chain anatomy only; knee-flexion variant needs trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "glute_ham_raise",
+      "name": "Glute-Ham Raise",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "glute_ham_raise_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "bodyweight",
+      "difficulty": "advanced",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the bench so knees rest appropriately on the pad and ankles are secured.",
+          "Lower the torso through controlled knee extension, then curl back upright with assistance if needed."
+        ],
+        "cues": [
+          "Begin with hand assistance."
+        ],
+        "mistakes": [
+          "Dropping forward faster than the hamstrings can control."
+        ],
+        "benefits": "Trains the hamstrings by bending the knee against resistance.",
+        "beginner_guidance": "Use a short controlled range initially and increase it only while the pelvis remains steady."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies posterior-chain anatomy only; knee-flexion variant needs trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "single_leg_glute_bridge",
+      "name": "Single-Leg Glute Bridge",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "bodyweight",
+      "difficulty": "intermediate",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie with one foot planted and the other knee drawn toward the chest.",
+          "Lift the hips through the planted leg and lower without twisting."
+        ],
+        "cues": [
+          "Keep the pelvis level."
+        ],
+        "mistakes": [
+          "Lifting by arching the lower back."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_glute_bridge",
+      "name": "Dumbbell Glute Bridge",
+      "exercise_type": "accessory",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "added",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie with feet planted and secure one padded dumbbell across the front of the hips.",
+          "Raise the pelvis to a straight shoulder-to-knee line and lower."
+        ],
+        "cues": [
+          "Hold the weight in place."
+        ],
+        "mistakes": [
+          "Balancing the weight without hand support."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "barbell_glute_bridge",
+      "name": "Barbell Glute Bridge",
+      "exercise_type": "accessory",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "added",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on the floor with a padded bar across the hips and feet planted.",
+          "Extend the hips to raise the bar and lower back to the floor."
+        ],
+        "cues": [
+          "Keep the bar centered across the hips."
+        ],
+        "mistakes": [
+          "Rolling the bar toward the abdomen."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    },
+    {
+      "id": "dumbbell_hip_thrust",
+      "name": "Dumbbell Hip Thrust",
+      "exercise_type": "accessory",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "flat_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "added",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Brace the upper back on a stable bench and hold one padded dumbbell across the hips.",
+          "Lower the hips and drive upward until the torso and thighs align."
+        ],
+        "cues": [
+          "Keep the bench from sliding."
+        ],
+        "mistakes": [
+          "Pushing into a large lower-back arch at the top."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+    }
+  ]
+}

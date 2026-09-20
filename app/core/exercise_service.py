@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import and_, delete, or_
+from sqlalchemy import and_, case, delete, func, or_
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session, selectinload
 
@@ -12,13 +12,13 @@ MAX_EXERCISE_LIMIT = 200
 
 def exercise_visibility_filter(user_id: Optional[str]):
     """Seed exercises are shared; user-created exercises are private to their owner."""
-    seed_visibility = Exercise.source != "user"
+    seed_visibility = and_(Exercise.source.in_(["seed", "catalog"]), Exercise.owner_user_id.is_(None), Exercise.publication_status.in_(["legacy", "published"]))
     if user_id is None:
         return seed_visibility
     return or_(seed_visibility, and_(Exercise.source == "user", Exercise.owner_user_id == user_id))
 
 
-def list_exercises(
+def exercise_query(
     db: Session,
     *,
     q: Optional[str] = None,
@@ -27,9 +27,7 @@ def list_exercises(
     exercise_type: Optional[str] = None,
     only_active: bool = True,
     user_id: Optional[str] = None,
-    limit: int = 100,
-    offset: int = 0,
-) -> list[Exercise]:
+):
     query = db.query(Exercise).options(selectinload(Exercise.equipment))
     query = query.filter(exercise_visibility_filter(user_id))
 
@@ -37,10 +35,7 @@ def list_exercises(
         query = query.filter(Exercise.is_active.is_(True))
 
     if q:
-        like = f"%{q}%"
-        query = query.filter(
-            or_(Exercise.name.ilike(like), Exercise.id.ilike(like)),
-        )
+        query = ranked_exercise_query(db, query, q)
 
     if muscle:
         query = query.filter(
@@ -59,18 +54,39 @@ def list_exercises(
             exercise_equipment.c.exercise_id == Exercise.id,
         ).filter(exercise_equipment.c.equipment_id == equipment_id)
 
-    capped_limit = min(limit, MAX_EXERCISE_LIMIT)
-
-    query = query.order_by(
+    return query.order_by(
         Exercise.primary_muscle.asc(),
         Exercise.sort_order.asc(),
         Exercise.name.asc(),
-    ).offset(offset or 0)
+        Exercise.id.asc(),
+    )
 
-    if capped_limit > 0:
-        query = query.limit(capped_limit)
 
-    return query.all()
+def ranked_exercise_query(db: Session, query, text: str):
+    from app.models.workout_template import ExerciseAlias
+    normalized = text.strip().lower()
+    name = func.lower(Exercise.name)
+    aliases = db.query(ExerciseAlias.id).filter(ExerciseAlias.exercise_id == Exercise.id)
+    exact = aliases.filter(func.lower(ExerciseAlias.alias) == normalized).exists()
+    prefix = aliases.filter(func.lower(ExerciseAlias.alias).startswith(normalized)).exists()
+    substring = aliases.filter(func.lower(ExerciseAlias.alias).contains(normalized)).exists()
+    alias_similarity = db.query(func.max(func.similarity(func.lower(ExerciseAlias.alias), normalized))).filter(ExerciseAlias.exercise_id == Exercise.id).correlate(Exercise).scalar_subquery()
+    similarity = func.greatest(func.similarity(name, normalized), func.coalesce(alias_similarity, 0.0))
+    identifier = func.lower(Exercise.id)
+    return query.filter(or_(name.contains(normalized), identifier.contains(normalized), substring, similarity >= .3)).order_by(
+        case((or_(name == normalized, identifier == normalized, exact), 0), else_=1),
+        case((or_(name.startswith(normalized), identifier.startswith(normalized), prefix), 0), else_=1),
+        case((or_(name.contains(normalized), identifier.contains(normalized), substring), 0), else_=1),
+        similarity.desc(), Exercise.name, Exercise.id,
+    )
+
+
+def list_exercises(db: Session, *, limit: int = 100, offset: int = 0, **filters) -> list[Exercise]:
+    return exercise_query(db, **filters).offset(max(offset, 0)).limit(max(1, min(limit, MAX_EXERCISE_LIMIT))).all()
+
+
+def count_exercises(db: Session, **filters) -> int:
+    return exercise_query(db, **filters).order_by(None).count()
 
 
 def get_exercise(
@@ -176,4 +192,13 @@ def exercise_to_dict(exercise: Exercise, *, user_id: Optional[str], favorited: b
         "why_it_works": exercise.why_it_works,
         "common_mistakes": exercise.common_mistakes,
         "beginner_notes": exercise.beginner_notes,
+        "content_version": exercise.content_version,
+        "movement_pattern": exercise.movement_pattern,
+        "resistance_modality": exercise.resistance_modality,
+        "difficulty": exercise.difficulty,
+        "laterality": exercise.laterality,
+        "tracking_mode": exercise.tracking_mode,
+        "load_profile": exercise.load_profile,
+        "structured_content": exercise.structured_content,
+        "media": exercise.published_media,
     }

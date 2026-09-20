@@ -300,17 +300,22 @@ def explore_search(
     query: str = Query(..., min_length=2, max_length=100),
     scope: Literal["all", "programs", "exercises"] = "all",
     limit: int = Query(20, ge=1, le=50),
+    program_offset: int = Query(0, alias="programOffset", ge=0),
+    exercise_offset: int = Query(0, alias="exerciseOffset", ge=0),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     programs = []
     exercises = []
+    program_total = exercise_total = 0
     if scope in {"all", "programs"}:
-        programs, _ = list_templates(
-            db, str(current_user.id), query=query, limit=limit, offset=0
+        programs, program_total = list_templates(
+            db, str(current_user.id), query=query, limit=limit, offset=program_offset
         )
     if scope in {"all", "exercises"}:
-        rows = search_exercises(db, str(current_user.id), query, limit=limit)
+        from app.core.exercise_service import count_exercises
+        exercise_total = count_exercises(db, user_id=str(current_user.id), q=query)
+        rows = search_exercises(db, str(current_user.id), query, limit=limit, offset=exercise_offset)
         favorite_ids = list_favorite_ids(
             db, str(current_user.id), [exercise.id for exercise in rows]
         )
@@ -324,4 +329,9 @@ def explore_search(
             )
             for exercise in rows
         ]
-    return ExploreSearchOut(programs=programs, exercises=exercises)
+    if program_total + exercise_total == 0:
+        import logging
+        logging.getLogger("primerep.catalog").info("catalog_zero_results", extra={"catalog_endpoint": "explore"})
+    return ExploreSearchOut(programs=programs, exercises=exercises,
+        program_pagination={"limit": limit, "offset": program_offset, "total": program_total, "has_more": program_offset + len(programs) < program_total},
+        exercise_pagination={"limit": limit, "offset": exercise_offset, "total": exercise_total, "has_more": exercise_offset + len(exercises) < exercise_total})
