@@ -40,6 +40,7 @@ PLATE_INCREMENT_KG = 0.5
 class SuggestedWeight:
     weight_kg: float
     reason: str  # "increase" | "hold" | "deload"
+    previous_weight_kg: float
 
 
 def suggest_weight_kg(
@@ -76,17 +77,27 @@ def suggest_weight_kg(
             return SuggestedWeight(
                 weight_kg=_round_to_plate(working_weight * (1 - DELOAD_FRACTION)),
                 reason="deload",
+                previous_weight_kg=working_weight,
             )
-        return SuggestedWeight(weight_kg=working_weight, reason="hold")
+        return SuggestedWeight(
+            weight_kg=working_weight,
+            reason="hold",
+            previous_weight_kg=working_weight,
+        )
 
     if _hit_top(last_sets, reps_max):
         increment = LOWER_INCREMENT_KG if is_lower_body else UPPER_INCREMENT_KG
         return SuggestedWeight(
             weight_kg=_round_to_plate(working_weight + increment),
             reason="increase",
+            previous_weight_kg=working_weight,
         )
 
-    return SuggestedWeight(weight_kg=working_weight, reason="hold")
+    return SuggestedWeight(
+        weight_kg=working_weight,
+        reason="hold",
+        previous_weight_kg=working_weight,
+    )
 
 
 def _weighted(sets: list[SetLog]) -> list[SetLog]:

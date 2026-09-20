@@ -1,7 +1,10 @@
+import hashlib
+import json
 from datetime import date, datetime, timedelta, timezone
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.attributes import flag_modified
 
 from app.core.onboarding_service import get_onboarding_by_user_id, upsert_onboarding
 from app.core.schedule_lock import lock_user_schedule
@@ -114,8 +117,27 @@ def update_training_preferences(
     current_programs = [item for item in active_programs if item.status == "active"]
     scheduled_programs = [item for item in active_programs if item.status == "scheduled"]
     if "selectedEquipment" in updates:
+        equipment = sorted(updates.get("selectedEquipment") or [])
+        changed_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         for active_program in active_programs:
+            revision = int(
+                active_program.activation_snapshot.get("equipmentReviewRevision", 0)
+            ) + 1
+            fingerprint = hashlib.sha256(
+                json.dumps(
+                    {"equipment": equipment, "revision": revision},
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode()
+            ).hexdigest()
             active_program.requires_review = True
+            active_program.activation_snapshot = {
+                **active_program.activation_snapshot,
+                "equipmentReviewFingerprint": fingerprint,
+                "equipmentReviewChangedAt": changed_at,
+                "equipmentReviewRevision": revision,
+            }
+            flag_modified(active_program, "activation_snapshot")
     if not current_programs:
         scheduled_week_start = min(
             (

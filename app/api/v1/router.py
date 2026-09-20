@@ -14,6 +14,7 @@ from app.api.v1.workout_templates.router import (
     explore_router,
     router as workout_templates_router,
 )
+from app.api.v1.coach.router import router as coach_router
 from app.core.database import get_db
 
 api_router = APIRouter()
@@ -31,6 +32,7 @@ api_router.include_router(workouts_router)
 api_router.include_router(workout_logging_router)
 api_router.include_router(workout_templates_router)
 api_router.include_router(explore_router)
+api_router.include_router(coach_router)
 
 
 @api_router.get("/_ping")

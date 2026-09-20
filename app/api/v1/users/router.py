@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.coach_feed_service import reconcile_after_mutation, sync_ai_eligibility
 from app.core.equipment_weights_service import (
     get_equipment_weight_arrays,
     upsert_equipment_weights,
@@ -126,13 +127,20 @@ def patch_training_preferences(
 ):
     updates = body.model_dump(exclude_unset=True)
     try:
-        return update_training_preferences(
+        result = update_training_preferences(
             db,
             str(current_user.id),
             updates,
             week_start=week_start,
             effective_date=effective_date,
         )
+        reconcile_after_mutation(
+            db,
+            str(current_user.id),
+            invalidate_plan_items=bool(updates),
+            invalidate_program_items="selectedEquipment" in updates,
+        )
+        return result
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
 
@@ -193,6 +201,11 @@ def update_preferences(
     current_user.coach_insights_enabled = body.coach_insights_enabled
     db.commit()
     db.refresh(current_user)
+    try:
+        sync_ai_eligibility(db, str(current_user.id))
+    except Exception:
+        db.rollback()
+    reconcile_after_mutation(db, str(current_user.id))
     return current_user
 
 

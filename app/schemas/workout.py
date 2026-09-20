@@ -26,6 +26,9 @@ class WorkoutPrescriptionOut(BaseModel):
     reps_max: int = Field(..., alias="repsMax")
     rest_seconds: int = Field(..., alias="restSeconds")
     suggested_weight_kg: Optional[float] = Field(None, alias="suggestedWeightKg")
+    suggested_previous_weight_kg: Optional[float] = Field(
+        None, alias="suggestedPreviousWeightKg"
+    )
     # "increase" | "hold" | "deload" — None when there is no suggestion.
     suggested_weight_reason: Optional[str] = Field(None, alias="suggestedWeightReason")
 
@@ -63,4 +66,3 @@ class WorkoutNextResponseOut(BaseModel):
     exercise_blocks: list[WorkoutExerciseBlockOut] = Field(..., alias="exerciseBlocks")
 
     model_config = ConfigDict(populate_by_name=True)
-

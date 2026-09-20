@@ -130,6 +130,7 @@ def test_top_of_range_increases_upper_by_2_5kg():
     assert suggestion is not None
     assert suggestion.reason == "increase"
     assert suggestion.weight_kg == 60.0 + UPPER_INCREMENT_KG
+    assert suggestion.previous_weight_kg == 60.0
 
 
 def test_top_of_range_increases_lower_by_5kg():
@@ -180,6 +181,7 @@ def test_missed_bottom_twice_consecutive_deloads_10_percent():
     assert suggestion is not None
     assert suggestion.reason == "deload"
     assert suggestion.weight_kg == 54.0
+    assert suggestion.previous_weight_kg == 60.0
 
 
 def test_in_range_but_not_top_holds():

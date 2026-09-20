@@ -23,3 +23,9 @@ from app.models.workout_template import (  # noqa: F401
     WorkoutTemplateEquipment,
     WorkoutTemplateExercise,
 )
+from app.models.coach import (  # noqa: F401
+    CoachFeedItem,
+    CoachNotificationDelivery,
+    CoachNotificationJob,
+    CoachPreference,
+)
