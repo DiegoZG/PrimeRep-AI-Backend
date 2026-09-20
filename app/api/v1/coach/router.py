@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
@@ -30,6 +30,8 @@ router = APIRouter(tags=["coach"])
 @router.get("/coach/feed", response_model=CoachFeedOut)
 def read_feed(
     local_date: date = Query(..., alias="localDate"),
+    view: Literal["now", "yesterday", "last7Days"] = Query("now"),
+    time_zone: str = Query("UTC", alias="timeZone"),
     cursor: Optional[str] = None,
     limit: int = Query(20, ge=1, le=50),
     db: Session = Depends(get_db),
@@ -40,6 +42,8 @@ def read_feed(
             db,
             str(current_user.id),
             local_date,
+            view=view,
+            time_zone=time_zone,
             cursor=cursor,
             limit=limit,
         )

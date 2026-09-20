@@ -39,6 +39,8 @@ from app.schemas.coach import (
 logger = logging.getLogger("primerep.coach")
 TARGET_ADAPTER = TypeAdapter(CoachTarget)
 RETENTION_DAYS = 30
+HISTORY_DAYS = 7
+MISSED_ACTION_DAYS = 3
 AI_BATCH_LIMIT = 10
 AI_ATTEMPT_LIMIT = 2
 AI_SAFE_KINDS = {"progression", "recovery", "program_review"}
@@ -380,7 +382,7 @@ def _recovery_candidate(db: Session, user_id: str) -> list[dict]:
 def _missed_candidates(db: Session, user_id: str, local_date: date) -> list[dict]:
     completed = _completed_day_ids(db, user_id)
     result = []
-    earliest_date = local_date - timedelta(days=RETENTION_DAYS)
+    earliest_date = local_date - timedelta(days=HISTORY_DAYS)
     earliest_week = earliest_date - timedelta(days=earliest_date.weekday())
     latest_week = local_date - timedelta(days=local_date.weekday())
     for plan, workout in _all_planned_workouts(
@@ -393,7 +395,7 @@ def _missed_candidates(db: Session, user_id: str, local_date: date) -> list[dict
         workout_id = workout.get("workoutDayId")
         if (
             workout_date
-            and local_date - timedelta(days=RETENTION_DAYS) <= workout_date < local_date
+            and earliest_date <= workout_date < local_date
             and workout_id not in completed
         ):
             evidence_at = datetime.combine(workout_date, time.min, tzinfo=timezone.utc)
@@ -416,6 +418,7 @@ def _missed_candidates(db: Session, user_id: str, local_date: date) -> list[dict
                         ],
                     },
                     target={"type": "planned_workout", "workoutDayId": workout_id, "weekStart": plan.week_start_date},
+                    expires_at=evidence_at + timedelta(days=MISSED_ACTION_DAYS),
                 )
             )
     return result
@@ -539,7 +542,7 @@ def _pr_candidates(db: Session, user_id: str) -> list[dict]:
                         "requiredText": [exercise.name, f"{weight:g} kg"],
                     },
                     target={"type": "completed_session", "sessionId": session.id},
-                    expires_at=session.completed_at + timedelta(days=RETENTION_DAYS),
+                    expires_at=session.completed_at + timedelta(days=HISTORY_DAYS),
                 )
             )
         prior[exercise_id] = max(weight, old or weight)
@@ -561,7 +564,7 @@ def _consistency_candidates(db: Session, user_id: str, local_date: date) -> list
     for milestone in milestones:
         if total >= milestone:
             session = completed_sessions[milestone - 1]
-            if session.completed_at < _now() - timedelta(days=RETENTION_DAYS):
+            if session.completed_at < _now() - timedelta(days=HISTORY_DAYS):
                 continue
             result.append(
                 _candidate(
@@ -578,7 +581,7 @@ def _consistency_candidates(db: Session, user_id: str, local_date: date) -> list
                         "requiredText": [str(milestone)],
                     },
                     target={"type": "completed_session", "sessionId": session.id},
-                    expires_at=session.completed_at + timedelta(days=RETENTION_DAYS),
+                    expires_at=session.completed_at + timedelta(days=HISTORY_DAYS),
                 )
             )
 
@@ -619,7 +622,7 @@ def _consistency_candidates(db: Session, user_id: str, local_date: date) -> list
                     },
                     target={"type": "none"},
                     expires_at=datetime.combine(
-                        closed_week_start + timedelta(days=RETENTION_DAYS + 6),
+                        closed_week_start + timedelta(days=HISTORY_DAYS + 6),
                         time.min,
                         tzinfo=timezone.utc,
                     ),
@@ -1017,19 +1020,45 @@ def get_feed(
     user_id: str,
     local_date: date,
     *,
+    view: Literal["now", "yesterday", "last7Days"] = "now",
+    time_zone: str = "UTC",
     cursor: Optional[str],
     limit: int,
 ) -> CoachFeedOut:
-    if cursor is None:
+    if view not in {"now", "yesterday", "last7Days"}:
+        raise ValueError("Invalid Coach feed view.")
+    try:
+        zone = ZoneInfo(time_zone)
+    except Exception as error:
+        raise ValueError("timeZone must be a valid IANA timezone") from error
+    if cursor is None and view == "now":
         reconcile_feed(db, user_id, local_date)
     now = _now()
     query = db.query(CoachFeedItem).filter(
         CoachFeedItem.user_id == user_id,
         CoachFeedItem.available_at <= now,
-        CoachFeedItem.expires_at > now,
         CoachFeedItem.dismissed_at.is_(None),
         CoachFeedItem.kind != "upcoming_workout",
     )
+    if view == "now":
+        query = query.filter(
+            CoachFeedItem.expires_at > now,
+            CoachFeedItem.invalidated_at.is_(None),
+        )
+    else:
+        start_date = (
+            local_date - timedelta(days=HISTORY_DAYS)
+            if view == "last7Days"
+            else local_date - timedelta(days=1)
+        )
+        start = datetime.combine(start_date, time.min, tzinfo=zone).astimezone(timezone.utc)
+        end = datetime.combine(local_date, time.min, tzinfo=zone).astimezone(
+            timezone.utc
+        )
+        query = query.filter(
+            CoachFeedItem.created_at >= start,
+            CoachFeedItem.created_at < end,
+        )
     if cursor:
         priority, created_at, item_id = _decode_cursor(cursor)
         query = query.filter(
@@ -1056,8 +1085,18 @@ def get_feed(
     page = rows[:limit]
     _event("coach_feed_read", user=_opaque(user_id), pageSize=len(page), hasMore=has_more)
     ai_eligible = _is_coach_eligible(db, user_id)
+    next_action = (
+        build_next_action(db, user_id, local_date)
+        if view == "now"
+        else CoachNextActionOut(
+            type="caught_up",
+            title="Recent guidance",
+            body="Historical Coach guidance is read-only.",
+            target={"type": "none"},
+        )
+    )
     return CoachFeedOut(
-        nextAction=build_next_action(db, user_id, local_date),
+        nextAction=next_action,
         items=[_item_out(item, ai_eligible=ai_eligible) for item in page],
         nextCursor=_encode_cursor(page[-1]) if has_more and page else None,
         hasMore=has_more,
@@ -1419,6 +1458,7 @@ def _call_coach_feed_ai(items: list[dict]) -> CoachAISelectionBatch:
 def purge_expired(db: Session, *, limit: int = 500) -> tuple[int, int]:
     cutoff = _now()
     delivery_cutoff = cutoff - timedelta(days=RETENTION_DAYS)
+    item_cutoff = cutoff - timedelta(days=RETENTION_DAYS)
     from app.models.coach import CoachNotificationDelivery
 
     capped = max(1, min(limit, 500))
@@ -1442,6 +1482,7 @@ def purge_expired(db: Session, *, limit: int = 500) -> tuple[int, int]:
         for row in db.query(CoachFeedItem.id)
         .filter(
             CoachFeedItem.expires_at <= cutoff,
+            CoachFeedItem.created_at <= item_cutoff,
             or_(
                 CoachFeedItem.invalidation_reason != "source_mutated",
                 CoachFeedItem.invalidation_reason.is_(None),

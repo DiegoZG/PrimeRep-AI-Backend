@@ -3,6 +3,7 @@ import logging
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, time, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 import pytest
 from fastapi.testclient import TestClient
@@ -213,6 +214,107 @@ def test_feed_cursor_read_dismiss_and_cross_account_isolation(monkeypatch):
     assert dismissed.status_code == 204
     assert client.post(f"/v1/coach/items/{item_id}/dismiss", headers=first_headers).status_code == 204
     assert client.get(f"/v1/coach/items/{item_id}", headers=first_headers).status_code == 404
+
+
+def test_feed_history_views_are_local_date_scoped_and_read_only(monkeypatch):
+    headers, user_id = _signup("history_views")
+    monkeypatch.setattr(coach_feed_service, "reconcile_feed", lambda *args, **kwargs: 0)
+    now = datetime.now(timezone.utc)
+    local_today = now.astimezone(ZoneInfo("America/New_York")).date()
+    with SessionLocal() as db:
+        yesterday = _item(user_id, 1)
+        yesterday.title = "Yesterday"
+        yesterday.created_at = datetime.combine(
+            local_today - timedelta(days=1), time(12), tzinfo=ZoneInfo("America/New_York")
+        ).astimezone(timezone.utc)
+        yesterday.expires_at = now - timedelta(hours=1)
+        yesterday.invalidated_at = now - timedelta(hours=1)
+        yesterday.invalidation_reason = "candidate_absent"
+
+        older = _item(user_id, 2)
+        older.title = "Earlier this week"
+        older.created_at = datetime.combine(
+            local_today - timedelta(days=4), time(12), tzinfo=ZoneInfo("America/New_York")
+        ).astimezone(timezone.utc)
+        older.expires_at = now - timedelta(days=2)
+
+        dismissed = _item(user_id, 3)
+        dismissed.title = "Dismissed"
+        dismissed.created_at = yesterday.created_at
+        dismissed.dismissed_at = now
+        db.add_all([yesterday, older, dismissed])
+        db.commit()
+
+    yesterday_response = client.get(
+        "/v1/coach/feed",
+        headers=headers,
+        params={
+            "localDate": local_today.isoformat(),
+            "view": "yesterday",
+            "timeZone": "America/New_York",
+        },
+    )
+    assert yesterday_response.status_code == 200
+    assert [item["title"] for item in yesterday_response.json()["items"]] == ["Yesterday"]
+
+    week_response = client.get(
+        "/v1/coach/feed",
+        headers=headers,
+        params={
+            "localDate": local_today.isoformat(),
+            "view": "last7Days",
+            "timeZone": "America/New_York",
+        },
+    )
+    assert week_response.status_code == 200
+    assert {item["title"] for item in week_response.json()["items"]} == {
+        "Yesterday",
+        "Earlier this week",
+    }
+
+    now_response = client.get(
+        "/v1/coach/feed",
+        headers=headers,
+        params={"localDate": local_today.isoformat(), "view": "now"},
+    )
+    assert now_response.status_code == 200
+    assert now_response.json()["items"] == []
+
+
+def test_feed_history_rejects_an_invalid_timezone():
+    headers, _ = _signup("history_timezone")
+    response = client.get(
+        "/v1/coach/feed",
+        headers=headers,
+        params={
+            "localDate": date.today().isoformat(),
+            "view": "yesterday",
+            "timeZone": "Not/AZone",
+        },
+    )
+    assert response.status_code == 422
+
+
+def test_purge_keeps_recent_expired_guidance_available_for_history(monkeypatch):
+    _, user_id = _signup("history_retention")
+    now = datetime.now(timezone.utc)
+    monkeypatch.setattr(coach_feed_service, "_now", lambda: now)
+    with SessionLocal() as db:
+        recent = _item(user_id, 1)
+        recent.created_at = now - timedelta(days=2)
+        recent.expires_at = now - timedelta(days=1)
+        old = _item(user_id, 2)
+        old.created_at = now - timedelta(days=31)
+        old.expires_at = now - timedelta(days=30)
+        db.add_all([recent, old])
+        db.commit()
+        recent_id = recent.id
+        old_id = old.id
+
+        coach_feed_service.purge_expired(db)
+
+        assert db.get(CoachFeedItem, recent_id) is not None
+        assert db.get(CoachFeedItem, old_id) is None
 
 
 def test_reconciliation_keeps_dismissal_and_new_evidence_creates_new_item(monkeypatch):
@@ -1755,6 +1857,9 @@ def test_progression_and_missed_rules_use_canonical_week_plan():
         progression = coach_feed_service._progression_candidates(db, user_id, today)
         assert len(missed) == 1
         assert missed[0]["target_data"]["workoutDayId"] == "missed-day"
+        assert missed[0]["expires_at"] == datetime.combine(
+            past_date, time.min, tzinfo=timezone.utc
+        ) + timedelta(days=coach_feed_service.MISSED_ACTION_DAYS)
         assert len(progression) == 1
         assert progression[0]["title"] == "Move up on Bench Press"
 
