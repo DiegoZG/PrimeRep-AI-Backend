@@ -314,6 +314,8 @@ def _progression_candidates(db: Session, user_id: str, local_date: date) -> list
                     "exerciseName": name,
                     "recommendation": reason,
                     "targetWeightKg": suggested,
+                    "currentWeightKg": suggestion.previous_weight_kg,
+                    "equipmentIds": exercise.get("requiredEquipmentIds") or [],
                     "requiredText": required_text,
                 },
                 target={"type": "planned_workout", "workoutDayId": workout_id, "weekStart": plan.week_start_date},
@@ -533,6 +535,7 @@ def _pr_candidates(db: Session, user_id: str) -> list[dict]:
                     protected_facts={
                         "exerciseName": exercise.name,
                         "recordWeightKg": weight,
+                        "equipmentIds": [item.id for item in exercise.equipment],
                         "requiredText": [exercise.name, f"{weight:g} kg"],
                     },
                     target={"type": "completed_session", "sessionId": session.id},
@@ -974,12 +977,16 @@ def _item_out(item: CoachFeedItem, *, ai_eligible: bool) -> CoachFeedItemOut:
             "context": "target",
             "exerciseName": facts.get("exerciseName"),
             "weightKg": facts.get("targetWeightKg"),
+            "currentWeightKg": facts.get("currentWeightKg"),
+            "recommendation": facts.get("recommendation"),
+            "equipmentIds": facts.get("equipmentIds") or [],
         }
     elif item.kind == "personal_record":
         weight_data = {
             "context": "record",
             "exerciseName": facts.get("exerciseName"),
             "weightKg": facts.get("recordWeightKg"),
+            "equipmentIds": facts.get("equipmentIds") or [],
         }
     if weight_data and (
         not isinstance(weight_data["exerciseName"], str)

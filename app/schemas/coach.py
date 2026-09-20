@@ -76,6 +76,9 @@ class CoachWeightDataOut(BaseModel):
     context: Literal["target", "record"]
     exercise_name: str = Field(..., alias="exerciseName")
     weight_kg: float = Field(..., alias="weightKg")
+    current_weight_kg: Optional[float] = Field(None, alias="currentWeightKg")
+    recommendation: Optional[Literal["increase", "hold", "deload"]] = None
+    equipment_ids: list[str] = Field(default_factory=list, alias="equipmentIds")
 
     model_config = ConfigDict(populate_by_name=True)
 

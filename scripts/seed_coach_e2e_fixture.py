@@ -373,6 +373,7 @@ def seed_fixture(db: Session, *, local_date: Optional[date] = None) -> str:
         for item in visible
         if item.kind == "progression"
         and item.target_data.get("workoutDayId") == FIXTURE_WORKOUT_ID
+        and item.evidence_data.get("exerciseIds") == ["barbell_curl"]
     )
     main_consistency = next(
         item

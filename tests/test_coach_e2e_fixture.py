@@ -251,6 +251,9 @@ def test_seeded_coach_fixture_feed_actions_and_safe_rerun():
         assert progression["isAiAssisted"] is True
         assert progression["weightData"]["context"] == "target"
         assert progression["weightData"]["weightKg"] == 27.5
+        assert progression["weightData"]["currentWeightKg"] == 25.0
+        assert progression["weightData"]["recommendation"] == "increase"
+        assert isinstance(progression["weightData"]["equipmentIds"], list)
         assert progression["weightData"]["exerciseName"] in progression["title"]
         assert progression["target"]["type"] == "planned_workout"
         assert progression["target"]["workoutDayId"] == FIXTURE_WORKOUT_ID

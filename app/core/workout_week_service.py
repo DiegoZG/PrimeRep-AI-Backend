@@ -284,6 +284,7 @@ def _prescription_with_suggestion(
     return base.model_copy(
         update={
             "suggested_weight_kg": suggestion.weight_kg,
+            "suggested_previous_weight_kg": suggestion.previous_weight_kg,
             "suggested_weight_reason": suggestion.reason,
         }
     )
