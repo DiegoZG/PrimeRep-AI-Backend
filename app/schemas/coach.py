@@ -72,6 +72,14 @@ class CoachNextActionOut(BaseModel):
     target: CoachTarget
 
 
+class CoachWeightDataOut(BaseModel):
+    context: Literal["target", "record"]
+    exercise_name: str = Field(..., alias="exerciseName")
+    weight_kg: float = Field(..., alias="weightKg")
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
 class CoachFeedItemOut(BaseModel):
     id: str
     kind: Literal[
@@ -88,6 +96,7 @@ class CoachFeedItemOut(BaseModel):
     body: str
     detail: Optional[str] = None
     target: CoachTarget
+    weight_data: Optional[CoachWeightDataOut] = Field(None, alias="weightData")
     is_ai_assisted: bool = Field(False, alias="isAiAssisted")
     read_at: Optional[datetime] = Field(None, alias="readAt")
     created_at: datetime = Field(..., alias="createdAt")

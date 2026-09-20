@@ -249,8 +249,18 @@ def test_seeded_coach_fixture_feed_actions_and_safe_rerun():
         assert progression["kind"] == "progression"
         assert progression["detail"]
         assert progression["isAiAssisted"] is True
+        assert progression["weightData"]["context"] == "target"
+        assert progression["weightData"]["weightKg"] == 27.5
+        assert progression["weightData"]["exerciseName"] in progression["title"]
         assert progression["target"]["type"] == "planned_workout"
         assert progression["target"]["workoutDayId"] == FIXTURE_WORKOUT_ID
+
+        personal_record = next(
+            item for item in feed["items"] if item["kind"] == "personal_record"
+        )
+        assert personal_record["weightData"]["context"] == "record"
+        assert personal_record["weightData"]["weightKg"] > 0
+        assert personal_record["weightData"]["exerciseName"] in personal_record["title"]
 
         read = client.post(
             f"/v1/coach/items/{PROGRESSION_ITEM_ID}/read",

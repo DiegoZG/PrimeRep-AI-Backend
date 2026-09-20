@@ -967,6 +967,28 @@ def _decode_cursor(cursor: str) -> tuple[int, datetime, str]:
 
 def _item_out(item: CoachFeedItem, *, ai_eligible: bool) -> CoachFeedItemOut:
     ai = ai_eligible and item.ai_status == "enriched" and bool(item.ai_title and item.ai_body)
+    facts = item.protected_facts or {}
+    weight_data = None
+    if item.kind == "progression":
+        weight_data = {
+            "context": "target",
+            "exerciseName": facts.get("exerciseName"),
+            "weightKg": facts.get("targetWeightKg"),
+        }
+    elif item.kind == "personal_record":
+        weight_data = {
+            "context": "record",
+            "exerciseName": facts.get("exerciseName"),
+            "weightKg": facts.get("recordWeightKg"),
+        }
+    if weight_data and (
+        not isinstance(weight_data["exerciseName"], str)
+        or not weight_data["exerciseName"].strip()
+        or not isinstance(weight_data["weightKg"], (int, float))
+        or isinstance(weight_data["weightKg"], bool)
+        or weight_data["weightKg"] <= 0
+    ):
+        weight_data = None
     return CoachFeedItemOut(
         id=item.id,
         kind=item.kind,
@@ -975,6 +997,7 @@ def _item_out(item: CoachFeedItem, *, ai_eligible: bool) -> CoachFeedItemOut:
         body=item.ai_body if ai else item.body,
         detail=item.ai_detail if ai else item.detail,
         target=TARGET_ADAPTER.validate_python(item.target_data),
+        weightData=weight_data,
         isAiAssisted=ai,
         readAt=item.read_at,
         createdAt=item.created_at,
