@@ -8,6 +8,7 @@ from app.main import app
 from app.models.onboarding_profile import OnboardingProfile
 from app.models.user import User
 from app.models.workout_template import WorkoutTemplate
+from app.models.workout_week_plan import WorkoutWeekPlan
 from scripts.seed_coach_e2e_fixture import (
     CONSISTENCY_ITEM_ID,
     FIXTURE_EMAIL,
@@ -172,6 +173,21 @@ def test_seeded_coach_fixture_feed_actions_and_safe_rerun():
             assert seed_fixture(db, local_date=local_date)
             assert seed_fixture(db, local_date=local_date)
             assert db.query(User).filter(User.email == FIXTURE_EMAIL).count() == 1
+            stored_week = (
+                db.query(WorkoutWeekPlan)
+                .filter(
+                    WorkoutWeekPlan.user_id == FIXTURE_USER_ID,
+                    WorkoutWeekPlan.week_start_date == monday,
+                )
+                .one()
+            )
+            stored_week_id = stored_week.id
+            stored_generated_at = stored_week.plan_json["generatedAt"]
+            stored_workouts = [
+                (workout["workoutDayId"], workout["date"])
+                for workout in stored_week.plan_json["workouts"]
+            ]
+            assert len(stored_workouts) == 3
 
         login = client.post(
             "/v1/auth/login",
@@ -179,6 +195,32 @@ def test_seeded_coach_fixture_feed_actions_and_safe_rerun():
         )
         assert login.status_code == 200, login.text
         headers = {"Authorization": f"Bearer {login.json()['access_token']}"}
+
+        week = client.get("/v1/workouts/week", headers=headers)
+        assert week.status_code == 200, week.text
+        assert week.json()["daysPerWeek"] == 3
+        assert [workout["slotIndex"] for workout in week.json()["workouts"]] == [
+            0,
+            1,
+            2,
+        ]
+        assert len(
+            {workout["slotIndex"] for workout in week.json()["workouts"]}
+        ) == 3
+        assert [
+            (workout["workoutDayId"], workout["date"])
+            for workout in week.json()["workouts"]
+        ] == stored_workouts
+        assert FIXTURE_WORKOUT_ID in {
+            workout["workoutDayId"] for workout in week.json()["workouts"]
+        }
+        with SessionLocal() as db:
+            unchanged_week = db.get(WorkoutWeekPlan, stored_week_id)
+            assert unchanged_week.plan_json["generatedAt"] == stored_generated_at
+            assert [
+                (workout["workoutDayId"], workout["date"])
+                for workout in unchanged_week.plan_json["workouts"]
+            ] == stored_workouts
 
         first_page = client.get(
             "/v1/coach/feed",
@@ -190,6 +232,7 @@ def test_seeded_coach_fixture_feed_actions_and_safe_rerun():
         assert len(feed["items"]) == 20
         assert feed["hasMore"] is True
         assert feed["nextCursor"]
+        assert feed["nextAction"]["type"] != "caught_up"
         assert {
             "progression",
             "recovery",
@@ -208,16 +251,6 @@ def test_seeded_coach_fixture_feed_actions_and_safe_rerun():
         assert progression["isAiAssisted"] is True
         assert progression["target"]["type"] == "planned_workout"
         assert progression["target"]["workoutDayId"] == FIXTURE_WORKOUT_ID
-
-        week = client.get(
-            "/v1/workouts/week",
-            headers=headers,
-            params={"weekStart": monday.isoformat()},
-        )
-        assert week.status_code == 200, week.text
-        assert FIXTURE_WORKOUT_ID in {
-            workout["workoutDayId"] for workout in week.json()["workouts"]
-        }
 
         read = client.post(
             f"/v1/coach/items/{PROGRESSION_ITEM_ID}/read",
@@ -255,6 +288,23 @@ def test_seeded_coach_fixture_feed_actions_and_safe_rerun():
             "reminderTime": "08:00:00",
             "timeZone": FIXTURE_TIME_ZONE,
         }
+
+        duration_update = client.patch(
+            "/v1/workouts/week/duration",
+            headers=headers,
+            json={
+                "workoutDayId": stored_workouts[0][0],
+                "durationMinutes": 35,
+            },
+        )
+        assert duration_update.status_code == 200, duration_update.text
+        assert [
+            workout["workoutDayId"]
+            for workout in duration_update.json()["workouts"]
+        ] == [workout_id for workout_id, _ in stored_workouts]
+        assert [
+            workout["slotIndex"] for workout in duration_update.json()["workouts"]
+        ] == [0, 1, 2]
     finally:
         with SessionLocal() as db:
             teardown_fixture(db)

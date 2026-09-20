@@ -15,6 +15,7 @@ from app.core.coach_feed_service import _render_ai_variant, reconcile_feed
 from app.core.database import SessionLocal
 from app.core.legal import PRIVACY_VERSION, TERMS_VERSION
 from app.core.security.passwords import hash_password
+from app.core.workout_week_service import ONBOARDING_WORKOUT_CONTRACT_VERSION
 from app.models.coach import CoachFeedItem, CoachPreference
 from app.models.exercise import Exercise
 from app.models.onboarding_profile import OnboardingProfile
@@ -89,7 +90,6 @@ def _workout(
 ) -> dict:
     return {
         "workoutDayId": workout_id,
-        "slotIndex": 0,
         "date": workout_date.isoformat(),
         "durationMinutes": 45,
         "title": title,
@@ -123,12 +123,19 @@ def _workout(
 
 
 def _plan_json(week_start: date, workouts: list[dict], now: datetime) -> dict:
+    ordered_workouts = [
+        {**workout, "slotIndex": slot_index}
+        for slot_index, workout in enumerate(
+            sorted(workouts, key=lambda workout: workout["date"])
+        )
+    ]
     return {
         "weekStart": week_start.isoformat(),
         "daysPerWeek": len(workouts),
+        "onboardingWorkoutContractVersion": ONBOARDING_WORKOUT_CONTRACT_VERSION,
         "generatedAt": now.isoformat(),
         "seed": "coach-e2e-fixture",
-        "workouts": sorted(workouts, key=lambda workout: workout["date"]),
+        "workouts": ordered_workouts,
         "programActivationId": None,
         "templateId": None,
         "templateVersion": None,
@@ -201,6 +208,7 @@ def seed_fixture(db: Session, *, local_date: Optional[date] = None) -> str:
     )
 
     missed_date = local_date - timedelta(days=1)
+    current_week_start = local_date - timedelta(days=local_date.weekday())
     planned_workout = _workout(
         workout_id=FIXTURE_WORKOUT_ID,
         workout_date=local_date,
@@ -213,8 +221,34 @@ def seed_fixture(db: Session, *, local_date: Optional[date] = None) -> str:
         title="Coach Fixture Missed Session",
         exercises=exercises[:3],
     )
+    current_workouts = [planned_workout]
+    if missed_date >= current_week_start:
+        current_workouts.append(missed_workout)
+    used_dates = {date.fromisoformat(workout["date"]) for workout in current_workouts}
+    available_dates = [
+        current_week_start + timedelta(days=offset)
+        for offset in range(7)
+        if current_week_start + timedelta(days=offset) not in used_dates
+    ]
+    available_dates.sort(key=lambda candidate: (candidate < local_date, candidate))
+    filler_workouts = [
+        _workout(
+            workout_id=f"coach-fixture-scheduled-{index + 1}",
+            workout_date=workout_date,
+            title=f"Coach Fixture Scheduled Session {index + 1}",
+            exercises=exercises[:3],
+        )
+        for index, workout_date in enumerate(
+            available_dates[: 3 - len(current_workouts)]
+        )
+    ]
+    current_workouts.extend(filler_workouts)
+
     by_week: dict[date, list[dict]] = {}
-    for workout in (missed_workout, planned_workout):
+    all_planned_workouts = list(current_workouts)
+    if missed_date < current_week_start:
+        all_planned_workouts.append(missed_workout)
+    for workout in all_planned_workouts:
         workout_date = date.fromisoformat(workout["date"])
         week_start = workout_date - timedelta(days=workout_date.weekday())
         by_week.setdefault(week_start, []).append(workout)
@@ -230,12 +264,21 @@ def seed_fixture(db: Session, *, local_date: Optional[date] = None) -> str:
         )
 
     sessions: list[WorkoutSession] = []
+    completed_filler_ids = [
+        workout["workoutDayId"]
+        for workout in filler_workouts
+        if date.fromisoformat(workout["date"]) < local_date
+    ]
     for index in range(10):
         completed_at = now - timedelta(days=9 - index, hours=1)
         session = WorkoutSession(
             id=f"coach-fixture-session-{index + 1}",
             user_id=user.id,
-            workout_day_id=f"coach-fixture-completed-{index + 1}",
+            workout_day_id=(
+                completed_filler_ids[index]
+                if index < len(completed_filler_ids)
+                else f"coach-fixture-completed-{index + 1}"
+            ),
             workout_date=completed_at.date(),
             day_type="full_body",
             workout_snapshot={
