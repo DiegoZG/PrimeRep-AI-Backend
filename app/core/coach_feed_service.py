@@ -41,7 +41,7 @@ TARGET_ADAPTER = TypeAdapter(CoachTarget)
 RETENTION_DAYS = 30
 AI_BATCH_LIMIT = 10
 AI_ATTEMPT_LIMIT = 2
-AI_SAFE_KINDS = {"recovery", "program_review"}
+AI_SAFE_KINDS = {"progression", "recovery", "program_review"}
 AI_STYLE_VARIANTS = ("direct", "supportive", "focused")
 FEED_KINDS = {
     "progression",
@@ -68,6 +68,11 @@ class CoachAISelectionBatch(BaseModel):
 
 
 AI_VARIANT_TITLES = {
+    "progression": {
+        "direct": "{action} on {exercise_name}",
+        "supportive": "Your next step: {action} on {exercise_name}",
+        "focused": "{exercise_name}: {action}",
+    },
     "recovery": {
         "direct": "Keep the next session steady",
         "supportive": "Give your training room to settle",
@@ -737,7 +742,6 @@ def reconcile_feed(
             ai_status = (
                 "pending"
                 if candidate["kind"] in AI_SAFE_KINDS
-                and not _contains_numeric_fact(candidate.get("protected_facts", {}))
                 else "fallback"
             )
         statement = insert(CoachFeedItem).values(
@@ -936,7 +940,7 @@ def _contains_numeric_fact(value: Any) -> bool:
 
 
 def _ai_safe_item(item: CoachFeedItem) -> bool:
-    return item.kind in AI_SAFE_KINDS and not _contains_numeric_fact(item.protected_facts or {})
+    return item.kind in AI_SAFE_KINDS
 
 
 def sync_ai_eligibility(db: Session, user_id: str) -> bool:
@@ -1340,6 +1344,17 @@ def _render_ai_variant(
     item: CoachFeedItem, variant: str
 ) -> tuple[str, str, Optional[str]]:
     title = AI_VARIANT_TITLES[item.kind][variant]
+    if item.kind == "progression":
+        facts = item.protected_facts or {}
+        action = (
+            "Move up"
+            if facts.get("recommendation") == "increase"
+            else "Use a lighter load"
+        )
+        title = title.format(
+            action=action,
+            exercise_name=facts.get("exerciseName") or "this exercise",
+        )
     return title, item.body, item.detail
 
 

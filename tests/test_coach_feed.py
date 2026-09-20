@@ -626,11 +626,13 @@ def test_ai_payload_excludes_exact_training_values(monkeypatch):
             }
 
         monkeypatch.setattr(coach_feed_service, "_call_coach_feed_ai", rewrite)
-        assert coach_feed_service.enrich_pending_items(db, user_id) == 1
+        assert coach_feed_service.enrich_pending_items(db, user_id) == 2
         serialized = str(captured)
-        assert len(captured) == 1
-        assert captured[0]["kind"] == "recovery"
-        assert set(captured[0]) == {"id", "kind", "availableVariants"}
+        assert {row["kind"] for row in captured} == {"recovery", "progression"}
+        assert all(
+            set(row) == {"id", "kind", "availableVariants"}
+            for row in captured
+        )
         assert "123.45" not in serialized
         assert "8 reps" not in serialized
         assert "RIR" not in serialized
