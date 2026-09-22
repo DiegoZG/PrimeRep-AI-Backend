@@ -20,6 +20,12 @@ class StructuredContent(BaseModel):
     benefits: str = Field(min_length=1, max_length=4000)
     beginner_guidance: str = Field(min_length=1, max_length=4000)
 
+    @model_validator(mode="after")
+    def distinct_cues(self):
+        if any(cue.strip().casefold() == self.benefits.strip().casefold() for cue in self.cues):
+            raise ValueError("Technique cues must not duplicate the benefits paragraph")
+        return self
+
 
 class ContentSource(BaseModel):
     model_config = ConfigDict(extra="forbid")

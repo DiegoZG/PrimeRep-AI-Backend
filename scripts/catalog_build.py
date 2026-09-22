@@ -4,10 +4,13 @@ from __future__ import annotations
 import argparse
 import ast
 import csv
+import difflib
+import hashlib
 import html
 import json
 import re
 import sys
+import subprocess
 from collections import Counter
 from pathlib import Path
 
@@ -137,7 +140,7 @@ def build_manifest() -> dict:
     for row in seed_exercises():
         family = FAMILIES[LEGACY_FAMILIES[row["id"]]]
         old = original[row["id"]]
-        content = {"steps": re.split(r"(?<=[.!?])\s+", old["how_to"]), "cues": [family[6]],
+        content = {"steps": re.split(r"(?<=[.!?])\s+", old["how_to"]), "cues": [],
                    "mistakes": re.split(r"(?<=[.!?])\s+", old["common_mistakes"]),
                    "benefits": family[6], "beginner_guidance": family[7]}
         entries.append(make_entry(row, family, row["required_equipment_ids"], content))
@@ -146,7 +149,27 @@ def build_manifest() -> dict:
             family = FAMILIES[row["family"]]
             content = {"steps": [row["setup"], row["action"]], "cues": [row["cue"]], "mistakes": [row["mistake"]], "benefits": family[6], "beginner_guidance": family[7]}
             entries.append(make_entry(row, family, row["equipment"].split(",") if row["equipment"] else [], content))
+    edits = json.loads((DATA / "editorial-corrections.json").read_text())
+    unknown = set(edits) - {entry["id"] for entry in entries}
+    if unknown:
+        raise ValueError(f"Unknown editorial exercise IDs: {sorted(unknown)}")
+    for entry in entries:
+        edit = edits.get(entry["id"], {})
+        entry["structured_content"].update(edit.get("structured_content", {}))
+        entry.update(edit.get("metadata", {}))
+        if "sources" in edit:
+            entry["sources"] = edit["sources"]
+        entry["review_notes"] += " Pending human review: " + edit.get("review_questions", "Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding.")
+        if entry["id"] in LEGACY_FAMILIES:
+            entry["review_notes"] = entry["review_notes"].replace("Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown.", "Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.")
+        for source in entry["sources"]:
+            if source["url"].endswith("/5/chest-press/"):
+                source["title"] = "ACE Exercise Library — Chest Press (barbell, exercise 5)"
+            elif source["url"].endswith("/19/chest-press/"):
+                source["title"] = "ACE Exercise Library — Chest Press (dumbbells, exercise 19)"
     result = CatalogManifest.model_validate({"schema_version": 1, "exercises": entries}).model_dump(mode="json")
+    if any(entry["generation_eligible"] for entry in result["exercises"]):
+        raise ValueError("Editorial drafts cannot enable workout generation")
     known_equipment = {e["id"] for e in seed_equipment()}
     missing = {e for row in entries for e in row["equipment_ids"]} - known_equipment
     if missing:
@@ -164,18 +187,48 @@ def inventory(manifest: dict) -> dict:
             "unresolved": ["Trainer review for every draft", "Publication review for every draft", "Variant-specific technique references beyond movement-family references", "Production media assets and rights"]}
 
 
-def review_packet(manifest: dict) -> str:
+def fingerprint(payload: dict) -> str:
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
+
+
+def editorial_audit(manifest: dict) -> dict:
+    entries = manifest["exercises"]
+    cues = Counter(tuple(entry["structured_content"]["cues"]) for entry in entries)
+    titles = {}
+    for entry in entries:
+        for source in entry["sources"]:
+            titles.setdefault(source["title"], set()).add(source["url"])
+    return {
+        "exercises": len(entries),
+        "cue_benefit_duplicates": [entry["id"] for entry in entries if any(cue.strip().casefold() == entry["structured_content"]["benefits"].strip().casefold() for cue in entry["structured_content"]["cues"])],
+        "shared_cue_sets": [entry["id"] for entry in entries if cues[tuple(entry["structured_content"]["cues"])] > 1],
+        "ambiguous_source_titles": sorted(title for title, urls in titles.items() if len(urls) > 1),
+        "generation_enabled": [entry["id"] for entry in entries if entry["generation_eligible"]],
+        "human_approvals_recorded_by_builder": 0,
+        "note": "Structural audit only; distinct text and citations do not establish technique accuracy or human approval.",
+    }
+
+
+def review_packet(manifest: dict, previous: dict | None = None) -> str:
     sections = []
+    prior = {entry["id"]: entry for entry in (previous or {}).get("exercises", [])}
     for entry in manifest["exercises"]:
         content = entry["structured_content"]
         sections.append(f'<article id="{html.escape(entry["id"])}"><h2>{html.escape(entry["name"])}</h2><p><code>{entry["id"]}</code> · Draft · No approvals</p>')
+        sections.append(f'<p>Content SHA-256: <code>{fingerprint(entry)}</code><br>Database revision ID: not assigned by this packet. Import and submit before recording human decisions.</p>')
+        if previous is not None:
+            diff = '\n'.join(difflib.unified_diff(json.dumps(prior.get(entry["id"], {}), indent=2, ensure_ascii=False).splitlines(), json.dumps(entry, indent=2, ensure_ascii=False).splitlines(), fromfile="previous draft", tofile="corrected draft"))
+            sections.append('<details><summary>Changes from previous draft</summary><pre>' + html.escape(diff or "No changes.") + '</pre></details>')
         sections.append('<p>' + html.escape(entry["review_notes"]) + '</p>')
         sections.append('<dl>' + ''.join(f'<dt>{html.escape(key)}</dt><dd>{html.escape(str(entry[key]))}</dd>' for key in ('movement_pattern', 'primary_muscle', 'secondary_muscles', 'equipment_ids', 'resistance_modality', 'load_profile', 'tracking_mode', 'laterality', 'difficulty', 'aliases', 'generation_eligible')) + '</dl>')
         for field in ('steps', 'cues', 'mistakes'):
             sections.append(f'<h3>{field.title()}</h3><ol>' + ''.join(f'<li>{html.escape(value)}</li>' for value in content[field]) + '</ol>')
         sections.append('<h3>Benefits</h3><p>' + html.escape(content['benefits']) + '</p><h3>Beginner guidance</h3><p>' + html.escape(content['beginner_guidance']) + '</p>')
         sections.append('<h3>Research references — not media licenses</h3><ul>' + ''.join(f'<li><a href="{html.escape(s["url"], quote=True)}">{html.escape(s["title"])}</a> · accessed {s["accessed_at"]}<p>{html.escape(" ".join(s["claims"]))}</p></li>' for s in entry['sources']) + '</ul><p>Media: pending original assets and independent approvals.</p></article>')
-    return '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>PrimeRep draft review packet</title><style>body{max-width:900px;margin:32px auto;padding:0 20px;font:16px/1.6 system-ui;color:#20242a}article{border-top:2px solid #ddd;margin-top:40px;padding-top:20px}dt{font-weight:bold}dd{margin-bottom:8px}h3{margin-bottom:0}a{color:#065d9a}</style><body><h1>PrimeRep exercise drafts</h1><p>Editorial drafts for trainer review. No publication or technique approval is implied. Review commands bind to imported revision hashes; this packet cannot approve content.</p>' + ''.join(sections) + '</body></html>'
+    identity = f'<p>Packet format: 2 · Manifest SHA-256: <code>{fingerprint(manifest)}</code></p>'
+    if previous is not None:
+        identity += f'<p>Compared with manifest SHA-256: <code>{fingerprint(previous)}</code></p>'
+    return '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>PrimeRep draft review packet</title><style>body{max-width:900px;margin:32px auto;padding:0 20px;font:16px/1.6 system-ui;color:#20242a}article{border-top:2px solid #ddd;margin-top:40px;padding-top:20px}dt{font-weight:bold}dd{margin-bottom:8px}h3{margin-bottom:0}a{color:#065d9a}code{overflow-wrap:anywhere}pre{white-space:pre-wrap;background:#f3f4f6;padding:16px}summary{cursor:pointer}</style><body><h1>PrimeRep exercise drafts</h1><p>Editorial drafts for trainer review. No publication or technique approval is implied. Review commands bind to imported revision hashes; this packet cannot approve content.</p>' + identity + ''.join(sections) + '</body></html>'
 
 
 def main():
@@ -183,8 +236,23 @@ def main():
     parser.add_argument("--batch", type=int, choices=range(1, 9))
     parser.add_argument("--inventory", action="store_true")
     parser.add_argument("--packet", action="store_true", help="Print a readable HTML packet, optionally limited by --batch")
+    parser.add_argument("--audit", action="store_true", help="Audit all drafts without importing or publishing")
+    parser.add_argument("--write", action="store_true", help="Regenerate source-controlled draft JSON and HTML packets only")
+    parser.add_argument("--compare-ref", help="Git commit containing previous draft JSON for packet diffs")
     args = parser.parse_args()
     manifest = build_manifest()
+    if args.write:
+        for batch in ([args.batch] if args.batch else range(1, 9)):
+            path = DATA / f"batch-{batch:02}.json"
+            output = {"schema_version": 1, "exercises": manifest["exercises"][(batch - 1) * 25:batch * 25]}
+            previous = json.loads(subprocess.check_output(["git", "show", f"{args.compare_ref}:scripts/data/catalog/{path.name}"], cwd=ROOT, text=True)) if args.compare_ref else None
+            path.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n")
+            (ROOT / "docs/catalog-review" / f"batch-{batch:02}.html").write_text(review_packet(output, previous) + "\n")
+        print(json.dumps(editorial_audit(manifest), indent=2))
+        return
+    if args.audit:
+        print(json.dumps(editorial_audit(manifest), indent=2))
+        return
     if args.inventory:
         output = inventory(manifest)
     elif args.batch:

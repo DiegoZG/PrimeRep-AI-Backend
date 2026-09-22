@@ -41,7 +41,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -49,7 +49,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "machine_chest_press",
@@ -90,7 +90,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -98,7 +98,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "dumbbell_squeeze_press",
@@ -140,7 +140,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -148,7 +148,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "standing_cable_press",
@@ -177,7 +177,8 @@
           "Press both handles forward and return without letting the cables pull the trunk backward."
         ],
         "cues": [
-          "Keep ribs over the pelvis."
+          "Press the cable handles without rocking forward.",
+          "Keep the chosen stance stable as the handles return."
         ],
         "mistakes": [
           "Arching the back to finish the press."
@@ -189,7 +190,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -197,7 +198,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
     },
     {
       "id": "single_arm_cable_press",
@@ -238,7 +239,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -246,7 +247,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "band_chest_press",
@@ -287,7 +288,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -295,7 +296,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. A rated band anchor is required but has no current equipment ID: resolve equipment taxonomy before approving this draft. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. A rated band anchor is required but has no current equipment ID: resolve equipment taxonomy before approving this draft.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "incline_push_up",
@@ -336,7 +337,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -344,7 +345,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "kneeling_push_up",
@@ -383,7 +384,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -391,7 +392,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "decline_push_up",
@@ -432,7 +433,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -440,7 +441,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "dumbbell_fly",
@@ -481,7 +482,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (dumbbells, exercise 19)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/19/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -489,7 +490,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "low_cable_fly",
@@ -529,7 +530,7 @@
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (dumbbells, exercise 19)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/19/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -537,7 +538,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "standing_dumbbell_press",
@@ -565,7 +566,8 @@
           "Press overhead and lower to shoulder height without using leg drive."
         ],
         "cues": [
-          "Keep the ribs from flaring."
+          "Keep the ribs from flaring as the dumbbells rise.",
+          "Lower both weights without leaning backward."
         ],
         "mistakes": [
           "Turning each repetition into a push press."
@@ -585,7 +587,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
     },
     {
       "id": "single_arm_dumbbell_overhead_press",
@@ -633,7 +635,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "arnold_press",
@@ -682,7 +684,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "neutral_grip_shoulder_press",
@@ -711,7 +713,8 @@
           "Press overhead with the neutral grip and lower beside the shoulders."
         ],
         "cues": [
-          "Keep wrists straight."
+          "Keep the palms facing each other through this press.",
+          "Lower the dumbbells in the same controlled path."
         ],
         "mistakes": [
           "Flaring the elbows outward despite the neutral setup."
@@ -731,7 +734,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
     },
     {
       "id": "machine_shoulder_press",
@@ -779,7 +782,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "smith_shoulder_press",
@@ -828,7 +831,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "half_kneeling_landmine_press",
@@ -878,7 +881,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "standing_landmine_press",
@@ -928,7 +931,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "seated_barbell_press",
@@ -979,7 +982,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "kettlebell_overhead_press",
@@ -1027,7 +1030,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "seated_lateral_raise",
@@ -1074,7 +1077,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "single_arm_lateral_raise",
@@ -1120,7 +1123,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "cable_lateral_raise",
@@ -1166,7 +1169,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "machine_lateral_raise",
@@ -1212,7 +1215,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     }
   ]
 }

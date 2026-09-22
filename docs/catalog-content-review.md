@@ -4,7 +4,9 @@
 
 The source-controlled target contains **200 unapproved drafts**: all 41 canonical migration IDs and 159 proposed additions, arranged in eight 25-exercise batches. The earlier estimate of 43 was not supported by the canonical migration or the 41-record content file. Private exercises and database fixture rows are excluded.
 
-The 159 new entries have individually authored setup, motion, cue and mistake text. Family files supply restrained benefits and beginner guidance. The 41 existing entries retain legacy instruction wording for comparison; its provenance and technique review remain unknown. None of these files constitutes trainer or publisher approval.
+The 159 new entries have individually authored setup, motion, cue and mistake text. Family files still supply draft benefits and beginner guidance outside the corrected first batch. The 41 existing entries now have exercise-specific cues; selected legacy steps were corrected without changing published database content. Remaining legacy wording has unknown provenance. None of these files constitutes trainer or publisher approval.
+
+The September 21 AI editorial review and correction pass are tracked in [the correction report](catalog-review/correction-report-2026-09-21.md). The four entries it called approved are **not human-approved**. All 200 entries remain unapproved and generation-disabled. Safety, eligibility and load-mode questions remain explicit publication blockers, not automatic gates that the current generator knows how to enforce.
 
 All drafts deliberately set `generation_eligible: false`. The trainer must explicitly approve generator eligibility and tracking/load conventions before publication. Publishing a legacy replacement while leaving this flag false removes that exercise from future personalized generation; it does not change existing plans or history. Do not batch-publish the 200 drafts unchanged.
 
@@ -16,12 +18,14 @@ All drafts deliberately set `generation_eligible: false`. The trainer must expli
 - [Batch 5](catalog-review/batch-05.html), [Batch 6](catalog-review/batch-06.html)
 - [Batch 7](catalog-review/batch-07.html), [Batch 8](catalog-review/batch-08.html)
 
-Open these HTML files locally in a browser. They include instructions, classifications, equipment, load interpretation, source claims and review uncertainties. For an imported revision, `exercise_catalog.py review-packet` additionally shows the exact immutable revision hash, a diff from published content and staged media status.
+Open these HTML files locally in a browser. They include instructions, classifications, equipment, load interpretation, source claims and review uncertainties. Format 2 includes the manifest hash, exact per-entry content hashes and expandable before/after diffs when generated with `--compare-ref`. These are not invented database revision IDs. For an imported revision, `exercise_catalog.py review-packet` additionally shows the assigned revision ID, a diff from published content and staged media status.
 
 ```sh
 PYTHONPATH=. .venv/bin/python scripts/catalog_build.py --inventory
 PYTHONPATH=. .venv/bin/python scripts/catalog_build.py --batch 1
 PYTHONPATH=. .venv/bin/python scripts/catalog_build.py --batch 1 --packet
+PYTHONPATH=. .venv/bin/python scripts/catalog_build.py --audit
+PYTHONPATH=. .venv/bin/python scripts/catalog_build.py --write --compare-ref 7271f77
 PYTHONPATH=. .venv/bin/python scripts/catalog_inventory.py --database
 PYTHONPATH=. .venv/bin/python scripts/exercise_catalog.py validate scripts/data/catalog/batch-01.json
 PYTHONPATH=. .venv/bin/python scripts/exercise_catalog.py import scripts/data/catalog/batch-01.json --operator ACTUAL_AUTHOR --dry-run
@@ -51,7 +55,7 @@ Only after checking the dry-run result, remove its `--dry-run` to publish. Use `
 
 ## Research and unresolved decisions
 
-Sources were accessed on 2026-09-20. Direct ACE instructional pages informed limited movement-family facts; Concept2's own technique pages informed rowing and SkiErg references. Each entry states exactly what its cited source supports. A related exercise page is **not evidence that a variant's entire technique, muscle classification or equipment setup was verified**. Variants have explicit trainer-review notes, including requests to add a directly applicable source where necessary.
+Original sources were accessed on 2026-09-20; replacement references record their own access dates. Direct ACE instructional pages informed limited movement-family facts; Concept2's own technique pages informed rowing and SkiErg references. Each entry states exactly what its cited source supports. A related exercise page is **not evidence that a variant's entire technique, muscle classification or equipment setup was verified**. Variants have explicit trainer-review notes, including requests to add a directly applicable source where necessary.
 
 The facts and original prose do not grant permission to reuse source photographs, video or wording. No vendor media or catalog has been imported. Reviewers should replace the 41 legacy descriptions where provenance or overly strong claims remain uncertain.
 
@@ -69,7 +73,7 @@ The target avoids counting equipment-model variants as separate movements: three
 
 ## Editing and consistency
 
-The authoring sources are `scripts/data/catalog/new-drafts.psv`, `families.json` and the legacy source file. `catalog_build.py` deterministically compiles them into the schema used by the publication CLI. After an editorial change, regenerate the affected batch and packet and run `tests/test_catalog_manifest.py`. Never edit an already submitted database payload; import a new revision and obtain reviews for its new hash.
+The authoring sources are `scripts/data/catalog/new-drafts.psv`, `families.json`, `editorial-corrections.json` and the legacy source file. Corrections override draft content only and retain the frozen canonical seeds and original prose for comparison. `catalog_build.py` deterministically compiles them into the schema used by the publication CLI. After an editorial change, regenerate the affected batch and packet and run `tests/test_catalog_manifest.py`. Never edit an already submitted database payload; import a new revision and obtain reviews for its new hash. The builder rejects generation-enabled drafts; the shared content schema rejects cues copied from benefits, including whitespace/case variants.
 
 Publication approval must be supplied by Diego or the designated publisher after a qualified trainer's review. The tooling does not infer approval from filenames, generated prose, technical validation or this document.
 

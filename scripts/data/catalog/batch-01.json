@@ -29,26 +29,28 @@
       },
       "structured_content": {
         "steps": [
-          "Lie on a flat bench with your eyes roughly under the bar, feet flat on the floor.",
-          "Grip the bar slightly wider than shoulder width, unrack it, and lower it under control to your mid-chest while keeping your elbows at about a 45-degree angle to your torso.",
-          "Press the bar back up in a slight arc until your arms are fully extended, keeping your shoulder blades pinned together and your glutes on the bench throughout."
+          "Before loading, have a qualified trainer check the rack, safety supports and spotter arrangement for this bench.",
+          "Lie with stable foot and bench contact and take a closed grip on the bar.",
+          "Lower the bar in a controlled path, then press it upward without bouncing.",
+          "Return the bar to its supports under control; rehearse the setup and return with a trainer before increasing load."
         ],
         "cues": [
-          "Practise moving the load away from the chest while keeping a stable support position."
+          "Keep a closed grip on the bar.",
+          "Lower smoothly; do not bounce off the chest."
         ],
         "mistakes": [
           "Flaring the elbows out to 90 degrees puts unnecessary stress on the shoulder joint and reduces chest involvement.",
           "Bouncing the bar off the chest instead of controlling the descent robs you of tension and increases injury risk.",
           "Letting the hips or feet lift off the bench during the press also reduces stability and power transfer."
         ],
-        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
-        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+        "benefits": "Trains chest and arm strength with a supported barbell press.",
+        "beginner_guidance": "Have a qualified trainer demonstrate the rack, spotter communication, and safety setup before loading the bar."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -56,7 +58,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: verify spotter/safety-arm requirements and model them as equipment/profile gates before generation. This draft is not a bailout guide. Confirm a suitable alternative when a safe setup is unavailable."
     },
     {
       "id": "incline_dumbbell_press",
@@ -87,29 +89,30 @@
           "Lower them with control back to just outside shoulder level before pressing again."
         ],
         "cues": [
-          "Practise moving the load away from the chest while keeping a stable support position."
+          "Keep the dumbbells balanced above the forearms.",
+          "Maintain contact with the bench as you press."
         ],
         "mistakes": [
           "Setting the incline too steep (over 45-50 degrees) turns the movement into more of a shoulder press and takes emphasis off the chest.",
           "Letting the dumbbells drift too far forward or crash together at the top reduces tension on the target muscles.",
           "Arching the lower back excessively to move more weight is another common compensation to avoid."
         ],
-        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
-        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+        "benefits": "Trains chest and shoulder pressing strength on an inclined support.",
+        "beginner_guidance": "Use a manageable pair and get help learning how to enter and leave the bench with the weights."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
-          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
-          "accessed_at": "2026-09-20",
+          "title": "ACE Exercise Library — Incline Chest Press (dumbbells)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/25/incline-chest-press/",
+          "accessed_at": "2026-09-21",
           "claims": [
-            "Chest pressing involves shoulder movement and elbow extension."
+            "Supports the inclined dumbbell setup, support contact and neutral wrist position; does not establish a universal dismount procedure."
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Verify the bench angle, wrist alignment, and a safe setup/dismount sequence; do not assume the proposed thigh-kick or dismount is appropriate for every lifter."
     },
     {
       "id": "push_up",
@@ -133,26 +136,27 @@
       },
       "structured_content": {
         "steps": [
-          "Start in a plank position with hands slightly wider than shoulder-width and your body forming a straight line from head to heels.",
-          "Lower your chest toward the floor by bending your elbows at roughly 45 degrees to your sides, keeping your core and glutes braced.",
-          "Push back up to full arm extension without letting your hips sag or pike up."
+          "Place the hands around shoulder width and support the body on hands and toes with the head aligned with the torso.",
+          "Bend the elbows to lower the body as a unit through a controlled range.",
+          "Push the floor away to return without letting the hips lag behind."
         ],
         "cues": [
-          "Practise moving the load away from the chest while keeping a stable support position."
+          "Move the torso and hips together.",
+          "Keep the head aligned with the body."
         ],
         "mistakes": [
           "Letting the hips sag toward the floor or piking them up removes tension from the target muscles and can strain the lower back.",
           "Flaring the elbows straight out to the sides places excess stress on the shoulders.",
           "Many people also only perform a partial range of motion, stopping well before the chest approaches the floor."
         ],
-        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
-        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+        "benefits": "Trains upper-body pushing strength while maintaining trunk control.",
+        "beginner_guidance": "If full push-ups are not controlled, ask a trainer to select a wall, stable elevated-support, or knee-supported variation. Those are different setups, not added weight on this record."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
           "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
           "accessed_at": "2026-09-20",
           "claims": [
@@ -160,7 +164,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Confirm the regression choices and their equipment requirements. Added-load and assistance logging are not implemented by this bodyweight record. Do not infer readiness from years of training."
     },
     {
       "id": "chest_fly_machine",
@@ -184,33 +188,35 @@
       },
       "structured_content": {
         "steps": [
-          "Sit in the machine with your back flat against the pad and grip the handles with a slight bend in your elbows.",
-          "Squeeze your chest to bring the handles together in front of you in a wide arcing motion, then slowly return to the stretched starting position without letting the weight stack slam down."
+          "Have staff adjust the seat, handles or forearm pads for your size according to the machine's instructions.",
+          "Take the handles with a comfortable elbow bend and keep that bend consistent as the arms move together.",
+          "Return under control through a comfortable range without letting the stack drop."
         ],
         "cues": [
-          "Trains bringing the upper arms across the torso with limited elbow movement."
+          "Keep the elbow bend consistent through the arc.",
+          "Return the handles slowly without letting the stack slam."
         ],
         "mistakes": [
           "Using too much weight often causes people to turn the movement into a press by bending the elbows more and losing the arcing path.",
           "Letting the handles snap back too quickly on the eccentric portion reduces muscle tension and increases strain on the shoulder joint.",
           "Rounding the shoulders forward at the top of the squeeze can also place unwanted stress on the front of the shoulder."
         ],
-        "benefits": "Trains bringing the upper arms across the torso with limited elbow movement.",
-        "beginner_guidance": "Start with a short, comfortable arc and light resistance; a deeper stretch is not a requirement."
+        "benefits": "Trains bringing the upper arms together against machine resistance.",
+        "beginner_guidance": "Ask staff to fit the seat and starting position to the specific machine before adding resistance."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
-          "url": "https://www.acefitness.org/resources/everyone/exercise-library/19/chest-press/",
-          "accessed_at": "2026-09-20",
+          "title": "ACE — What Are the Top 3 Most Effective Chest Exercises?",
+          "url": "https://www.acefitness.org/certifiednewsarticle/3003/what-are-the-top-3-most-effective-chest-exercises/",
+          "accessed_at": "2026-09-21",
           "claims": [
-            "Reference establishes chest-training anatomy; the fly variation requires separate trainer verification."
+            "Identifies pec-deck and dip movements in a chest-exercise study. Context only: does not establish machine seat settings, safe dip depth, or clinical contraindications."
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: obtain the actual machine's setup reference, including handle/pad position and seat height. A chest-press source is not evidence for fly-machine setup."
     },
     {
       "id": "cable_crossover",
@@ -234,33 +240,35 @@
       },
       "structured_content": {
         "steps": [
-          "Stand centered between two cable stacks with pulleys set high, grab a handle in each hand, and step forward slightly with a soft bend in your knees and a forward lean at the hips.",
-          "Pull the handles down and across your body in an arcing motion until your hands meet or cross in front of your hips, then return under control to the stretched starting position."
+          "Set the two pulleys and attachments for the intended fly variation and choose manageable settings.",
+          "Take a stable stance and bring the handles together while keeping a small, consistent elbow bend.",
+          "Return the arms under control; keep the same chosen cable path rather than changing direction to move the load."
         ],
         "cues": [
-          "Trains bringing the upper arms across the torso with limited elbow movement."
+          "Keep a small, consistent elbow bend.",
+          "Bring the handles together without rocking the torso."
         ],
         "mistakes": [
-          "Standing too upright rather than hinging slightly forward reduces chest tension and shifts stress toward the shoulders.",
-          "Using momentum by swinging the torso or arms defeats the purpose of the constant-tension exercise.",
-          "Setting the pulleys too low (rather than high, for a downward crossing path) changes the muscle emphasis away from the chest."
+          "Changing the elbow bend to turn the fly into a press.",
+          "Rocking the torso to move resistance that cannot be controlled.",
+          "Switching the cable path mid-set instead of using the chosen variation consistently."
         ],
-        "benefits": "Trains bringing the upper arms across the torso with limited elbow movement.",
-        "beginner_guidance": "Start with a short, comfortable arc and light resistance; a deeper stretch is not a requirement."
+        "benefits": "Trains chest strength through a cable-resisted fly.",
+        "beginner_guidance": "Start with a controlled arc and have a trainer set the pulley height for the intended variation."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Chest Press",
-          "url": "https://www.acefitness.org/resources/everyone/exercise-library/19/chest-press/",
-          "accessed_at": "2026-09-20",
+          "title": "ACE Exercise Library — Standing Chest Fly (cables)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/160/standing-chest-fly/",
+          "accessed_at": "2026-09-21",
           "claims": [
-            "Reference establishes chest-training anatomy; the fly variation requires separate trainer verification."
+            "Supports a two-cable fly with a maintained elbow bend; does not specify PrimeRep's stack-weight logging convention."
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: decide per-stack versus combined weight and preserve old logged values. Different cable directions are variations, not inherently mistakes. Validate attachments, pulley ratios, and the exercise identity."
     },
     {
       "id": "overhead_press",
@@ -294,15 +302,16 @@
           "Lower it back to the shoulders under control."
         ],
         "cues": [
-          "Builds controlled overhead pressing strength through the shoulders and triceps."
+          "Keep the wrists aligned with the forearms.",
+          "Avoid leaning back to finish the press."
         ],
         "mistakes": [
           "Leaning back excessively to help drive the bar up turns the lift into more of an incline press and stresses the lower back.",
           "Failing to move the head out of the way results in a bar path that drifts forward instead of straight up, reducing efficiency and shoulder safety.",
           "Not fully locking out the elbows or shrugging the shoulders up at the top also limits the strength benefit."
         ],
-        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
-        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+        "benefits": "Trains an overhead barbell press while stabilizing the trunk.",
+        "beginner_guidance": "Learn the press and bar setup with a light implement before adding plates. Ask a trainer for an alternative if a comfortable overhead position is unavailable."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -316,7 +325,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Verify wrist setup, trunk-muscle classification, and bar pickup/rack requirements. Alternatives for restricted movement need individual review, not an automatic clinical rule."
     },
     {
       "id": "dumbbell_shoulder_press",
@@ -348,15 +357,16 @@
           "Keep your core braced and avoid excessive arching of the lower back."
         ],
         "cues": [
-          "Builds controlled overhead pressing strength through the shoulders and triceps."
+          "Press both dumbbells without lifting off the back support.",
+          "Lower each weight with the same control."
         ],
         "mistakes": [
           "Letting the dumbbells drift too far forward changes the exercise into more of a front raise and reduces shoulder loading efficiency.",
           "Overarching the lower back to gain leverage is a common compensation when the weight gets heavy.",
           "Not lowering the dumbbells to a full shoulder-height stretch also shortchanges the range of motion."
         ],
-        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
-        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+        "benefits": "Trains overhead pressing with independently held dumbbells.",
+        "beginner_guidance": "Use weights you can position and put down under control; ask for help learning the setup."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -370,7 +380,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: AI editorial review is not approval. Verify getting the weights into position, exit technique, and whether a neutral-grip variation belongs under this ID."
     },
     {
       "id": "lateral_raise",
@@ -397,15 +407,16 @@
           "Avoid using momentum or swinging the torso to lift the weight."
         ],
         "cues": [
-          "Trains shoulder strength through an arm-raising motion with a relatively light load."
+          "Raise the dumbbells without bouncing from the legs.",
+          "Keep a soft, consistent bend in the elbows."
         ],
         "mistakes": [
-          "Using too much weight almost always leads to using momentum — swinging the torso or shrugging the traps to heave the dumbbells up — which shifts work away from the side delts.",
-          "Raising the arms too high above shoulder height also recruits the traps more than intended.",
-          "Locking the elbows completely straight can place unnecessary stress on the elbow joint."
+          "Swinging from the legs to start the raise.",
+          "Shrugging to move a load that cannot be raised with control.",
+          "Changing the elbow bend substantially between repetitions."
         ],
-        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
-        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+        "benefits": "Trains shoulder strength with a sideways arm raise.",
+        "beginner_guidance": "Use a light pair and a range you can control without swinging."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -419,7 +430,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Confirm the upper-back/trapezius role within the existing muscle taxonomy; it has no separate traps value. Avoid blanket injury claims about elbow lockout."
     },
     {
       "id": "front_raise",
@@ -441,20 +452,21 @@
       },
       "structured_content": {
         "steps": [
-          "Stand holding a dumbbell in each hand in front of your thighs with palms facing your body.",
-          "Keeping a slight bend in your elbows, raise one or both dumbbells straight out in front of you to about shoulder height, then lower with control.",
-          "Avoid swinging your torso to generate momentum."
+          "Hold one dumbbell in each hand in front of the thighs with a stable stance.",
+          "Raise both arms together in front of the body through a controlled range without leaning back.",
+          "Lower both weights smoothly. Alternating and single-arm versions are separate variations."
         ],
         "cues": [
-          "Trains shoulder strength through an arm-raising motion with a relatively light load."
+          "Raise both dumbbells together.",
+          "Keep the torso still as the weights return."
         ],
         "mistakes": [
           "Raising the dumbbells above shoulder height shifts stress toward the traps and reduces front delt tension.",
           "Using body momentum by leaning back or swinging the arms up quickly is a very common compensation with heavier weights.",
           "Because the front delts are already heavily worked by pressing exercises, overdoing this movement can also lead to unnecessary shoulder fatigue."
         ],
-        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
-        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+        "benefits": "Trains the front of the shoulders with a forward arm raise.",
+        "beginner_guidance": "Use a light pair; keep both arms moving together for this bilateral record."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -468,7 +480,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Review whether this accessory belongs in generated plans and how to avoid redundant shoulder volume. Selection weighting is not implemented in this correction."
     },
     {
       "id": "reverse_fly",
@@ -499,38 +511,41 @@
           "Lower back down under control."
         ],
         "cues": [
-          "Trains the back of the shoulders and the upper back through a controlled pulling arc."
+          "Open the arms without jerking the torso upward.",
+          "Keep the elbow bend consistent as the weights lower."
         ],
         "mistakes": [
           "Standing too upright rather than hinging forward reduces the effectiveness of the movement and shifts stress to the lower back.",
           "Using momentum by jerking the weights up, or letting the elbows bend too much and turning it into a row, both reduce rear delt isolation.",
           "Shrugging the shoulders up toward the ears at the top of the movement also pulls tension away from the target muscle."
         ],
-        "benefits": "Trains the back of the shoulders and the upper back through a controlled pulling arc.",
-        "beginner_guidance": "Practise the arm path without weight before adding light resistance."
+        "benefits": "Trains the rear shoulders and upper back with a dumbbell fly.",
+        "beginner_guidance": "If holding the hinged position is difficult, ask about a chest-supported variation using an incline bench; it needs different equipment from this record."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Bent-over Row",
-          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
-          "accessed_at": "2026-09-20",
+          "title": "ACE — Correct Cues for Scapular Motion",
+          "url": "https://www.acefitness.org/certifiednewsarticle/2384/correct-cues-for-scapular-motion/",
+          "accessed_at": "2026-09-21",
           "claims": [
-            "Reference supports controlled pulling with a stable torso; rear-delt variants need trainer verification."
+            "Discusses scapular motion during reverse flys. Does not verify a machine setup or prescribe the chest-supported variation."
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Validate the unsupported and chest-supported identities separately; do not silently require a bench for this dumbbells-only ID. Replace the row reference with direct fly guidance."
     },
     {
       "id": "deadlift",
       "name": "Deadlift",
       "exercise_type": "strength",
-      "primary_muscle": "back",
+      "primary_muscle": "glutes",
       "secondary_muscles": [
-        "glutes",
-        "hamstrings"
+        "hamstrings",
+        "quads",
+        "back",
+        "abs"
       ],
       "equipment_ids": [
         "olympic_barbell",
@@ -547,20 +562,21 @@
       },
       "structured_content": {
         "steps": [
-          "Stand with feet hip-width apart, the barbell over your mid-foot, and grip it just outside your legs.",
-          "Hinge at the hips and bend your knees to grab the bar with a flat back and chest up, then drive through your heels and extend your hips and knees together to stand up straight, keeping the bar close to your body throughout.",
-          "Reverse the motion under control to lower the bar back to the floor."
+          "Have a trainer establish the stance, bar position, secure grip and bracing setup before adding load.",
+          "With the bar close and balanced foot pressure, extend the knees and hips to stand without jerking the bar.",
+          "Return the bar under control using the practiced hip and knee motion. Stop if the setup cannot be maintained."
         ],
         "cues": [
-          "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning."
+          "Keep the bar close during the lift.",
+          "Stand up without leaning back at the top."
         ],
         "mistakes": [
           "Rounding the lower back during the pull is the most serious technique error and significantly increases injury risk.",
           "Letting the bar drift away from the shins and thighs during the lift makes it mechanically harder and puts more strain on the lower back.",
           "Hyperextending (leaning back excessively) at the top of the lift is another common but unnecessary compensation."
         ],
-        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
-        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+        "benefits": "Trains a coordinated floor lift through hip and knee extension with trunk stabilization.",
+        "beginner_guidance": "Learn the start position, grip, bracing and controlled return with qualified instruction before adding load."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -574,7 +590,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: keep reference-only pending generator policy. Confirm hip-extensor primary classification and secondary muscles, mid-foot balance, grip choice and bracing. Do not add an unsourced mixed-grip injury claim."
     },
     {
       "id": "romanian_deadlift",
@@ -608,15 +624,16 @@
           "Stop when you feel a deep stretch in your hamstrings (typically around mid-shin), then drive your hips forward to return to standing."
         ],
         "cues": [
-          "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning."
+          "Send the hips back while the bar stays close.",
+          "Keep the chosen knee bend steady through the descent."
         ],
         "mistakes": [
           "Bending the knees too much turns the movement into more of a squat and reduces hamstring loading.",
           "Rounding the back to reach further down is a common and risky compensation — the range of motion should be limited by hamstring flexibility, not by rounding the spine.",
           "Letting the bar drift away from the legs also increases lower back stress."
         ],
-        "benefits": "Trains the posterior chain through a hip-hinge pattern with controlled trunk positioning.",
-        "beginner_guidance": "Learn the hip movement with a light load; reduce depth before losing your chosen trunk position."
+        "benefits": "Trains hip-hinge strength with the bar starting from standing.",
+        "beginner_guidance": "First learn how to bring the bar to the standing start position and return it safely. Hinge only as far as you can maintain control."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -630,7 +647,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: AI editorial review is not approval. Verify the starting setup, individualized knee bend and end range; do not prescribe a universal 15–20 degree angle."
     },
     {
       "id": "pull_up",
@@ -647,7 +664,7 @@
       "aliases": [],
       "movement_pattern": "vertical_pull",
       "resistance_modality": "bodyweight",
-      "difficulty": "beginner",
+      "difficulty": "advanced",
       "laterality": "bilateral",
       "load_profile": {
         "basis": "bodyweight",
@@ -660,29 +677,30 @@
           "Lower back down under control to a full arm extension before starting the next rep."
         ],
         "cues": [
-          "Trains the back and arm muscles in a vertical pulling pattern."
+          "Keep the body from swinging.",
+          "Lower under control instead of dropping."
         ],
         "mistakes": [
           "Using momentum by kipping or swinging the legs turns the exercise into a much less effective, less controlled movement for most training goals.",
           "Not achieving a full range of motion — stopping short of chin-over-bar at the top or not fully extending the arms at the bottom — reduces the training effect.",
           "Excessive shoulder shrugging without engaging the lats is another common inefficiency."
         ],
-        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
-        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+        "benefits": "Trains vertical pulling against bodyweight.",
+        "beginner_guidance": "If you cannot perform a controlled repetition, ask a trainer to select an appropriately supported or assisted alternative rather than forcing this unassisted movement."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Seated Lat Pulldown",
-          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
-          "accessed_at": "2026-09-20",
+          "title": "ACE — 4 Moves to Help You Master the Pull-up",
+          "url": "https://www.acefitness.org/resources/pros/expert-articles/5565/4-moves-to-help-you-master-the-pull-up/",
+          "accessed_at": "2026-09-21",
           "claims": [
-            "Pulldowns draw an overhead resistance toward the upper torso."
+            "Discusses the pulling movement and building capacity before unassisted repetitions. Does not validate a three-rep gate or the advanced label."
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: decide assistance/load tracking and readiness assessment before generation; the proposed three-rep threshold is not validated. Advanced is a provisional editorial rating, not a clinical classification."
     },
     {
       "id": "lat_pulldown",
@@ -713,15 +731,16 @@
           "Avoid using your body weight to yank the bar down."
         ],
         "cues": [
-          "Trains the back and arm muscles in a vertical pulling pattern."
+          "Pull the elbows down without swinging backward.",
+          "Guide the bar back up without releasing control."
         ],
         "mistakes": [
           "Leaning back too far and using body momentum to heave the bar down reduces lat engagement and can strain the lower back.",
           "Pulling the bar behind the neck rather than to the front of the chest places unnecessary and potentially risky stress on the shoulder joint.",
           "Not allowing a full stretch at the top of each rep also limits the range of motion benefit."
         ],
-        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
-        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+        "benefits": "Trains vertical pulling with an adjustable cable resistance.",
+        "beginner_guidance": "Have the thigh support and seat fitted before starting; use a resistance that lets you stay seated and control the return."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -735,7 +754,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: AI editorial review is not approval. Verify the machine setup and thigh-pad adjustment against its manufacturer guidance."
     },
     {
       "id": "seated_row",
@@ -765,15 +784,16 @@
           "Pull the handle toward your lower abdomen by driving your elbows straight back, squeezing your shoulder blades together, then extend your arms back out under control without rounding your lower back."
         ],
         "cues": [
-          "Builds horizontal pulling strength through the upper back and elbow flexors."
+          "Pull without rocking the torso back.",
+          "Control the reach as the handle returns."
         ],
         "mistakes": [
           "Rounding the lower back or leaning too far forward and back (using body momentum rather than the arms and back) is the most common technique breakdown, especially as fatigue sets in.",
           "Shrugging the shoulders up toward the ears reduces mid-back engagement.",
           "Not pulling the handle far enough back to fully retract the shoulder blades also limits the benefit."
         ],
-        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
-        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+        "benefits": "Trains upper-back and arm strength through a seated cable pull.",
+        "beginner_guidance": "Have a trainer show how to take and return the handle while maintaining a supported position."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -787,7 +807,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Verify safe entry/exit, knee bend and trunk setup on the actual apparatus; the family bent-over-row reference does not validate a seated machine's setup."
     },
     {
       "id": "t_bar_row",
@@ -804,7 +824,7 @@
       "aliases": [],
       "movement_pattern": "horizontal_pull",
       "resistance_modality": "machine",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "laterality": "bilateral",
       "load_profile": {
         "basis": "machine",
@@ -816,15 +836,16 @@
           "Pull the weight up toward your chest or upper abdomen by driving your elbows back, squeezing your shoulder blades together, then lower under control to a full stretch."
         ],
         "cues": [
-          "Builds horizontal pulling strength through the upper back and elbow flexors."
+          "Keep the torso steady as the handle rises.",
+          "Lower the plates without a sudden drop."
         ],
         "mistakes": [
           "Rounding the back during the pull, especially as the weight gets heavy, is the most significant risk with this exercise.",
           "Standing too upright rather than maintaining a solid hip hinge reduces back engagement and shifts the movement pattern.",
           "Using momentum by jerking the torso up and down instead of pulling with the back muscles is another common error."
         ],
-        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
-        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+        "benefits": "Trains pulling strength against a plate-loaded lever.",
+        "beginner_guidance": "Ask staff to demonstrate the specific T-bar apparatus, including supports, loading and how to set it down."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -838,7 +859,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: the existing equipment ID is plate_loaded_t_bar, not proof of an unsupported landmine. Confirm exact apparatus and whether load means plates only or includes starting resistance before changing load metadata. Back-issue exclusions require a separate profile/clinical policy."
     },
     {
       "id": "barbell_curl",
@@ -855,7 +876,7 @@
       "aliases": [],
       "movement_pattern": "flexion",
       "resistance_modality": "barbell",
-      "difficulty": "intermediate",
+      "difficulty": "beginner",
       "laterality": "bilateral",
       "load_profile": {
         "basis": "total",
@@ -868,15 +889,16 @@
           "Avoid swinging your hips or back to help lift the weight."
         ],
         "cues": [
-          "Builds elbow-flexor strength with a controlled curl and lowering phase."
+          "Keep the upper arms beside the torso.",
+          "Lower the bar without using a backward lean."
         ],
         "mistakes": [
           "Using momentum by swinging the torso back and forth (often called 'cheat curling') is extremely common once the weight gets challenging, and it significantly reduces the effectiveness of the exercise.",
           "Letting the elbows drift forward away from the torso also changes the movement pattern and reduces bicep isolation.",
           "Not fully extending the arms at the bottom of each rep shortens the effective range of motion."
         ],
-        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
-        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+        "benefits": "Trains elbow flexion with a two-handed bar.",
+        "beginner_guidance": "Start with a light bar you can control. An EZ-bar is a separate equipment choice; do not assume it weighs the same."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -890,7 +912,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Beginner is a provisional skill rating. Confirm the barbell/short-bar/EZ-bar identities and weight convention before adding aliases or substitutions."
     },
     {
       "id": "dumbbell_curl",
@@ -914,20 +936,21 @@
       },
       "structured_content": {
         "steps": [
-          "Stand or sit holding a dumbbell in each hand at your sides with palms facing forward (or neutral, depending on preference).",
-          "Curl one or both dumbbells up toward your shoulders by bending at the elbow, keeping your upper arm stationary, then lower back down under control.",
-          "You can alternate arms or curl both simultaneously."
+          "Hold a dumbbell in each hand with palms facing forward and upper arms near the torso.",
+          "Bend both elbows together to lift the weights without swinging the body.",
+          "Lower both dumbbells under control. Use separate entries for hammer or alternating curls."
         ],
         "cues": [
-          "Builds elbow-flexor strength with a controlled curl and lowering phase."
+          "Keep the palms facing forward for this variation.",
+          "Curl both arms together without swinging the hips."
         ],
         "mistakes": [
           "Swinging the dumbbells up using momentum from the hips or back is the most common error, particularly with heavier weights.",
           "Letting the elbows drift forward or flare out to the sides changes the exercise and reduces bicep isolation.",
           "Curling both arms unevenly due to a dominant side is also common and worth correcting with focused, controlled reps."
         ],
-        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
-        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+        "benefits": "Trains elbow flexion with a dumbbell held in each hand.",
+        "beginner_guidance": "Use a manageable pair and perform the simultaneous palms-forward version. Hammer and alternating curls have separate catalog identities."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -941,7 +964,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Confirm bilateral supinated identity. Preserve the existing per-implement convention; changing grip or sequencing must not silently redefine historical sets."
     },
     {
       "id": "preacher_curl",
@@ -958,7 +981,7 @@
       "aliases": [],
       "movement_pattern": "flexion",
       "resistance_modality": "barbell",
-      "difficulty": "intermediate",
+      "difficulty": "beginner",
       "laterality": "bilateral",
       "load_profile": {
         "basis": "total",
@@ -966,19 +989,21 @@
       },
       "structured_content": {
         "steps": [
-          "Sit at the preacher curl bench with your upper arms resting flat against the angled pad and grip the bar (or dumbbell) with an underhand grip.",
-          "Curl the weight up toward your shoulders, then lower it back down under control until your arms are nearly fully extended, keeping your upper arms pinned to the pad throughout."
+          "Have the seat adjusted so the upper arms rest comfortably against the preacher pad.",
+          "Grip the short bar with the palms up and curl while keeping the upper arms supported.",
+          "Lower the bar smoothly through the range taught by your trainer without bouncing at the bottom."
         ],
         "cues": [
-          "Builds elbow-flexor strength with a controlled curl and lowering phase."
+          "Keep the upper arms in contact with the pad.",
+          "Lower the bar smoothly without bouncing at the bottom."
         ],
         "mistakes": [
           "Fully locking out the elbows at the bottom of each rep while under load can place excessive stress on the elbow joint and biceps tendon — a slight bend at the bottom is safer.",
           "Lifting the shoulders or upper arms off the pad to cheat the weight up defeats the purpose of the strict positioning.",
           "Using too much weight often leads to a partial, jerky range of motion."
         ],
-        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
-        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+        "benefits": "Trains a supported two-handed curl with a bar.",
+        "beginner_guidance": "Ask staff to adjust the seat and pad before loading the short bar; do not substitute a dumbbell under this record."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -992,7 +1017,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: Verify seat/pad fit and bottom-range wording, including the legacy lockout injury claim. Beginner is provisional. Confirm total bar-plus-plates convention."
     },
     {
       "id": "tricep_pushdown",
@@ -1018,15 +1043,16 @@
           "Push the attachment down by extending your elbows until your arms are fully straight, keeping your upper arms stationary, then let it return under control back to the starting position."
         ],
         "cues": [
-          "Trains elbow extension while the shoulder position is kept relatively steady."
+          "Keep the upper arms near the torso.",
+          "Return the attachment without letting the stack drop."
         ],
         "mistakes": [
           "Letting the elbows drift away from the torso or flare outward reduces triceps isolation and can shift stress toward the shoulders.",
           "Leaning the torso forward and using body weight to help push the bar down is a common way people cheat the movement when the weight is too heavy.",
           "Not achieving full elbow extension at the bottom of the movement also limits triceps activation."
         ],
-        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
-        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+        "benefits": "Trains elbow extension against a high cable.",
+        "beginner_guidance": "Use a light stack setting and keep the same attachment when comparing sessions."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -1040,7 +1066,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: AI editorial review is not approval. Rope and bar attachments currently share this ID; determine variant tracking before comparing their loads."
     },
     {
       "id": "skull_crushers",
@@ -1063,19 +1089,22 @@
       },
       "structured_content": {
         "steps": [
-          "Lie on a flat bench holding an EZ-bar or dumbbells with arms extended straight up over your chest.",
-          "Keeping your upper arms stationary, bend at the elbows to lower the weight toward your forehead or just behind your head, then extend your elbows to press the weight back up to the starting position."
+          "Have a trainer demonstrate the bench setup, handling and return of the EZ-bar before adding load.",
+          "Lie supported on the bench and hold the EZ-bar securely above the upper body.",
+          "Bend and extend the elbows through a controlled range; stop before the bar becomes difficult to control.",
+          "Return the bar using the setup practiced with your trainer; do not improvise a failed-repetition bailout."
         ],
         "cues": [
-          "Trains elbow extension while the shoulder position is kept relatively steady."
+          "Lower the EZ-bar deliberately.",
+          "Keep the grip secure throughout the return."
         ],
         "mistakes": [
           "Letting the upper arms drift backward or forward during the movement (rather than staying vertical) changes the exercise into something closer to a skull-crusher-pullover hybrid and reduces the intended muscle emphasis.",
           "Using too much weight often leads to shortened range of motion or the elbows flaring out excessively.",
           "Lowering the weight too far without control also increases the risk of hitting the head or straining the elbow."
         ],
-        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
-        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+        "benefits": "Trains elbow extension while lying on a bench with an EZ-bar.",
+        "beginner_guidance": "Learn this setup with a qualified trainer. If you cannot control the load or it causes discomfort, stop and ask for a suitable alternative."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -1089,7 +1118,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: validate solo-lifter/spotter setup and exit before generation. Do not adopt the AI's behind-the-head bailout instruction without qualified review. Confirm EZ-bar mass in total load and individualized elbow precautions."
     },
     {
       "id": "dip",
@@ -1106,7 +1135,7 @@
       "aliases": [],
       "movement_pattern": "vertical_push",
       "resistance_modality": "bodyweight",
-      "difficulty": "beginner",
+      "difficulty": "intermediate",
       "laterality": "bilateral",
       "load_profile": {
         "basis": "bodyweight",
@@ -1119,29 +1148,30 @@
           "Keep your core engaged and avoid excessive swinging."
         ],
         "cues": [
-          "Trains elbow extension while the shoulder position is kept relatively steady."
+          "Keep the body from swinging between the bars.",
+          "Press back up without bouncing from the bottom."
         ],
         "mistakes": [
           "Descending too deep, especially with limited shoulder mobility, can place excessive strain on the front of the shoulder joint.",
           "Flaring the elbows out wide rather than keeping them closer to the body increases shoulder stress.",
           "Using momentum by bouncing at the bottom of the movement rather than controlling the descent also increases injury risk."
         ],
-        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
-        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+        "benefits": "Trains a compound bodyweight press using the chest, triceps and shoulders.",
+        "beginner_guidance": "Ask a trainer to assess whether you can support and lower your body under control. Assisted alternatives need their own equipment and tracking."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
       "sources": [
         {
-          "title": "ACE Exercise Library — Triceps Extension",
-          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
-          "accessed_at": "2026-09-20",
+          "title": "ACE — What Are the Top 3 Most Effective Chest Exercises?",
+          "url": "https://www.acefitness.org/certifiednewsarticle/3003/what-are-the-top-3-most-effective-chest-exercises/",
+          "accessed_at": "2026-09-21",
           "claims": [
-            "Triceps extensions straighten the elbows against resistance."
+            "Identifies pec-deck and dip movements in a chest-exercise study. Context only: does not establish machine seat settings, safe dip depth, or clinical contraindications."
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: resolve chest- versus triceps-emphasis identity, shoulder range and readiness; do not add blanket clinical contraindications. Assistance/added-load modes are a separate product decision. Intermediate is provisional."
     },
     {
       "id": "squat",
@@ -1170,20 +1200,22 @@
       },
       "structured_content": {
         "steps": [
-          "Stand with the barbell resting on your upper back (not your neck), feet roughly shoulder-width apart and toes turned slightly out.",
-          "Brace your core, then bend your hips and knees together to lower your body until your thighs are at least parallel to the floor, keeping your chest up and knees tracking over your toes.",
-          "Drive through your feet to stand back up to full hip and knee extension."
+          "Have a trainer fit the rack and safety supports and teach the unrack, walkout and return before loading.",
+          "Support the bar on the upper-back position taught for the chosen squat variation, not on the neck.",
+          "Bend the hips and knees through a depth that allows stable balance and trunk control, then stand.",
+          "Return to the rack under control using the practiced sequence."
         ],
         "cues": [
-          "Trains coordinated knee and hip extension in a squat pattern."
+          "Keep steady foot pressure as you descend.",
+          "Stand without letting the bar shift on the back."
         ],
         "mistakes": [
           "Letting the knees cave inward (valgus collapse) during the ascent is a common and potentially risky compensation, often linked to weak hip muscles or insufficient depth practice.",
           "Rounding the lower back, especially at the bottom of a deep squat, increases injury risk.",
           "Rising onto the toes or shifting weight forward due to poor ankle mobility also disrupts balance and bar path."
         ],
-        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
-        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+        "benefits": "Trains leg and hip strength with a back-supported barbell.",
+        "beginner_guidance": "Learn the rack, walkout and return with a qualified trainer before loading; use a depth you can control."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -1197,7 +1229,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: validate bar position, rack-safety setup, spotter/failed-rep procedure and equipment gates before generation. Do not prescribe a universal depth or teach an unsupervised bailout from AI text."
     },
     {
       "id": "front_squat",
@@ -1224,19 +1256,21 @@
       },
       "structured_content": {
         "steps": [
-          "Rest the barbell across the front of your shoulders with elbows raised high and hands lightly supporting the bar (or crossed over the top, depending on flexibility), feet shoulder-width apart.",
-          "Keeping your torso upright and elbows lifted, bend your hips and knees to squat down until your thighs are at least parallel to the floor, then drive back up to standing."
+          "Have a trainer establish the front-rack grip and safety setup, with the bar supported on the front shoulders rather than held up by the hands.",
+          "With stable foot contact, bend the hips and knees through a depth that preserves the rack position and control.",
+          "Stand and return the bar to the rack using the practiced sequence."
         ],
         "cues": [
-          "Trains coordinated knee and hip extension in a squat pattern."
+          "Keep the bar supported on the front of the shoulders.",
+          "Maintain the rack position while standing up."
         ],
         "mistakes": [
           "Letting the elbows drop during the squat causes the torso to lean forward and the bar to roll off the shoulders, which is the single most common technique breakdown.",
           "Insufficient wrist or shoulder mobility often leads people to grip the bar in a way that strains the wrists rather than truly resting it on the shoulders.",
           "Rushing depth without adequate ankle and hip mobility can also cause the heels to lift or the back to round."
         ],
-        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
-        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+        "benefits": "Trains leg strength while supporting a barbell in a front-rack position.",
+        "beginner_guidance": "Have a trainer teach a comfortable front-rack setup and rack return before loading."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -1250,7 +1284,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: review grip/rack options, shoulder rather than hand support, depth and failed-rep procedure. Do not assume prior back-squat experience is a sufficient eligibility gate."
     },
     {
       "id": "leg_press",
@@ -1274,19 +1308,22 @@
       },
       "structured_content": {
         "steps": [
-          "Sit in the leg press machine with your back flat against the pad and feet placed shoulder-width apart on the platform.",
-          "Release the safety catches and lower the platform by bending your knees toward your chest until you reach a comfortable depth (roughly 90 degrees or slightly more), then press through your heels to extend your legs back to the starting position without fully locking your knees."
+          "Have staff adjust the seat and explain the start/stop mechanism of this selectorized leg press.",
+          "With the back and pelvis supported and feet securely on the platform, press through a controlled range.",
+          "Return without letting the pelvis lift off the pad or the stack drop.",
+          "Let the resistance settle and follow the machine's instructions before leaving the seat."
         ],
         "cues": [
-          "Trains coordinated knee and hip extension in a squat pattern."
+          "Keep the pelvis supported through the repetition.",
+          "Return the platform under control."
         ],
         "mistakes": [
-          "Lowering the platform too far and allowing the lower back to round off the pad (often called 'butt wink') places unwanted stress on the spine.",
-          "Fully locking out the knees at the top of each rep can place excessive stress on the knee joint over time.",
-          "Placing the feet too low on the platform emphasizes the quads more but can push the knees excessively forward."
+          "Losing pelvis or back contact with the support.",
+          "Letting the resistance return faster than it can be controlled.",
+          "Using a machine without first learning its adjustment and stopping mechanism."
         ],
-        "benefits": "Trains coordinated knee and hip extension in a squat pattern.",
-        "beginner_guidance": "Start with a depth that preserves stable foot pressure and controlled movement."
+        "benefits": "Trains leg pressing against a machine's resistance.",
+        "beginner_guidance": "Have staff demonstrate the seat, selector and start/stop mechanism on the actual machine."
       },
       "generation_eligible": false,
       "tracking_mode": "reps",
@@ -1300,7 +1337,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity and original instruction text retained for comparison; provenance of older wording is unknown. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: BLOCKING: this ID uses a selectorized machine, not necessarily a sled with safety catches. Obtain manufacturer instructions before inserting catch/bail guidance. Remove unsupported universal knee/hand-position rules; do not compare loads across different machines."
     }
   ]
 }

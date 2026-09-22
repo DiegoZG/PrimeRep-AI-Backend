@@ -47,7 +47,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "underhand_lat_pulldown",
@@ -75,7 +75,8 @@
           "Pull to the upper chest, then return overhead without shrugging abruptly."
         ],
         "cues": [
-          "Keep wrists aligned with the forearms."
+          "Keep the palms facing you during the pull.",
+          "Return the bar without rocking backward to finish."
         ],
         "mistakes": [
           "Pulling the bar down behind the head."
@@ -95,7 +96,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
     },
     {
       "id": "single_arm_lat_pulldown",
@@ -123,7 +124,8 @@
           "Pull the elbow down toward the side and return without side-bending."
         ],
         "cues": [
-          "Keep the pelvis level."
+          "Pull the working elbow down without tilting the torso.",
+          "Control the overhead return with the same arm."
         ],
         "mistakes": [
           "Tilting the trunk to add range."
@@ -143,7 +145,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
     },
     {
       "id": "straight_arm_pulldown",
@@ -191,7 +193,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "dumbbell_pullover",
@@ -220,7 +222,8 @@
           "Lower behind the head within shoulder comfort, then bring it back above the chest."
         ],
         "cues": [
-          "Keep the ribs from flaring."
+          "Keep the elbow bend consistent as the dumbbell travels.",
+          "Limit the overhead reach to a range you can control."
         ],
         "mistakes": [
           "Allowing the weight to pull the torso into a large arch."
@@ -240,7 +243,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
     },
     {
       "id": "machine_pullover",
@@ -289,7 +292,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "hammer_curl",
@@ -337,7 +340,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "alternating_dumbbell_curl",
@@ -385,7 +388,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "incline_dumbbell_curl",
@@ -434,7 +437,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "concentration_curl",
@@ -483,7 +486,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "ez_bar_curl",
@@ -532,7 +535,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "cable_curl",
@@ -580,7 +583,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "rope_hammer_curl",
@@ -608,7 +611,8 @@
           "Curl the ends upward and lower without spreading the elbows widely."
         ],
         "cues": [
-          "Keep wrists straight."
+          "Keep the rope grip steady as the elbows bend.",
+          "Lower the attachment without swinging the torso."
         ],
         "mistakes": [
           "Pulling the shoulders upward with the rope."
@@ -628,7 +632,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
     },
     {
       "id": "bayesian_cable_curl",
@@ -676,7 +680,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "high_cable_curl",
@@ -724,7 +728,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "spider_curl",
@@ -773,7 +777,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "machine_biceps_curl",
@@ -821,7 +825,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "dumbbell_preacher_curl",
@@ -870,7 +874,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "reverse_barbell_curl",
@@ -919,7 +923,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "band_biceps_curl",
@@ -967,7 +971,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "cross_body_hammer_curl",
@@ -1015,7 +1019,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "rope_triceps_pushdown",
@@ -1061,7 +1065,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "single_arm_pushdown",
@@ -1107,7 +1111,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "overhead_cable_extension",
@@ -1153,7 +1157,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     },
     {
       "id": "single_arm_overhead_cable_extension",
@@ -1199,7 +1203,7 @@
           ]
         }
       ],
-      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. "
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
     }
   ]
 }
