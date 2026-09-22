@@ -1,0 +1,1225 @@
+{
+  "schema_version": 1,
+  "exercises": [
+    {
+      "id": "band_lateral_raise",
+      "name": "Band Lateral Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "loop_bands"
+      ],
+      "aliases": [],
+      "movement_pattern": "abduction",
+      "resistance_modality": "band",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand on the middle of an undamaged band and hold its ends beside the thighs.",
+          "Raise the arms to the sides and lower before the band pulls them down."
+        ],
+        "cues": [
+          "Start with mild tension."
+        ],
+        "mistakes": [
+          "Using a band too short to reach the intended height."
+        ],
+        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
+        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Lateral Raise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lateral raises lift the arms to the side against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "plate_front_raise",
+      "name": "Plate Front Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "other",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one plate securely at its sides in front of the thighs.",
+          "Raise it forward to about shoulder height and lower along the same arc."
+        ],
+        "cues": [
+          "Keep elbows softly bent."
+        ],
+        "mistakes": [
+          "Leaning backward as the plate rises."
+        ],
+        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
+        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Lateral Raise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lateral raises lift the arms to the side against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "cable_front_raise",
+      "name": "Cable Front Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face away from a low pulley and hold a handle in one hand beside the thigh.",
+          "Raise the hand forward toward shoulder height and lower without rotating."
+        ],
+        "cues": [
+          "Keep the cable clear of the legs."
+        ],
+        "mistakes": [
+          "Swinging the torso to start the lift."
+        ],
+        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
+        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Lateral Raise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lateral raises lift the arms to the side against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "rear_delt_machine",
+      "name": "Reverse Pec Deck",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "back"
+      ],
+      "equipment_ids": [
+        "fly_machine"
+      ],
+      "aliases": [
+        "rear delt fly machine"
+      ],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face the pad of a machine designed for reverse flyes and adjust handles to shoulder height.",
+          "Open the arms backward through a comfortable arc and return slowly."
+        ],
+        "cues": [
+          "Keep the chest on the pad."
+        ],
+        "mistakes": [
+          "Using a machine that does not support a reverse-fly setup."
+        ],
+        "benefits": "Trains the back of the shoulders and the upper back through a controlled pulling arc.",
+        "beginner_guidance": "Practise the arm path without weight before adding light resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference supports controlled pulling with a stable torso; rear-delt variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "face_pull",
+      "name": "Cable Face Pull",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "back"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Attach a suitable rope at face height and take a stable stance facing the cable.",
+          "Pull toward the face with hands separating beside the head, then reach forward."
+        ],
+        "cues": [
+          "Keep the neck relaxed."
+        ],
+        "mistakes": [
+          "Leaning backward to move a heavy stack."
+        ],
+        "benefits": "Trains the back of the shoulders and the upper back through a controlled pulling arc.",
+        "beginner_guidance": "Practise the arm path without weight before adding light resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference supports controlled pulling with a stable torso; rear-delt variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "band_pull_apart",
+      "name": "Band Pull-Apart",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "back"
+      ],
+      "equipment_ids": [
+        "loop_bands"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "band",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold an undamaged band at chest height with arms ahead of you.",
+          "Separate the hands until the band approaches the chest, then return smoothly."
+        ],
+        "cues": [
+          "Separate the hands without thrusting the chest forward.",
+          "Bring the hands back without letting the band snap."
+        ],
+        "mistakes": [
+          "Snapping the band or locking the elbows forcefully."
+        ],
+        "benefits": "Trains the back of the shoulders and the upper back through a controlled pulling arc.",
+        "beginner_guidance": "Practise the arm path without weight before adding light resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference supports controlled pulling with a stable torso; rear-delt variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "bent_over_barbell_row",
+      "name": "Bent-Over Barbell Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hinge forward while holding the bar with an overhand grip and knees softly bent.",
+          "Pull toward the lower ribs and lower until the arms extend."
+        ],
+        "cues": [
+          "Keep the torso angle steady."
+        ],
+        "mistakes": [
+          "Standing up to throw the bar toward the abdomen."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "underhand_barbell_row",
+      "name": "Underhand Barbell Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold a bar with palms forward and hinge to a stable inclined torso position.",
+          "Row toward the waist with elbows near the ribs, then lower."
+        ],
+        "cues": [
+          "Keep the underhand grip secure as you row.",
+          "Maintain the hinged torso position while lowering the bar."
+        ],
+        "mistakes": [
+          "Curling the wrists to finish the pull."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "pendlay_row",
+      "name": "Pendlay Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "barbell",
+      "difficulty": "advanced",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set the bar on the floor and hinge until you can grip it with a stable trunk.",
+          "Pull to the torso, return the bar to the floor and reset between repetitions."
+        ],
+        "cues": [
+          "Make every repetition start from stillness."
+        ],
+        "mistakes": [
+          "Jerking the torso upward before the bar moves."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "single_arm_dumbbell_row",
+      "name": "Single-Arm Dumbbell Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "flat_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Support one hand and knee on a bench while the opposite foot stays planted.",
+          "Pull the dumbbell toward the hip and lower without turning the chest."
+        ],
+        "cues": [
+          "Keep shoulders facing the floor."
+        ],
+        "mistakes": [
+          "Rotating the whole torso to lift the weight higher."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "chest_supported_dumbbell_row",
+      "name": "Chest-Supported Dumbbell Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "incline_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie chest-down on an incline bench with dumbbells hanging below the shoulders.",
+          "Row the weights beside the ribs and extend the arms slowly."
+        ],
+        "cues": [
+          "Keep chest pressure on the pad."
+        ],
+        "mistakes": [
+          "Lifting the sternum away from the bench."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "incline_elbows_out_row",
+      "name": "Chest-Supported Elbows-Out Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "incline_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie chest-down on an incline bench and turn palms toward the feet.",
+          "Pull with elbows angled outward, then lower until the arms hang."
+        ],
+        "cues": [
+          "Aim elbows toward the sides rather than the hips."
+        ],
+        "mistakes": [
+          "Shrugging and lifting the head off the bench."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "seated_machine_row",
+      "name": "Seated Machine Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "row_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the seat and chest pad so handles can be reached without rounding forward.",
+          "Pull the handles toward the ribs and return with the chest supported."
+        ],
+        "cues": [
+          "Keep the pad contact consistent."
+        ],
+        "mistakes": [
+          "Driving backward with the torso."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "chest_supported_t_bar_row",
+      "name": "Chest-Supported T-Bar Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "plate_loaded_chest_supported_t_bar",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set the chest pad and stand securely on the machine platform.",
+          "Lift the handle toward the ribs, then lower under control."
+        ],
+        "cues": [
+          "Keep the chest down as the arms pull."
+        ],
+        "mistakes": [
+          "Using leg drive to bounce off the pad."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "single_arm_cable_row",
+      "name": "Single-Arm Cable Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set a pulley around waist height and stand in a staggered stance.",
+          "Draw the handle beside the waist and reach forward without twisting."
+        ],
+        "cues": [
+          "Keep shoulders and hips facing the pulley."
+        ],
+        "mistakes": [
+          "Rotating the pelvis through each repetition."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "wide_grip_cable_row",
+      "name": "Wide-Grip Seated Cable Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "row_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit at a cable row with an appropriate wide handle, feet supported and knees soft.",
+          "Pull toward the upper abdomen with elbows wider than the torso, then reach forward."
+        ],
+        "cues": [
+          "Keep the chest tall without leaning back."
+        ],
+        "mistakes": [
+          "Turning the row into a backward body swing."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "band_seated_row",
+      "name": "Seated Band Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "loop_bands"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "band",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit with an undamaged band safely looped around the middle of both feet.",
+          "Pull the ends toward the waist and return, keeping the band away from the face."
+        ],
+        "cues": [
+          "Keep knees slightly bent."
+        ],
+        "mistakes": [
+          "Anchoring the band on the toes where it can slip."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "band_standing_row",
+      "name": "Standing Band Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "loop_bands"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "band",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Attach a band to a rated anchor at lower-chest height and step back.",
+          "Pull elbows behind the ribs, then reach forward without rocking."
+        ],
+        "cues": [
+          "Check anchor security before tensioning."
+        ],
+        "mistakes": [
+          "Using a loose handle or sharp anchor edge."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. A rated band anchor is required but has no current equipment ID: resolve equipment taxonomy before approving this draft.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "inverted_row",
+      "name": "Inverted Row",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "smith_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Secure the bar at a suitable height, grip it from underneath and set heels ahead.",
+          "Pull the chest toward the bar and lower as one body line."
+        ],
+        "cues": [
+          "Adjust difficulty by changing foot position."
+        ],
+        "mistakes": [
+          "Using a bar that can rotate out of its catches."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "trx_row",
+      "name": "Suspension Row",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "trx"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_pull",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Check the rated anchor and lean backward holding both handles.",
+          "Pull the torso toward the handles and lower with the body aligned."
+        ],
+        "cues": [
+          "Walk feet back for an easier angle."
+        ],
+        "mistakes": [
+          "Letting the hips fold during the pull."
+        ],
+        "benefits": "Builds horizontal pulling strength through the upper back and elbow flexors.",
+        "beginner_guidance": "Start light enough to pause briefly at the end of the pull without twisting."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bent-over Row",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/12/bent-over-row/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Rows pull a load toward the torso while maintaining a stable starting position."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "neutral_grip_pull_up",
+      "name": "Neutral-Grip Pull-Up",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps"
+      ],
+      "equipment_ids": [
+        "pull_up_bar"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_pull",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Use a bar with secure parallel handles and hang with palms facing each other.",
+          "Pull upward until the upper chest approaches the handles, then lower with control."
+        ],
+        "cues": [
+          "Start each pull without a swing."
+        ],
+        "mistakes": [
+          "Kipping to reach the top."
+        ],
+        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
+        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Pulldowns draw an overhead resistance toward the upper torso."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "chin_up",
+      "name": "Chin-Up",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps"
+      ],
+      "equipment_ids": [
+        "pull_up_bar"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_pull",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Grip a secure bar with palms toward you and arms extended comfortably.",
+          "Pull the chest upward and lower without swinging the legs."
+        ],
+        "cues": [
+          "Keep the grip comfortable for the wrists."
+        ],
+        "mistakes": [
+          "Reaching with the chin while the shoulders remain low."
+        ],
+        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
+        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Pulldowns draw an overhead resistance toward the upper torso."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "assisted_pull_up",
+      "name": "Assisted Pull-Up Machine",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps"
+      ],
+      "equipment_ids": [
+        "assisted_weight_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_pull",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "assistance",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Select assistance and mount the knee or foot platform according to its instructions.",
+          "Pull upward, then lower while keeping the platform controlled."
+        ],
+        "cues": [
+          "More assistance makes the exercise easier."
+        ],
+        "mistakes": [
+          "Stepping off before the moving platform settles."
+        ],
+        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
+        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Pulldowns draw an overhead resistance toward the upper torso."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "assisted_chin_up",
+      "name": "Assisted Chin-Up Machine",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps"
+      ],
+      "equipment_ids": [
+        "assisted_weight_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_pull",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "assistance",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set the assistance stack and use underhand handles on the machine.",
+          "Pull toward the handles and return slowly on the support platform."
+        ],
+        "cues": [
+          "Keep the wrists comfortable."
+        ],
+        "mistakes": [
+          "Mistaking added assistance for added lifting load."
+        ],
+        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
+        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Pulldowns draw an overhead resistance toward the upper torso."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "band_assisted_pull_up",
+      "name": "Band-Assisted Pull-Up",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps"
+      ],
+      "equipment_ids": [
+        "loop_bands",
+        "pull_up_bar"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_pull",
+      "resistance_modality": "band",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "assistance",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Secure a suitable band to the bar and carefully position the knee or foot in the loop.",
+          "Pull upward and lower while the band remains securely positioned."
+        ],
+        "cues": [
+          "Mount and dismount with stable support."
+        ],
+        "mistakes": [
+          "Letting a stretched band slip toward the face."
+        ],
+        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
+        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Pulldowns draw an overhead resistance toward the upper torso."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    }
+  ]
+}

@@ -1,81 +1,29 @@
-"""
-Upload filmed exercise clips (and optional poster images) to object storage and
-point the `exercises` table at them.
+"""Stage original exercise footage privately; publish only reviewed derivatives.
 
-This is OFFLINE TOOLING — it is never run by the app or by Alembic. Run it by
-hand whenever new footage has been filmed. It is safe to re-run: only files
-whose contents have actually changed cause an upload or a database write.
+Stage: python scripts/upload_local_footage.py stage --dir footage --operator NAME
+       --production-method filmed --rights-file rights.txt --variant front-three-quarter
+Publish: python scripts/upload_local_footage.py publish --asset-id ID --hash HASH
+         --operator NAME --release-id RELEASE
 
-Naming
-------
-Files are matched to exercises by filename. The stem is the exercise id, with
-hyphens and spaces accepted as substitutes for underscores:
-
-    footage/bench_press.mp4   -> exercises.demo_video_url for "bench_press"
-    footage/bench-press.jpg   -> exercises.image_url      for "bench_press"
-
-A file whose stem matches no exercise is reported and skipped — it never
-aborts the rest of the batch.
-
-Storage
--------
-Any S3-compatible service works. Leave ASSET_S3_ENDPOINT_URL unset for AWS S3,
-or point it at https://<account-id>.r2.cloudflarestorage.com for Cloudflare R2.
-Credentials come from the usual AWS environment variables.
-
-Object keys embed a content hash:
-
-    exercises/bench_press/demo.3f9a1c02b7d4.mp4
-
-so the bytes behind a key never change. That makes re-uploads a no-op (the key
-is already there), lets the CDN cache objects permanently, and guarantees a
-re-filmed clip is served immediately instead of sitting behind a stale cache.
-Superseded objects stay in the bucket; clear them out with a lifecycle rule if
-they ever add up.
-
-Usage
------
-    # Show what would happen, without contacting storage or writing to the DB
-    python scripts/upload_local_footage.py --dir footage --dry-run
-
-    # Upload and update the database
-    python scripts/upload_local_footage.py --dir footage
-
-    # Limit the run to specific exercises
-    python scripts/upload_local_footage.py --dir footage --only squat,bench_press
+Files are named by exercise ID. Publication approvals are recorded using
+scripts/exercise_catalog.py; uploading alone never changes a visible exercise.
 """
 from __future__ import annotations
 
 import argparse
-import hashlib
 import os
+import re
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
+from scripts.media_pipeline import prepare_video, probe_video
 
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v", ".webm"}
-POSTER_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
-
-CONTENT_TYPES = {
-    ".mp4": "video/mp4",
-    ".mov": "video/quicktime",
-    ".m4v": "video/x-m4v",
-    ".webm": "video/webm",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".png": "image/png",
-    ".webp": "image/webp",
-}
-
-VIDEO_COLUMN = "demo_video_url"
-POSTER_COLUMN = "image_url"
-
-HASH_PREFIX_LENGTH = 12
-
-# Safe because keys are content-addressed — see the module docstring.
 IMMUTABLE_CACHE_CONTROL = "public, max-age=31536000, immutable"
 
 
@@ -83,109 +31,35 @@ IMMUTABLE_CACHE_CONTROL = "public, max-age=31536000, immutable"
 class StorageConfig:
     bucket: str
     cdn_base_url: str
+    staging_bucket: str
     endpoint_url: str | None = None
     region: str = "auto"
 
-    def url_for(self, key: str) -> str:
-        return f"{self.cdn_base_url.rstrip('/')}/{key}"
-
-
-@dataclass
-class Asset:
-    """One local file destined for one column of one exercise row."""
-
-    exercise_id: str
-    path: Path
-    column: str
-
-    @property
-    def is_video(self) -> bool:
-        return self.column == VIDEO_COLUMN
+    def validate(self, *, publish: bool = False):
+        if not self.staging_bucket or self.staging_bucket == self.bucket:
+            raise ValueError("A separate private ASSET_STAGING_BUCKET is required")
+        if publish:
+            parsed = urlparse(self.cdn_base_url)
+            if not self.bucket or parsed.scheme != "https" or not parsed.netloc or parsed.query or parsed.fragment or parsed.username or parsed.password:
+                raise ValueError("Publishing requires ASSET_BUCKET and an HTTPS media origin")
+            if parsed.hostname.endswith(".r2.dev"):
+                raise ValueError("Use a production custom media domain rather than r2.dev")
 
 
 @dataclass
 class RunReport:
     uploaded: list[str] = field(default_factory=list)
     already_in_storage: list[str] = field(default_factory=list)
-    rows_updated: list[str] = field(default_factory=list)
-    rows_unchanged: list[str] = field(default_factory=list)
+    registered: list[dict] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
 
 
 def normalize_slug(stem: str) -> str:
-    """Map a filename stem onto an exercise id (`bench-press` -> `bench_press`)."""
-    return stem.strip().lower().replace("-", "_").replace(" ", "_")
-
-
-def content_type_for(path: Path) -> str:
-    return CONTENT_TYPES.get(path.suffix.lower(), "application/octet-stream")
-
-
-def file_sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as fh:
-        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def build_key(asset: Asset, digest: str) -> str:
-    name = "demo" if asset.is_video else "poster"
-    suffix = asset.path.suffix.lower()
-    return f"exercises/{asset.exercise_id}/{name}.{digest[:HASH_PREFIX_LENGTH]}{suffix}"
-
-
-def discover_assets(directory: Path) -> tuple[list[Asset], list[str]]:
-    """Collect uploadable files from `directory`, plus warnings about the rest."""
-    if not directory.is_dir():
-        raise SystemExit(f"Footage directory not found: {directory}")
-
-    assets: list[Asset] = []
-    warnings: list[str] = []
-    claimed: dict[tuple[str, str], Path] = {}
-
-    for path in sorted(directory.iterdir()):
-        if path.is_dir() or path.name.startswith("."):
-            continue
-
-        suffix = path.suffix.lower()
-        if suffix in VIDEO_EXTENSIONS:
-            column = VIDEO_COLUMN
-        elif suffix in POSTER_EXTENSIONS:
-            column = POSTER_COLUMN
-        else:
-            warnings.append(f"{path.name}: unsupported file type, skipped")
-            continue
-
-        exercise_id = normalize_slug(path.stem)
-        existing = claimed.get((exercise_id, column))
-        if existing:
-            warnings.append(
-                f"{path.name}: '{existing.name}' already claims {column} for "
-                f"'{exercise_id}', skipped"
-            )
-            continue
-
-        claimed[(exercise_id, column)] = path
-        assets.append(Asset(exercise_id=exercise_id, path=path, column=column))
-
-    return assets, warnings
-
-
-def _is_not_found(exc: Exception) -> bool:
-    """True for an S3 "object does not exist" error, false for anything else.
-
-    Matched structurally rather than by catching botocore's ClientError so that
-    tests can stand in a fake client without importing botocore.
-    """
-    response = getattr(exc, "response", None)
-    if not isinstance(response, dict):
-        return False
-
-    code = str(response.get("Error", {}).get("Code", ""))
-    status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
-    return code in {"404", "NoSuchKey", "NotFound"} or status == 404
+    value = stem.strip().lower().replace("-", "_").replace(" ", "_")
+    if not re.fullmatch(r"[a-z0-9][a-z0-9_]{1,119}", value):
+        raise ValueError("Filename must be an exercise ID")
+    return value
 
 
 def object_exists(client, bucket: str, key: str) -> bool:
@@ -193,194 +67,161 @@ def object_exists(client, bucket: str, key: str) -> bool:
         client.head_object(Bucket=bucket, Key=key)
         return True
     except Exception as exc:
-        if _is_not_found(exc):
+        response = getattr(exc, "response", {})
+        code = str(response.get("Error", {}).get("Code", ""))
+        if code in {"404", "NoSuchKey", "NotFound"} or response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 404:
             return False
         raise
 
 
 def build_s3_client(config: StorageConfig):
-    """boto3 is imported lazily so the module stays importable without it."""
     import boto3
-
-    return boto3.client(
-        "s3",
-        endpoint_url=config.endpoint_url or None,
-        region_name=config.region or None,
-    )
+    return boto3.client("s3", endpoint_url=config.endpoint_url, region_name=config.region)
 
 
-def run(
-    directory: Path,
-    db,
-    config: StorageConfig,
-    client=None,
-    *,
-    dry_run: bool = False,
-    only: set[str] | None = None,
-) -> RunReport:
-    """Upload every asset in `directory` and repoint the matching exercise rows.
+def upload_private(client, config: StorageConfig, key: str, path: Path, content_type: str, report: RunReport):
+    if object_exists(client, config.staging_bucket, key):
+        report.already_in_storage.append(key)
+        return
+    with path.open("rb") as source:
+        client.put_object(Bucket=config.staging_bucket, Key=key, Body=source,
+                          ContentType=content_type, CacheControl="private, no-store")
+    report.uploaded.append(key)
 
-    Failures are recorded per file rather than raised, so one unreadable clip
-    cannot cost you the rest of a batch.
-    """
+
+def run(directory: Path, db, config: StorageConfig, client=None, *, operator: str,
+        production_method: str, rights_documentation: str, variant: str,
+        model_version: str | None = None, dry_run: bool = False,
+        only: set[str] | None = None, prepare=prepare_video, probe=probe_video) -> RunReport:
+    from app.core.exercise_catalog_service import register_media
     from app.models.exercise import Exercise
-
-    assets, warnings = discover_assets(directory)
-    report = RunReport(warnings=warnings)
-
-    if only:
-        assets = [asset for asset in assets if asset.exercise_id in only]
-
-    for asset in assets:
-        label = f"{asset.exercise_id}.{asset.column}"
+    config.validate()
+    if not directory.is_dir():
+        raise ValueError("Footage directory does not exist")
+    if not operator.strip() or not variant.strip() or not rights_documentation.strip():
+        raise ValueError("Operator, variant and rights documentation are required")
+    if production_method not in {"filmed", "ai_generated", "hybrid"}:
+        raise ValueError("Unknown production method")
+    if production_method in {"ai_generated", "hybrid"} and not (model_version or "").strip():
+        raise ValueError("AI/hybrid assets require a model/tool version")
+    report = RunReport()
+    for source in sorted(directory.iterdir()):
+        if not source.is_file() or source.name.startswith("."):
+            continue
+        if source.suffix.lower() not in VIDEO_EXTENSIONS:
+            report.warnings.append(f"{source.name}: only video masters are staged; posters are generated")
+            continue
         try:
-            exercise = (
-                db.query(Exercise).filter(Exercise.id == asset.exercise_id).first()
-            )
-            if exercise is None:
-                report.warnings.append(
-                    f"{asset.path.name}: no exercise with id '{asset.exercise_id}', skipped"
-                )
+            exercise_id = normalize_slug(source.stem)
+            if only and exercise_id not in only:
                 continue
-
-            if asset.path.stat().st_size == 0:
-                report.warnings.append(f"{asset.path.name}: file is empty, skipped")
+            exercise = db.get(Exercise, exercise_id)
+            if exercise is None or exercise.source == "user" or exercise.owner_user_id:
+                report.warnings.append(f"{source.name}: not a canonical exercise")
                 continue
-
-            key = build_key(asset, file_sha256(asset.path))
-            url = config.url_for(key)
-
             if dry_run:
-                report.uploaded.append(key)
-            elif object_exists(client, config.bucket, key):
-                report.already_in_storage.append(key)
-            else:
-                with asset.path.open("rb") as fh:
-                    client.put_object(
-                        Bucket=config.bucket,
-                        Key=key,
-                        Body=fh,
-                        ContentType=content_type_for(asset.path),
-                        CacheControl=IMMUTABLE_CACHE_CONTROL,
-                    )
-                report.uploaded.append(key)
-
-            if getattr(exercise, asset.column) == url:
-                report.rows_unchanged.append(label)
+                probe(source)
+                report.registered.append({"exercise_id": exercise_id, "action": "would prepare and stage privately"})
                 continue
-
-            if not dry_run:
-                setattr(exercise, asset.column, url)
-            report.rows_updated.append(label)
+            with tempfile.TemporaryDirectory(prefix="primerep-media-") as temporary:
+                prepared = prepare(source, Path(temporary))
+                prefix = f"exercises/{exercise_id}"
+                original_key = f"{prefix}/original.{prepared['source_hash']}{source.suffix.lower()}"
+                video_key = f"{prefix}/demo.{prepared['video_hash']}.mp4"
+                poster_key = f"{prefix}/poster.{prepared['poster_hash']}.jpg"
+                upload_private(client, config, original_key, source, "application/octet-stream", report)
+                upload_private(client, config, video_key, prepared["video"], "video/mp4", report)
+                upload_private(client, config, poster_key, prepared["poster"], "image/jpeg", report)
+                metadata = {**prepared["technical"], "original_key": original_key, "source_hash": prepared["source_hash"],
+                            "poster_hash": prepared["poster_hash"], "variant": variant, "model_version": model_version,
+                            "operator": operator, "staging_bucket": config.staging_bucket}
+                with db.begin_nested():
+                    asset = register_media(db, exercise_id=exercise_id, content_hash=prepared["video_hash"],
+                                           storage_key=video_key, poster_key=poster_key, mime_type="video/mp4",
+                                           metadata_json=metadata, production_method=production_method,
+                                           rights_documentation=rights_documentation, technical_validated=True)
+                report.registered.append({"exercise_id": exercise_id, "asset_id": asset.id, "approval_hash": asset.approval_hash})
         except Exception as exc:
-            report.errors.append(f"{asset.path.name}: {exc}")
-
-    if dry_run:
-        db.rollback()
-    else:
+            report.errors.append(f"{source.name}: {type(exc).__name__}: {str(exc) if isinstance(exc, ValueError) else 'staging failed; inspect local configuration'}")
+    if not dry_run:
         db.commit()
-
     return report
 
 
+def promote(db, config: StorageConfig, client, *, asset_id: str, expected_hash: str,
+            operator: str, release_id: str, dry_run: bool = False, rollback: bool = False):
+    from app.core.exercise_catalog_service import preflight_media_publication, publish_media
+    config.validate(publish=True)
+    if not operator.strip() or not release_id.strip():
+        raise ValueError("Operator and release ID are required")
+    asset = preflight_media_publication(db, asset_id, expected_hash, rollback=rollback)
+    if asset.metadata_json.get("staging_bucket") != config.staging_bucket:
+        raise ValueError("Asset belongs to a different staging bucket")
+    if not asset.poster_key:
+        raise ValueError("A validated poster is required")
+    for key, content_type in [(asset.storage_key, "video/mp4"), (asset.poster_key, "image/jpeg")]:
+        if not object_exists(client, config.staging_bucket, key):
+            raise ValueError("Approved derivative is missing from staging")
+        if not dry_run and not object_exists(client, config.bucket, key):
+            client.copy_object(Bucket=config.bucket, Key=key,
+                               CopySource={"Bucket": config.staging_bucket, "Key": key},
+                               ContentType=content_type, CacheControl=IMMUTABLE_CACHE_CONTROL,
+                               MetadataDirective="REPLACE")
+    if dry_run:
+        db.rollback()
+        return asset_id
+    published = publish_media(db, asset_id, expected_hash, public_base_url=config.cdn_base_url,
+                              operator=operator, release_id=release_id, rollback=rollback)
+    db.commit()
+    return published.id
+
+
 def load_config_from_env() -> StorageConfig:
-    bucket = os.getenv("ASSET_BUCKET", "").strip()
-    cdn_base_url = os.getenv("ASSET_CDN_BASE_URL", "").strip()
-
-    missing = [
-        name
-        for name, value in (("ASSET_BUCKET", bucket), ("ASSET_CDN_BASE_URL", cdn_base_url))
-        if not value
-    ]
-    if missing:
-        raise SystemExit(
-            f"{' and '.join(missing)} must be set. See .env.example for the full "
-            "object-storage configuration."
-        )
-
-    return StorageConfig(
-        bucket=bucket,
-        cdn_base_url=cdn_base_url,
-        endpoint_url=os.getenv("ASSET_S3_ENDPOINT_URL", "").strip() or None,
-        region=os.getenv("ASSET_S3_REGION", "auto").strip() or "auto",
-    )
+    config = StorageConfig(bucket=os.getenv("ASSET_BUCKET", "").strip(),
+                           cdn_base_url=os.getenv("ASSET_CDN_BASE_URL", "").strip(),
+                           staging_bucket=os.getenv("ASSET_STAGING_BUCKET", "").strip(),
+                           endpoint_url=os.getenv("ASSET_S3_ENDPOINT_URL", "").strip() or None,
+                           region=os.getenv("ASSET_S3_REGION", "auto").strip() or "auto")
+    config.validate()
+    return config
 
 
-def print_report(report: RunReport, *, dry_run: bool) -> None:
-    verb = "Would upload" if dry_run else "Uploaded"
-    print(f"\n{verb} {len(report.uploaded)} object(s).")
-    for key in report.uploaded:
-        print(f"  + {key}")
-
-    if report.already_in_storage:
-        print(f"\n{len(report.already_in_storage)} object(s) already in storage, unchanged.")
-
-    verb = "Would update" if dry_run else "Updated"
-    print(f"\n{verb} {len(report.rows_updated)} exercise field(s).")
-    for label in report.rows_updated:
-        print(f"  * {label}")
-
-    if report.rows_unchanged:
-        print(f"\n{len(report.rows_unchanged)} exercise field(s) already correct.")
-
-    if report.warnings:
-        print(f"\n{len(report.warnings)} warning(s):")
-        for warning in report.warnings:
-            print(f"  ! {warning}")
-
-    if report.errors:
-        print(f"\n{len(report.errors)} error(s):")
-        for error in report.errors:
-            print(f"  x {error}")
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-    parser.add_argument(
-        "--dir",
-        default="footage",
-        help="Folder of clips named by exercise id (default: footage)",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Report what would change without contacting storage or writing to the DB",
-    )
-    parser.add_argument(
-        "--only",
-        help="Comma-separated exercise ids to limit the run to",
-    )
-    args = parser.parse_args()
-
-    config = load_config_from_env()
-    only = (
-        {normalize_slug(part) for part in args.only.split(",") if part.strip()}
-        if args.only
-        else None
-    )
-
+def main():
+    import json
     from app.core.database import SessionLocal
-
-    client = None if args.dry_run else build_s3_client(config)
-    db = SessionLocal()
-    try:
-        report = run(
-            Path(args.dir),
-            db,
-            config,
-            client,
-            dry_run=args.dry_run,
-            only=only,
-        )
-    finally:
-        db.close()
-
-    print_report(report, dry_run=args.dry_run)
-    if report.errors:
-        raise SystemExit(1)
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+    stage = sub.add_parser("stage")
+    stage.add_argument("--dir", type=Path, required=True)
+    stage.add_argument("--production-method", choices=["filmed", "ai_generated", "hybrid"], required=True)
+    stage.add_argument("--rights-file", type=Path, required=True)
+    stage.add_argument("--variant", required=True)
+    stage.add_argument("--model-version")
+    stage.add_argument("--only")
+    publish = sub.add_parser("publish")
+    publish.add_argument("--asset-id", required=True)
+    publish.add_argument("--hash", required=True)
+    publish.add_argument("--release-id", required=True)
+    publish.add_argument("--rollback", action="store_true", help="Restore a previously published, still approved asset")
+    for command in (stage, publish):
+        command.add_argument("--operator", required=True)
+        command.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args()
+    config = load_config_from_env()
+    client = None if args.command == "stage" and args.dry_run else build_s3_client(config)
+    with SessionLocal() as db:
+        if args.command == "stage":
+            report = run(args.dir, db, config, client, operator=args.operator, production_method=args.production_method,
+                         rights_documentation=args.rights_file.read_text(), variant=args.variant,
+                         model_version=args.model_version, dry_run=args.dry_run,
+                         only=set(args.only.split(",")) if args.only else None)
+            print(json.dumps(report.__dict__, indent=2))
+            if report.errors:
+                raise SystemExit(1)
+        else:
+            result = promote(db, config, client, asset_id=args.asset_id, expected_hash=args.hash,
+                             operator=args.operator, release_id=args.release_id, dry_run=args.dry_run, rollback=args.rollback)
+            print(json.dumps({"asset_id": result, "dry_run": args.dry_run}))
 
 
 if __name__ == "__main__":

@@ -14,6 +14,8 @@ class WorkoutExerciseOut(BaseModel):
     image_url: Optional[str] = Field(None, alias="imageUrl")
     demo_video_url: Optional[str] = Field(None, alias="demoVideoUrl")
     required_equipment_ids: list[str] = Field(..., alias="requiredEquipmentIds")
+    load_profile: Optional[dict] = Field(None, alias="loadProfile")
+    content_version: Optional[str] = Field(None, alias="contentVersion")
 
     model_config = ConfigDict(populate_by_name=True)
 

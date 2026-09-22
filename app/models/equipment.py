@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, func
+from sqlalchemy.dialects.postgresql import JSONB
 
 from app.core.database import Base
 
@@ -8,6 +9,7 @@ class Equipment(Base):
 
     id = Column(String, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
+    aliases = Column(JSONB, nullable=False, server_default="[]", default=list)
     category = Column(String, nullable=False)
     category_order = Column(Integer, nullable=False, server_default="0")
     sort_order = Column(Integer, nullable=False, server_default="0")
@@ -21,4 +23,3 @@ class Equipment(Base):
         onupdate=func.now(),
         nullable=False,
     )
-

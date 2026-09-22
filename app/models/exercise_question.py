@@ -22,6 +22,7 @@ class ExerciseQuestion(Base):
     )
     question = Column(Text, nullable=False)
     answer = Column(Text, nullable=False)
+    content_version = Column(String, nullable=True)
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),

@@ -411,8 +411,17 @@ def list_templates(
 def _validate_template_exercises(db: Session, user_id: str, payload: WorkoutTemplateWrite) -> None:
     for day in payload.days:
         for item in day.exercises:
-            if get_exercise(db, item.exercise_id, user_id=user_id) is None:
+            exercise = get_exercise(db, item.exercise_id, user_id=user_id)
+            if exercise is None:
                 raise TemplateValidationError(f"Exercise '{item.exercise_id}' is unavailable")
+            _require_supported_tracking(exercise)
+
+
+def _require_supported_tracking(exercise: Exercise) -> None:
+    if exercise.content_version and exercise.tracking_mode != "reps":
+        raise TemplateValidationError(
+            f"Exercise '{exercise.id}' is reference only; its tracking mode is not supported in programs"
+        )
 
 
 def _replace_template_graph(
@@ -562,6 +571,19 @@ def clone_template(db: Session, user_id: str, template_id: str) -> WorkoutTempla
     return create_template(db, user_id, payload)
 
 
+def compatible_substitution(original, replacement) -> bool:
+    def field(value, key):
+        return value.get(key) if isinstance(value, dict) else getattr(value, key, None)
+    if field(replacement, "content_version") and field(replacement, "tracking_mode") != "reps":
+        return False
+    if field(original, "primary_muscle") != field(replacement, "primary_muscle"):
+        return False
+    if field(original, "content_version") and field(replacement, "content_version"):
+        return (field(original, "movement_pattern") == field(replacement, "movement_pattern")
+                and field(original, "tracking_mode") == field(replacement, "tracking_mode"))
+    return field(original, "exercise_type") == field(replacement, "exercise_type")
+
+
 def list_substitutions(
     db: Session, user_id: str, exercise_id: str, *, owned_only: bool = False
 ) -> list[Exercise]:
@@ -575,7 +597,6 @@ def list_substitutions(
         .filter(
             Exercise.id != exercise_id,
             Exercise.is_active.is_(True),
-            Exercise.exercise_type == original.exercise_type,
             Exercise.primary_muscle == original.primary_muscle,
             exercise_visibility_filter(user_id),
         )
@@ -585,6 +606,7 @@ def list_substitutions(
         candidates = [
             item for item in candidates if {eq.id for eq in item.equipment} <= owned
         ]
+    candidates = [item for item in candidates if compatible_substitution(original, item)]
     original_secondary = set(original.secondary_muscles or [])
     candidates.sort(
         key=lambda item: (
@@ -754,12 +776,11 @@ def preview_activation(
         day_exercise_ids = {entry.exercise_id for entry in day.exercises}
         suggested_in_day: set[str] = set()
         for item in day.exercises:
-            if not item.exercise.is_active or (
-                item.exercise.source == "user" and item.exercise.owner_user_id != user_id
-            ):
+            if get_exercise(db, item.exercise_id, user_id=user_id) is None:
                 raise TemplateValidationError(
                     f"Exercise '{item.exercise_id}' is no longer available; edit the program before activation"
                 )
+            _require_supported_tracking(item.exercise)
             required = {entry.id for entry in item.exercise.equipment}
             missing = required - owned
             if not missing:
@@ -824,13 +845,9 @@ def _activation_snapshot(
                 raise TemplateValidationError(
                     "Replacement exercises must use equipment you own"
                 )
-            if replacement.exercise_type != item["exercise"]["exercise_type"]:
+            if not compatible_substitution(item["exercise"], replacement):
                 raise TemplateValidationError(
-                    "Replacement exercises must have the same exercise type"
-                )
-            if replacement.primary_muscle != item["exercise"]["primary_muscle"]:
-                raise TemplateValidationError(
-                    "Replacement exercises must train the same primary muscle"
+                    "Replacement exercises must have compatible movement, tracking, and primary muscle"
                 )
             item["originalExerciseId"] = item["exerciseId"]
             item["exerciseId"] = replacement.id
@@ -880,13 +897,9 @@ def _validate_activation_substitutions(
             raise TemplateValidationError(
                 f"Replacement exercise '{replacement_id}' is unavailable"
             )
-        if replacement.exercise_type != occurrence.exercise.exercise_type:
+        if not compatible_substitution(occurrence.exercise, replacement):
             raise TemplateValidationError(
-                "Replacement exercises must have the same exercise type"
-            )
-        if replacement.primary_muscle != occurrence.exercise.primary_muscle:
-            raise TemplateValidationError(
-                "Replacement exercises must train the same primary muscle"
+                "Replacement exercises must have compatible movement, tracking, and primary muscle"
             )
         if not {entry.id for entry in replacement.equipment} <= owned:
             raise TemplateValidationError(
@@ -1750,7 +1763,7 @@ def _save_custom_exercise(
     return get_exercise(db, exercise.id, user_id=user_id)
 
 
-def _bump_referencing_template_versions(db: Session, user_id: str, exercise_id: str) -> None:
+def _bump_referencing_template_versions(db: Session, user_id: Optional[str], exercise_id: str) -> None:
     template_ids = (
         db.query(WorkoutTemplateDay.template_id)
         .join(WorkoutTemplateExercise)
@@ -1766,7 +1779,7 @@ def _bump_referencing_template_versions(db: Session, user_id: str, exercise_id: 
             selectinload(WorkoutTemplate.equipment_requirements),
         )
         .filter(
-            WorkoutTemplate.owner_user_id == user_id,
+            True if user_id is None else WorkoutTemplate.owner_user_id == user_id,
             WorkoutTemplate.id.in_(template_ids),
         )
         .all()
@@ -1796,62 +1809,6 @@ def archive_custom_exercise(db: Session, user_id: str, exercise_id: str) -> None
     db.commit()
 
 
-def search_exercises(db: Session, user_id: str, query: str, limit: int = 20) -> list[Exercise]:
-    normalized = query.strip().lower()
-    alias_exact = (
-        db.query(ExerciseAlias.id)
-        .filter(
-            ExerciseAlias.exercise_id == Exercise.id,
-            func.lower(ExerciseAlias.alias) == normalized,
-        )
-        .exists()
-    )
-    alias_prefix = (
-        db.query(ExerciseAlias.id)
-        .filter(
-            ExerciseAlias.exercise_id == Exercise.id,
-            func.lower(ExerciseAlias.alias).startswith(normalized),
-        )
-        .exists()
-    )
-    alias_substring = (
-        db.query(ExerciseAlias.id)
-        .filter(
-            ExerciseAlias.exercise_id == Exercise.id,
-            func.lower(ExerciseAlias.alias).contains(normalized),
-        )
-        .exists()
-    )
-    alias_similarity = (
-        db.query(func.max(func.similarity(func.lower(ExerciseAlias.alias), normalized)))
-        .filter(ExerciseAlias.exercise_id == Exercise.id)
-        .correlate(Exercise)
-        .scalar_subquery()
-    )
-    similarity = func.greatest(
-        func.similarity(func.lower(Exercise.name), normalized),
-        func.coalesce(alias_similarity, 0.0),
-    )
-    name = func.lower(Exercise.name)
-    exact = case((or_(name == normalized, alias_exact), 0), else_=1)
-    prefix = case((or_(name.startswith(normalized), alias_prefix), 0), else_=1)
-    substring = case((or_(name.contains(normalized), alias_substring), 0), else_=1)
-    return (
-        db.query(Exercise)
-        .options(selectinload(Exercise.equipment))
-        .filter(
-            Exercise.is_active.is_(True),
-            exercise_visibility_filter(user_id),
-            or_(name.contains(normalized), alias_substring, similarity >= 0.3),
-        )
-        .order_by(
-            exact.asc(),
-            prefix.asc(),
-            substring.asc(),
-            similarity.desc(),
-            Exercise.name.asc(),
-            Exercise.id.asc(),
-        )
-        .limit(limit)
-        .all()
-    )
+def search_exercises(db: Session, user_id: str, query: str, limit: int = 20, offset: int = 0) -> list[Exercise]:
+    from app.core.exercise_service import list_exercises
+    return list_exercises(db, user_id=user_id, q=query, limit=limit, offset=offset)

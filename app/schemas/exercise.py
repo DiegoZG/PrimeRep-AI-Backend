@@ -51,6 +51,13 @@ class ExerciseOut(BaseModel):
     is_favorited: bool = False
     source: str = "seed"
     is_editable: bool = False
+    content_version: Optional[str] = None
+    movement_pattern: Optional[str] = None
+    resistance_modality: Optional[str] = None
+    difficulty: Optional[str] = None
+    laterality: Optional[str] = None
+    tracking_mode: Optional[str] = None
+    load_profile: Optional[dict] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -63,12 +70,19 @@ class ExerciseDetailOut(ExerciseOut):
     why_it_works: Optional[str] = None
     common_mistakes: Optional[str] = None
     beginner_notes: Optional[str] = None
+    structured_content: Optional[dict] = None
+    media: Optional[dict] = None
 
     model_config = ConfigDict(from_attributes=True)
 
 
 class ExerciseListOut(BaseModel):
     items: list[ExerciseOut]
+    limit: int = 50
+    offset: int = 0
+    total: int = 0
+    has_more: bool = False
+    catalog_version: str = "0"
 
 
 class CustomExerciseWrite(BaseModel):

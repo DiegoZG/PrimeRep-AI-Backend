@@ -79,6 +79,7 @@ class CoachWeightDataOut(BaseModel):
     current_weight_kg: Optional[float] = Field(None, alias="currentWeightKg")
     recommendation: Optional[Literal["increase", "hold", "deload"]] = None
     equipment_ids: list[str] = Field(default_factory=list, alias="equipmentIds")
+    load_profile: Optional[dict] = Field(None, alias="loadProfile")
 
     model_config = ConfigDict(populate_by_name=True)
 

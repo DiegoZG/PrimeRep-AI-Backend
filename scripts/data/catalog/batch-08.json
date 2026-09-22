@@ -1,0 +1,1142 @@
+{
+  "schema_version": 1,
+  "exercises": [
+    {
+      "id": "single_leg_hip_thrust",
+      "name": "Single-Leg Hip Thrust",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "bodyweight",
+      "difficulty": "intermediate",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Support the upper back on a stable bench with one foot planted and the other lifted.",
+          "Lower and raise the hips using the planted leg while keeping the pelvis level."
+        ],
+        "cues": [
+          "Keep the chin gently tucked."
+        ],
+        "mistakes": [
+          "Rotating toward the lifted leg."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "machine_hip_thrust",
+      "name": "Hip Thrust Machine",
+      "exercise_type": "accessory",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "plate_loaded_hip_thrust",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the belt or pad across the hips and set feet according to the machine instructions.",
+          "Extend the hips through the machine arc and return to the stop."
+        ],
+        "cues": [
+          "Secure the restraint before moving."
+        ],
+        "mistakes": [
+          "Allowing the restraint to sit across the abdomen."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "cable_glute_kickback",
+      "name": "Cable Glute Kickback",
+      "exercise_type": "accessory",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Attach a rated ankle cuff to a low pulley and hold a stable support.",
+          "Move the thigh backward a modest distance and return without bending the back."
+        ],
+        "cues": [
+          "Move from the hip."
+        ],
+        "mistakes": [
+          "Swinging high enough to arch the lower back."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "hip_abduction_machine",
+      "name": "Hip Abduction Machine",
+      "exercise_type": "accessory",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "abductor_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "abduction",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit with the outer thighs against the pads and feet supported.",
+          "Press the legs apart through a comfortable range and return slowly."
+        ],
+        "cues": [
+          "Keep the torso against the seat."
+        ],
+        "mistakes": [
+          "Bouncing the pads outward with the upper body."
+        ],
+        "benefits": "Trains lateral hip control through a deliberate sideward leg movement.",
+        "beginner_guidance": "Keep the movement small enough that the pelvis does not roll or tilt."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies hip musculature only; side-motion variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "side_lying_hip_abduction",
+      "name": "Side-Lying Hip Abduction",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "abduction",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on the side with the lower knee bent and upper leg straight.",
+          "Lift the upper leg sideways a modest distance and lower without rolling back."
+        ],
+        "cues": [
+          "Keep toes generally forward."
+        ],
+        "mistakes": [
+          "Turning the pelvis upward to lift higher."
+        ],
+        "benefits": "Trains lateral hip control through a deliberate sideward leg movement.",
+        "beginner_guidance": "Keep the movement small enough that the pelvis does not roll or tilt."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies hip musculature only; side-motion variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "dumbbell_calf_raise",
+      "name": "Dumbbell Calf Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "calves",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "plantar_flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand with two dumbbells beside the thighs on a level surface.",
+          "Lift both heels, pause and lower slowly."
+        ],
+        "cues": [
+          "Keep ankles from rolling outward."
+        ],
+        "mistakes": [
+          "Bouncing quickly from the bottom."
+        ],
+        "benefits": "Builds calf strength through controlled heel raising and lowering.",
+        "beginner_guidance": "Begin on a flat surface and use support before adding load or extra depth."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Standing Calf Raises - Wall",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/73/standing-calf-raises-wall/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Calf raises lift the heel by moving through the ankle."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "single_leg_calf_raise",
+      "name": "Single-Leg Calf Raise",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "calves",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "plantar_flexion",
+      "resistance_modality": "bodyweight",
+      "difficulty": "intermediate",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand on one foot beside a wall for light balance support.",
+          "Raise the heel and lower fully before changing sides."
+        ],
+        "cues": [
+          "Keep pressure through the ball of the foot."
+        ],
+        "mistakes": [
+          "Pulling upward with the supporting hand."
+        ],
+        "benefits": "Builds calf strength through controlled heel raising and lowering.",
+        "beginner_guidance": "Begin on a flat surface and use support before adding load or extra depth."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Standing Calf Raises - Wall",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/73/standing-calf-raises-wall/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Calf raises lift the heel by moving through the ankle."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "bodyweight_calf_raise",
+      "name": "Bodyweight Calf Raise",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "calves",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "plantar_flexion",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand with feet near hip width and fingertips on a wall if needed.",
+          "Raise the heels evenly and return them to the floor."
+        ],
+        "cues": [
+          "Move both ankles together."
+        ],
+        "mistakes": [
+          "Rocking onto the outer edges of the feet."
+        ],
+        "benefits": "Builds calf strength through controlled heel raising and lowering.",
+        "beginner_guidance": "Begin on a flat surface and use support before adding load or extra depth."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Standing Calf Raises - Wall",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/73/standing-calf-raises-wall/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Calf raises lift the heel by moving through the ankle."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "leg_press_calf_raise",
+      "name": "Leg-Press Calf Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "calves",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "leg_press_machine_selectorized"
+      ],
+      "aliases": [],
+      "movement_pattern": "plantar_flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set the machine safely and place the balls of the feet securely on the platform with heels free.",
+          "Move the platform through ankle extension and return through a controlled ankle bend."
+        ],
+        "cues": [
+          "Keep knees softly extended."
+        ],
+        "mistakes": [
+          "Using a platform edge where the feet can slip."
+        ],
+        "benefits": "Builds calf strength through controlled heel raising and lowering.",
+        "beginner_guidance": "Begin on a flat surface and use support before adding load or extra depth."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Standing Calf Raises - Wall",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/73/standing-calf-raises-wall/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Calf raises lift the heel by moving through the ankle."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "smith_calf_raise",
+      "name": "Smith Machine Calf Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "calves",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "smith_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "plantar_flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set stops and support the bar across the upper back with feet flat beneath you.",
+          "Raise the heels and lower them without bouncing."
+        ],
+        "cues": [
+          "Keep the bar path balanced over the feet."
+        ],
+        "mistakes": [
+          "Locking knees backward as the heels lift."
+        ],
+        "benefits": "Builds calf strength through controlled heel raising and lowering.",
+        "beginner_guidance": "Begin on a flat surface and use support before adding load or extra depth."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Standing Calf Raises - Wall",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/73/standing-calf-raises-wall/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Calf raises lift the heel by moving through the ankle."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "seated_dumbbell_calf_raise",
+      "name": "Seated Dumbbell Calf Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "calves",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "flat_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "plantar_flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Sit with knees bent and hold a dumbbell securely above each knee.",
+          "Raise the heels, pause and lower while the weights stay steady."
+        ],
+        "cues": [
+          "Keep the balls of the feet planted."
+        ],
+        "mistakes": [
+          "Letting the dumbbells slide toward the kneecaps."
+        ],
+        "benefits": "Builds calf strength through controlled heel raising and lowering.",
+        "beginner_guidance": "Begin on a flat surface and use support before adding load or extra depth."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Standing Calf Raises - Wall",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/73/standing-calf-raises-wall/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Calf raises lift the heel by moving through the ankle."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "dead_bug",
+      "name": "Dead Bug",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on the back with arms up and hips and knees bent.",
+          "Reach one arm and the opposite heel away, return and switch sides."
+        ],
+        "cues": [
+          "Keep the trunk position steady."
+        ],
+        "mistakes": [
+          "Extending farther than you can control without arching."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "bird_dog",
+      "name": "Bird Dog",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Start on hands and knees with hands beneath shoulders.",
+          "Reach one arm and the opposite leg, return and alternate without shifting the pelvis."
+        ],
+        "cues": [
+          "Reach long rather than high."
+        ],
+        "mistakes": [
+          "Lifting the leg until the lower back arches."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "side_plank",
+      "name": "Side Plank",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on one side with the elbow below the shoulder and legs stacked.",
+          "Lift the hips into a straight line and hold while breathing, then lower."
+        ],
+        "cues": [
+          "Keep shoulders stacked."
+        ],
+        "mistakes": [
+          "Allowing the hips to sag or rotate forward."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "duration",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Timed tracking is reference-only in this phase. Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "kneeling_side_plank",
+      "name": "Kneeling Side Plank",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on the side with knees bent and elbow beneath the shoulder.",
+          "Lift the hips so the shoulder, hip and knees align and hold while breathing."
+        ],
+        "cues": [
+          "Keep the supporting shoulder away from the ear."
+        ],
+        "mistakes": [
+          "Twisting the chest toward the floor."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "duration",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Timed tracking is reference-only in this phase. Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "pallof_press",
+      "name": "Cable Pallof Press",
+      "exercise_type": "accessory",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand side-on to a chest-height pulley and hold the handle against the sternum.",
+          "Press the hands forward and bring them back without turning the torso."
+        ],
+        "cues": [
+          "Keep hips and shoulders facing ahead."
+        ],
+        "mistakes": [
+          "Rotating with the cable as the arms extend."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "band_pallof_press",
+      "name": "Band Pallof Press",
+      "exercise_type": "accessory",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "loop_bands"
+      ],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "band",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Secure a band to a rated chest-height anchor and stand side-on holding both ends at the chest.",
+          "Extend the arms and return while resisting the sideward pull."
+        ],
+        "cues": [
+          "Check the anchor first."
+        ],
+        "mistakes": [
+          "Standing too far away to hold the trunk still."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. A rated band anchor is required but has no current equipment ID: resolve equipment taxonomy before approving this draft.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "cable_crunch",
+      "name": "Kneeling Cable Crunch",
+      "exercise_type": "accessory",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Kneel facing a high pulley and hold a rope beside the head.",
+          "Curl the ribs toward the pelvis and return slowly without pulling with the arms."
+        ],
+        "cues": [
+          "Let the trunk create the movement."
+        ],
+        "mistakes": [
+          "Sitting the hips backward as if bowing."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "reverse_crunch",
+      "name": "Reverse Crunch",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on the back with knees bent above the hips and arms on the floor.",
+          "Curl the pelvis gently off the floor and lower without swinging the legs."
+        ],
+        "cues": [
+          "Keep the movement small."
+        ],
+        "mistakes": [
+          "Throwing the knees toward the head for momentum."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "bicycle_crunch",
+      "name": "Bicycle Crunch",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on the back with hands lightly supporting the head and legs lifted.",
+          "Rotate the ribs toward the opposite bent knee while the other leg extends, then switch."
+        ],
+        "cues": [
+          "Turn from the torso."
+        ],
+        "mistakes": [
+          "Pulling the neck with the hands."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "floor_crunch",
+      "name": "Floor Crunch",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie with knees bent, feet planted and hands across the chest.",
+          "Curl the shoulder blades off the floor and lower with control."
+        ],
+        "cues": [
+          "Leave space between chin and chest."
+        ],
+        "mistakes": [
+          "Performing a full sit-up by swinging the arms."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "hanging_knee_raise",
+      "name": "Hanging Knee Raise",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "pull_up_bar"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hang from a secure bar with a controlled shoulder position.",
+          "Raise bent knees toward the torso and lower without swinging."
+        ],
+        "cues": [
+          "Pause the body before the next repetition."
+        ],
+        "mistakes": [
+          "Kicking the legs to start the movement."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "plank_shoulder_tap",
+      "name": "Plank Shoulder Tap",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set a high plank with hands under shoulders and feet a little wider than the hips.",
+          "Touch one hand to the opposite shoulder, replace it and alternate."
+        ],
+        "cues": [
+          "Keep the hips facing the floor."
+        ],
+        "mistakes": [
+          "Swaying side to side as each hand lifts."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "stability_ball_rollout",
+      "name": "Stability-Ball Rollout",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "stability_ball"
+      ],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Kneel with forearms on a stable ball in front of you.",
+          "Roll the ball forward a short distance and draw it back while the torso stays aligned."
+        ],
+        "cues": [
+          "Use a short reach first."
+        ],
+        "mistakes": [
+          "Rolling beyond the point where the lower back can stay controlled."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "seated_cable_rotation",
+      "name": "Seated Cable Rotation",
+      "exercise_type": "accessory",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable",
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "rotation",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit side-on to a chest-height pulley with feet planted and hold a handle in both hands.",
+          "Turn the ribs away from the cable through a modest range, then return."
+        ],
+        "cues": [
+          "Keep the pelvis facing forward."
+        ],
+        "mistakes": [
+          "Forcing rotation at the end of range."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    }
+  ]
+}

@@ -1,0 +1,1276 @@
+{
+  "schema_version": 1,
+  "exercises": [
+    {
+      "id": "leg_extension",
+      "name": "Leg Extension",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "leg_extension_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit in the leg extension machine with your back against the pad and the ankle pad resting just above your feet, knees bent at 90 degrees.",
+          "Extend your legs by straightening your knees until they're fully extended, squeezing your quads at the top, then lower back down under control to the starting position."
+        ],
+        "cues": [
+          "Keep the thighs supported on the seat.",
+          "Lower the shin pad without dropping the stack."
+        ],
+        "mistakes": [
+          "Using too much weight often leads to using momentum — swinging the legs up quickly and letting them drop rather than controlling the movement.",
+          "Lifting the hips off the seat to help extend the legs reduces the isolation benefit of the exercise.",
+          "Locking the knees out forcefully at the top under heavy load can also place unnecessary strain on the knee joint."
+        ],
+        "benefits": "Trains knee-extension strength with the thigh supported.",
+        "beginner_guidance": "Adjust the machine to your leg length and choose a comfortable range at light resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Leg Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/183/seated-leg-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Leg extensions straighten the knees against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "leg_curl",
+      "name": "Leg Curl",
+      "exercise_type": "strength",
+      "primary_muscle": "hamstrings",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "leg_curl_machine"
+      ],
+      "aliases": [
+        "lying leg curl"
+      ],
+      "movement_pattern": "flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie face down on the leg curl machine (or sit, depending on machine type) with the ankle pad positioned just above your heels.",
+          "Curl your legs by bending your knees to bring your heels toward your glutes, squeezing your hamstrings at the top, then lower back down under control to full leg extension."
+        ],
+        "cues": [
+          "Keep the hips supported as the knees bend.",
+          "Return the pad at a controlled pace."
+        ],
+        "mistakes": [
+          "Lifting the hips off the pad to help curl the weight up is a very common compensation once the weight gets heavy, and it significantly reduces hamstring isolation.",
+          "Using a fast, jerky tempo rather than controlling both the lifting and lowering phases reduces the training effect.",
+          "Not achieving a full stretch at the bottom of each rep also limits range of motion benefits."
+        ],
+        "benefits": "Trains the hamstrings by bending the knee against resistance.",
+        "beginner_guidance": "Use a short controlled range initially and increase it only while the pelvis remains steady."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Deadlift",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/6/deadlift/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies posterior-chain anatomy only; knee-flexion variant needs trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "walking_lunge",
+      "name": "Walking Lunge",
+      "exercise_type": "strength",
+      "primary_muscle": "quads",
+      "secondary_muscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "lunge",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand holding a dumbbell in each hand at your sides (or bodyweight only).",
+          "Step forward with one leg and lower your body until both knees are bent at roughly 90 degrees, with your back knee hovering just above the floor.",
+          "Push through your front heel to stand up and step forward into the next lunge with the opposite leg, continuing to alternate as you walk forward."
+        ],
+        "cues": [
+          "Step into a stable stance before lowering.",
+          "Alternate legs without rushing the next step."
+        ],
+        "mistakes": [
+          "Letting the front knee travel excessively far forward past the toes, or letting it cave inward, are both common technique breakdowns, especially as fatigue accumulates late in a set.",
+          "Taking steps that are too short results in a narrow, unstable lunge with excessive forward knee travel.",
+          "Leaning the torso too far forward also shifts stress away from the glutes and onto the lower back."
+        ],
+        "benefits": "Builds leg strength while controlling one side of the body at a time.",
+        "beginner_guidance": "Practise a shallow bodyweight version and use a stable support if balance limits control."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Forward Lunge",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/94/forward-lunge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lunges load a split stance through knee and hip motion."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "hip_thrust",
+      "name": "Hip Thrust",
+      "exercise_type": "strength",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "flat_bench",
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [
+        "barbell hip thrust"
+      ],
+      "movement_pattern": "extension",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "added",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit on the ground with your upper back resting against a bench and a barbell positioned across your hips (padded for comfort), knees bent and feet flat on the floor about shoulder-width apart.",
+          "Drive through your heels to raise your hips up until your torso is roughly parallel to the floor and your body forms a straight line from shoulders to knees, squeezing your glutes hard at the top, then lower back down under control."
+        ],
+        "cues": [
+          "Keep the upper back supported on the bench.",
+          "Finish with the hips rather than lifting the ribs."
+        ],
+        "mistakes": [
+          "Hyperextending the lower back at the top of the movement rather than stopping at a straight torso-to-knee line is a very common error that shifts stress away from the glutes and onto the spine.",
+          "Not driving the hips high enough (partial range of motion) reduces the training stimulus.",
+          "Letting the knees cave inward during the drive up also reduces glute activation and stability."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "glute_bridge",
+      "name": "Glute Bridge",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on your back with knees bent and feet flat on the floor, hip-width apart, arms resting at your sides.",
+          "Drive through your heels to lift your hips off the ground until your body forms a straight line from shoulders to knees, squeezing your glutes at the top, then lower back down under control."
+        ],
+        "cues": [
+          "Press through the feet while raising the hips.",
+          "Lower the pelvis without losing control."
+        ],
+        "mistakes": [
+          "Overextending the lower back at the top rather than stopping at a straight line from shoulders to knees is the most common error and shifts stress away from the glutes.",
+          "Pushing through the toes instead of the heels reduces glute engagement and shifts emphasis toward the quads.",
+          "Rushing through reps without a pause and squeeze at the top also reduces the training effect."
+        ],
+        "benefits": "Builds hip-extension strength with the upper body supported.",
+        "beginner_guidance": "Learn to finish with the hips extended without trying to lift the ribs higher."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Glute Bridge Exercise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/49/glute-bridge/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Bridges raise the pelvis through hip extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "standing_calf_raise",
+      "name": "Standing Calf Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "calves",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "calf_raise_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "plantar_flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand on the calf raise machine with the balls of your feet on the platform and your shoulders under the pads, heels hanging off the edge.",
+          "Lower your heels down as far as comfortable to feel a stretch in your calves, then rise up onto your toes as high as possible, squeezing at the top, before lowering back down under control."
+        ],
+        "cues": [
+          "Rise through the ankles without bouncing.",
+          "Lower both heels at a steady pace."
+        ],
+        "mistakes": [
+          "Using a very short range of motion — small, bouncy pulses rather than a full stretch-to-contraction range — significantly reduces the training stimulus.",
+          "Bending the knees during the movement shifts emphasis away from the gastrocnemius.",
+          "Rushing through reps without pausing at the top or bottom also reduces time under tension for this notoriously stubborn muscle group."
+        ],
+        "benefits": "Builds calf strength through controlled heel raising and lowering.",
+        "beginner_guidance": "Begin on a flat surface and use support before adding load or extra depth."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Standing Calf Raises - Wall",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/73/standing-calf-raises-wall/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Calf raises lift the heel by moving through the ankle."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "seated_calf_raise",
+      "name": "Seated Calf Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "calves",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "plate_loaded_seated_calf",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "plantar_flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit at the seated calf raise machine with the balls of your feet on the platform and the pad resting across your lower thighs, knees bent at roughly 90 degrees.",
+          "Lower your heels down for a full stretch, then press up onto your toes as high as possible, squeezing at the top, before lowering back down under control."
+        ],
+        "cues": [
+          "Keep the knees beneath the support pads.",
+          "Raise and lower the heels without bouncing."
+        ],
+        "mistakes": [
+          "As with standing calf raises, using a short, bouncy range of motion instead of a full stretch-to-contraction range significantly limits results.",
+          "Letting the knees lift off the pad or shifting body weight to assist the movement reduces the direct loading on the calves.",
+          "Rushing through reps without a brief pause at the top also reduces effectiveness."
+        ],
+        "benefits": "Builds calf strength through controlled heel raising and lowering.",
+        "beginner_guidance": "Begin on a flat surface and use support before adding load or extra depth."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Standing Calf Raises - Wall",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/73/standing-calf-raises-wall/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Calf raises lift the heel by moving through the ankle."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "plank",
+      "name": "Plank",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [
+        "shoulders"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Get into a forearm plank position with elbows directly under your shoulders and your body forming a straight line from head to heels.",
+          "Engage your core, squeeze your glutes, and hold the position, breathing steadily, without letting your hips sag or pike upward.",
+          "Hold for the prescribed time."
+        ],
+        "cues": [
+          "Hold the torso steady between elbows and feet.",
+          "Keep breathing while maintaining the hold."
+        ],
+        "mistakes": [
+          "Letting the hips sag toward the floor is the most common error and places excess strain on the lower back rather than the core.",
+          "Piking the hips up too high reduces the effectiveness of the exercise by taking tension off the abs.",
+          "Holding your breath instead of breathing steadily throughout the hold is another common mistake that limits how long you can maintain good form."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "duration",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown. Timed tracking is reference-only in this phase. Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "crunch_machine",
+      "name": "Crunch Machine",
+      "exercise_type": "strength",
+      "primary_muscle": "abs",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "ab_crunch_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit in the ab crunch machine with your chest against the pad and hands gripping the handles (or holding the upper pad, depending on machine design).",
+          "Curl your torso forward by contracting your abs, bringing your chest toward your hips, then return under control to the starting position without letting the weight stack slam down."
+        ],
+        "cues": [
+          "Curl the trunk without pulling only with the arms.",
+          "Control the machine's return."
+        ],
+        "mistakes": [
+          "Pulling with the arms rather than contracting through the abs is a very common way people cheat the movement, especially as the weight increases.",
+          "Using a fast, jerky range of motion instead of a controlled contraction and return reduces the training stimulus.",
+          "Not achieving a full contraction (rounding through the whole spine) also limits ab engagement."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "hanging_leg_raise",
+      "name": "Hanging Leg Raise",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "abs",
+      "secondary_muscles": [
+        "quads"
+      ],
+      "equipment_ids": [
+        "pull_up_bar"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hang from a pull-up bar with arms fully extended and core engaged.",
+          "Keeping your legs relatively straight (or bent at the knees for an easier variation), raise them up in front of you until they're at least parallel to the floor, then lower back down under control without swinging."
+        ],
+        "cues": [
+          "Keep the hanging body from swinging.",
+          "Lower the legs without dropping them."
+        ],
+        "mistakes": [
+          "Using momentum by swinging the body to throw the legs up rather than lifting them with controlled ab and hip flexor strength is extremely common and significantly reduces the exercise's effectiveness.",
+          "Excessively arching the lower back at the bottom of the movement can create unwanted spinal stress.",
+          "Not achieving at least a parallel-to-floor leg position also limits ab engagement."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "ab_wheel_rollout",
+      "name": "Ab Wheel Roll-Out",
+      "exercise_type": "strength",
+      "primary_muscle": "abs",
+      "secondary_muscles": [
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "ab_wheel"
+      ],
+      "aliases": [],
+      "movement_pattern": "anti_rotation",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Kneel on the floor holding an ab wheel with both hands, wrists directly under shoulders.",
+          "Slowly roll the wheel forward, extending your body into as long a line as you can control while keeping your core braced and back flat, then use your abs to pull the wheel back to the starting position."
+        ],
+        "cues": [
+          "Roll only as far as you can keep control.",
+          "Bring the wheel back without jerking the hips."
+        ],
+        "mistakes": [
+          "Letting the lower back sag and arch as you roll out is the most common and most important error to avoid, since it shifts stress from the abs to the lower spine.",
+          "Rolling out too far too soon, before building sufficient core strength, can also lead to loss of control and potential strain.",
+          "Rushing the return phase rather than pulling back with control reduces the training benefit."
+        ],
+        "benefits": "Trains deliberate trunk control while the limbs or external resistance challenge position.",
+        "beginner_guidance": "Shorten the lever or movement range so you can maintain position and continue breathing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Front Plank",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/32/front-plank/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Plank variants maintain trunk position against gravity; dynamic variants need trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown.  Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "rowing_machine",
+      "name": "Rowing Machine",
+      "exercise_type": "cardio",
+      "primary_muscle": "cardio",
+      "secondary_muscles": [
+        "back",
+        "full_body"
+      ],
+      "equipment_ids": [
+        "rowing_machine_cardio"
+      ],
+      "aliases": [],
+      "movement_pattern": "locomotion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit on the rowing machine with feet strapped in and grip the handle with both hands.",
+          "Drive through your legs first, then lean back slightly and pull the handle to your lower ribs, finishing with your arms bent and elbows tucked.",
+          "Reverse the sequence — extend your arms, lean forward, then bend your knees — to return to the starting position and repeat rhythmically."
+        ],
+        "cues": [
+          "Move the seat and handle through a smooth stroke.",
+          "Keep the recovery controlled rather than rushing forward."
+        ],
+        "mistakes": [
+          "Pulling primarily with the arms instead of driving power from the legs first is one of the most common and inefficient rowing errors.",
+          "Rounding the lower back, especially as fatigue sets in during longer intervals, can create unnecessary spinal stress.",
+          "Rushing the stroke rate without focusing on power per stroke also reduces overall efficiency and can lead to premature fatigue."
+        ],
+        "benefits": "Supports rhythmic whole-body activity at an individually chosen effort.",
+        "beginner_guidance": "Start slowly and learn the equipment controls before increasing speed or resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "duration",
+      "sources": [
+        {
+          "title": "Concept2 — Indoor Rowing Technique",
+          "url": "https://www.concept2.com/training/rowing-technique",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Manufacturer guidance on drive/recovery sequence and machine posture."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown. Timed tracking is reference-only in this phase. Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "stationary_bike",
+      "name": "Stationary Bike",
+      "exercise_type": "cardio",
+      "primary_muscle": "cardio",
+      "secondary_muscles": [
+        "quads",
+        "hamstrings"
+      ],
+      "equipment_ids": [
+        "stationary_bike"
+      ],
+      "aliases": [],
+      "movement_pattern": "locomotion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the seat height so your knee has a slight bend at the bottom of the pedal stroke, then sit and begin pedaling at a steady cadence.",
+          "Keep your core engaged and avoid excessive rocking of the hips, adjusting resistance and speed based on your target intensity for the session."
+        ],
+        "cues": [
+          "Pedal smoothly without rocking on the saddle.",
+          "Keep a relaxed grip on the handlebars."
+        ],
+        "mistakes": [
+          "An incorrect seat height — too low causes excessive knee bend and stress, too high causes hip rocking and reduced power — is one of the most common setup errors.",
+          "Gripping the handlebars too tightly and tensing the upper body wastes energy that could go toward the legs.",
+          "Pedaling with just the front of the foot rather than a fuller foot position can also reduce power efficiency."
+        ],
+        "benefits": "Supports rhythmic whole-body activity at an individually chosen effort.",
+        "beginner_guidance": "Start slowly and learn the equipment controls before increasing speed or resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "duration",
+      "sources": [
+        {
+          "title": "CDC — How to Measure Physical Activity Intensity",
+          "url": "https://www.cdc.gov/physical-activity-basics/measuring/index.html",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Aerobic effort varies with the person and intensity; this source does not verify machine-specific setup."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown. Timed tracking is reference-only in this phase. Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "treadmill_run",
+      "name": "Treadmill Run",
+      "exercise_type": "cardio",
+      "primary_muscle": "cardio",
+      "secondary_muscles": [
+        "full_body"
+      ],
+      "equipment_ids": [
+        "treadmill"
+      ],
+      "aliases": [],
+      "movement_pattern": "locomotion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Start the treadmill at a comfortable walking pace to warm up, then gradually increase speed to your target running pace.",
+          "Maintain an upright posture with a slight forward lean from the ankles, land with your foot roughly under your hips rather than far out in front, and keep your arms swinging naturally at your sides."
+        ],
+        "cues": [
+          "Stay centered on the moving belt.",
+          "Change speed gradually using the controls."
+        ],
+        "mistakes": [
+          "Overstriding — landing with the foot far in front of the body — increases impact stress on the joints and is a very common treadmill running error, partly because the moving belt encourages it.",
+          "Holding onto the handrails while running disrupts natural arm swing and posture, and also artificially reduces the effective workload.",
+          "Starting at too fast a pace without a proper warm-up increases injury risk and often leads to early fatigue."
+        ],
+        "benefits": "Supports rhythmic whole-body activity at an individually chosen effort.",
+        "beginner_guidance": "Start slowly and learn the equipment controls before increasing speed or resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "duration",
+      "sources": [
+        {
+          "title": "CDC — How to Measure Physical Activity Intensity",
+          "url": "https://www.cdc.gov/physical-activity-basics/measuring/index.html",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Aerobic effort varies with the person and intensity; this source does not verify machine-specific setup."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown. Timed tracking is reference-only in this phase. Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "air_bike",
+      "name": "Air Bike",
+      "exercise_type": "cardio",
+      "primary_muscle": "cardio",
+      "secondary_muscles": [
+        "full_body"
+      ],
+      "equipment_ids": [
+        "air_bike"
+      ],
+      "aliases": [],
+      "movement_pattern": "locomotion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit on the air bike (fan bike) with feet on the pedals and hands gripping the moving handlebars.",
+          "Pedal and push/pull the handles simultaneously, using both your arms and legs to drive the fan, adjusting your effort level to match your target intensity — the resistance increases automatically with your effort since it's driven by a fan."
+        ],
+        "cues": [
+          "Coordinate the pedals and handles smoothly.",
+          "Reduce effort gradually before stopping."
+        ],
+        "mistakes": [
+          "Relying mostly on the legs and barely using the arms (or vice versa) reduces the total-body benefit that makes the air bike unique.",
+          "Starting an interval at an unsustainable all-out pace without any prior conditioning can lead to early burnout or poor pacing across a workout.",
+          "Poor posture — slouching or hunching over the handlebars — can also reduce power output and cause unnecessary strain."
+        ],
+        "benefits": "Supports rhythmic whole-body activity at an individually chosen effort.",
+        "beginner_guidance": "Start slowly and learn the equipment controls before increasing speed or resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "duration",
+      "sources": [
+        {
+          "title": "CDC — How to Measure Physical Activity Intensity",
+          "url": "https://www.cdc.gov/physical-activity-basics/measuring/index.html",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Aerobic effort varies with the person and intensity; this source does not verify machine-specific setup."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown. Timed tracking is reference-only in this phase. Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "ski_erg",
+      "name": "SkiErg",
+      "exercise_type": "cardio",
+      "primary_muscle": "cardio",
+      "secondary_muscles": [
+        "shoulders",
+        "back"
+      ],
+      "equipment_ids": [
+        "ski_erg"
+      ],
+      "aliases": [],
+      "movement_pattern": "locomotion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand facing the SkiErg machine, gripping the handles above your head with arms extended.",
+          "Hinge at the hips and pull the handles down and back in a motion similar to a double-pole skiing stroke, engaging your lats, core, and legs, then let the handles return under control back to the starting position and repeat rhythmically."
+        ],
+        "cues": [
+          "Pull the handles in a controlled downward stroke.",
+          "Let the handles return without a sudden recoil."
+        ],
+        "mistakes": [
+          "Pulling primarily with the arms instead of initiating the movement with a hip hinge and using the core and lats reduces power output and increases arm fatigue.",
+          "Standing too upright without engaging the hip hinge limits the contribution from the legs and core.",
+          "Rushing the stroke rate without focusing on a full, powerful pull per stroke also reduces overall efficiency."
+        ],
+        "benefits": "Supports rhythmic whole-body activity at an individually chosen effort.",
+        "beginner_guidance": "Start slowly and learn the equipment controls before increasing speed or resistance."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "duration",
+      "sources": [
+        {
+          "title": "Concept2 — SkiErg Technique",
+          "url": "https://www.concept2.com/training/skierg-technique",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Manufacturer guidance on drive/recovery sequence and machine posture."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. Legacy identity retained; editorial corrections are unapproved. Compare against the previous packet; provenance of remaining older wording is unknown. Timed tracking is reference-only in this phase. Pending human review: New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+    },
+    {
+      "id": "dumbbell_bench_press",
+      "name": "Dumbbell Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "dumbbells",
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on a flat bench with a dumbbell above each side of the chest and feet supported.",
+          "Lower the weights beside the chest, then press them above the shoulders."
+        ],
+        "cues": [
+          "Keep wrists above elbows."
+        ],
+        "mistakes": [
+          "Colliding the dumbbells at the top."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "incline_barbell_press",
+      "name": "Incline Barbell Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "incline_bench",
+        "olympic_barbell",
+        "plates",
+        "squat_rack"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set a low incline inside a rack with safeties and position the bar above the upper chest.",
+          "Lower toward the upper chest, then press back to the starting position."
+        ],
+        "cues": [
+          "Keep your seat against the pad."
+        ],
+        "mistakes": [
+          "Using a steep incline that changes the intended press."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "decline_barbell_press",
+      "name": "Decline Barbell Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "decline_bench",
+        "olympic_barbell",
+        "plates",
+        "squat_rack"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Secure the legs on a decline bench in a correctly positioned rack with a spotter.",
+          "Unrack above the chest, lower with control and press back above the shoulders."
+        ],
+        "cues": [
+          "Check the rack position before lying down."
+        ],
+        "mistakes": [
+          "Attempting to sit up while still holding the bar."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "decline_dumbbell_press",
+      "name": "Decline Dumbbell Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "decline_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Secure the legs on a decline bench and have the dumbbells handed into position.",
+          "Lower beside the lower chest and press up, maintaining contact with the bench."
+        ],
+        "cues": [
+          "Keep the descent symmetrical."
+        ],
+        "mistakes": [
+          "Trying to mount the bench with weights overhead."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "dumbbell_floor_press",
+      "name": "Dumbbell Floor Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on the floor with knees bent, holding two dumbbells above the chest.",
+          "Lower until the upper arms touch the floor gently, pause, then press up."
+        ],
+        "cues": [
+          "Let the floor define the bottom position."
+        ],
+        "mistakes": [
+          "Bouncing elbows off the floor."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "single_arm_dumbbell_press",
+      "name": "Single-Arm Dumbbell Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "dumbbells",
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie fully supported on a bench with one dumbbell above the chest and both feet planted.",
+          "Lower beside the chest and press up without rotating the ribcage; finish the side before switching."
+        ],
+        "cues": [
+          "Keep both shoulders supported."
+        ],
+        "mistakes": [
+          "Rolling off the bench toward the loaded side."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "neutral_grip_dumbbell_press",
+      "name": "Neutral-Grip Dumbbell Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "dumbbells",
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on a flat bench with palms facing each other and dumbbells above the chest.",
+          "Lower with elbows nearer the ribs, then press along the same path."
+        ],
+        "cues": [
+          "Keep the palms facing inward."
+        ],
+        "mistakes": [
+          "Turning the movement into a fly by straightening the elbows early."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "close_grip_bench_press",
+      "name": "Close-Grip Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "flat_bench",
+        "olympic_barbell",
+        "plates",
+        "squat_rack"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set up in a rack with safeties and use a grip around shoulder width rather than hands touching.",
+          "Lower the bar with elbows near the torso, then press back above the shoulders."
+        ],
+        "cues": [
+          "Keep forearms near vertical at the bottom."
+        ],
+        "mistakes": [
+          "Forcing an excessively narrow wrist position."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "smith_flat_press",
+      "name": "Smith Machine Bench Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "smith_machine",
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Place a flat bench so the guided bar reaches the chest comfortably and set the stops.",
+          "Unhook the bar, lower toward the chest and press along the rails."
+        ],
+        "cues": [
+          "Test the path with the unloaded machine."
+        ],
+        "mistakes": [
+          "Positioning the bench so the bar tracks toward the neck."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    }
+  ]
+}

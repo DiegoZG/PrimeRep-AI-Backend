@@ -282,7 +282,7 @@ def _progression_candidates(db: Session, user_id: str, local_date: date) -> list
             db,
             user_id=user_id,
             exercise_id=exercise_id,
-            is_lower_body=exercise.get("primaryMuscle")
+            is_lower_body=(exercise.get("primaryMuscle") or exercise.get("primary_muscle"))
             in {"quads", "hamstrings", "glutes", "calves"},
             reps_min=int(prescription.get("repsMin") or 1),
             reps_max=int(prescription.get("repsMax") or prescription.get("repsMin") or 1),
@@ -317,7 +317,8 @@ def _progression_candidates(db: Session, user_id: str, local_date: date) -> list
                     "recommendation": reason,
                     "targetWeightKg": suggested,
                     "currentWeightKg": suggestion.previous_weight_kg,
-                    "equipmentIds": exercise.get("requiredEquipmentIds") or [],
+                    "equipmentIds": exercise.get("requiredEquipmentIds") or exercise.get("required_equipment_ids") or [],
+                    "loadProfile": exercise.get("loadProfile") or exercise.get("load_profile"),
                     "requiredText": required_text,
                 },
                 target={"type": "planned_workout", "workoutDayId": workout_id, "weekStart": plan.week_start_date},
@@ -539,6 +540,7 @@ def _pr_candidates(db: Session, user_id: str) -> list[dict]:
                         "exerciseName": exercise.name,
                         "recordWeightKg": weight,
                         "equipmentIds": [item.id for item in exercise.equipment],
+                        "loadProfile": exercise.load_profile,
                         "requiredText": [exercise.name, f"{weight:g} kg"],
                     },
                     target={"type": "completed_session", "sessionId": session.id},
@@ -983,6 +985,7 @@ def _item_out(item: CoachFeedItem, *, ai_eligible: bool) -> CoachFeedItemOut:
             "currentWeightKg": facts.get("currentWeightKg"),
             "recommendation": facts.get("recommendation"),
             "equipmentIds": facts.get("equipmentIds") or [],
+            "loadProfile": facts.get("loadProfile"),
         }
     elif item.kind == "personal_record":
         weight_data = {
@@ -990,6 +993,7 @@ def _item_out(item: CoachFeedItem, *, ai_eligible: bool) -> CoachFeedItemOut:
             "exerciseName": facts.get("exerciseName"),
             "weightKg": facts.get("recordWeightKg"),
             "equipmentIds": facts.get("equipmentIds") or [],
+            "loadProfile": facts.get("loadProfile"),
         }
     if weight_data and (
         not isinstance(weight_data["exerciseName"], str)

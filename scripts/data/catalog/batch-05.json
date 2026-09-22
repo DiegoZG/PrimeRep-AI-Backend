@@ -1,0 +1,1209 @@
+{
+  "schema_version": 1,
+  "exercises": [
+    {
+      "id": "close_grip_lat_pulldown",
+      "name": "Close-Grip Lat Pulldown",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps"
+      ],
+      "equipment_ids": [
+        "lat_pulldown_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_pull",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Secure the thigh pad and grip a narrow neutral handle overhead.",
+          "Pull toward the upper chest and allow a controlled overhead return."
+        ],
+        "cues": [
+          "Move elbows down beside the ribs."
+        ],
+        "mistakes": [
+          "Leaning far back to meet the handle."
+        ],
+        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
+        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Pulldowns draw an overhead resistance toward the upper torso."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "underhand_lat_pulldown",
+      "name": "Underhand Lat Pulldown",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps"
+      ],
+      "equipment_ids": [
+        "lat_pulldown_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_pull",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit with thighs secured and grip the bar palms toward you near shoulder width.",
+          "Pull to the upper chest, then return overhead without shrugging abruptly."
+        ],
+        "cues": [
+          "Keep the palms facing you during the pull.",
+          "Return the bar without rocking backward to finish."
+        ],
+        "mistakes": [
+          "Pulling the bar down behind the head."
+        ],
+        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
+        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Pulldowns draw an overhead resistance toward the upper torso."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "single_arm_lat_pulldown",
+      "name": "Single-Arm Lat Pulldown",
+      "exercise_type": "strength",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "biceps"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_pull",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Kneel facing a high pulley and hold one handle with the arm overhead.",
+          "Pull the elbow down toward the side and return without side-bending."
+        ],
+        "cues": [
+          "Pull the working elbow down without tilting the torso.",
+          "Control the overhead return with the same arm."
+        ],
+        "mistakes": [
+          "Tilting the trunk to add range."
+        ],
+        "benefits": "Trains the back and arm muscles in a vertical pulling pattern.",
+        "beginner_guidance": "Select a resistance or assistance that permits control at both ends of the movement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Pulldowns draw an overhead resistance toward the upper torso."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "straight_arm_pulldown",
+      "name": "Straight-Arm Cable Pulldown",
+      "exercise_type": "accessory",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "chest"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face a high pulley and hold a bar with elbows slightly bent.",
+          "Sweep the bar toward the thighs and return through a comfortable overhead arc."
+        ],
+        "cues": [
+          "Keep the elbow angle nearly fixed."
+        ],
+        "mistakes": [
+          "Turning the movement into a triceps pushdown."
+        ],
+        "benefits": "Trains bringing the upper arms down toward the torso while keeping elbow movement small.",
+        "beginner_guidance": "Use a modest overhead reach rather than forcing a shoulder stretch."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies the overhead pulling family; straight-arm mechanics require trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "dumbbell_pullover",
+      "name": "Dumbbell Pullover",
+      "exercise_type": "accessory",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "chest"
+      ],
+      "equipment_ids": [
+        "flat_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Lie fully supported on a bench holding one secure dumbbell above the chest.",
+          "Lower behind the head within shoulder comfort, then bring it back above the chest."
+        ],
+        "cues": [
+          "Keep the elbow bend consistent as the dumbbell travels.",
+          "Limit the overhead reach to a range you can control."
+        ],
+        "mistakes": [
+          "Allowing the weight to pull the torso into a large arch."
+        ],
+        "benefits": "Trains bringing the upper arms down toward the torso while keeping elbow movement small.",
+        "beginner_guidance": "Use a modest overhead reach rather than forcing a shoulder stretch."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies the overhead pulling family; straight-arm mechanics require trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "machine_pullover",
+      "name": "Machine Pullover",
+      "exercise_type": "accessory",
+      "primary_muscle": "back",
+      "secondary_muscles": [
+        "chest"
+      ],
+      "equipment_ids": [
+        "plate_loaded_pullover",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the seat and pads, then use the start assist if the machine provides one.",
+          "Bring the upper arms down through the machine arc and return slowly."
+        ],
+        "cues": [
+          "Follow the machine setup diagram."
+        ],
+        "mistakes": [
+          "Releasing the pads suddenly under load."
+        ],
+        "benefits": "Trains bringing the upper arms down toward the torso while keeping elbow movement small.",
+        "beginner_guidance": "Use a modest overhead reach rather than forcing a shoulder stretch."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Lat Pulldown",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/158/seated-lat-pulldown/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference identifies the overhead pulling family; straight-arm mechanics require trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "hammer_curl",
+      "name": "Dumbbell Hammer Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand holding two dumbbells with palms facing the thighs.",
+          "Curl with palms facing inward and lower without moving the upper arms forward."
+        ],
+        "cues": [
+          "Keep thumbs pointing upward."
+        ],
+        "mistakes": [
+          "Turning the wrists at the top into a different curl."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "alternating_dumbbell_curl",
+      "name": "Alternating Dumbbell Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand with one dumbbell in each hand and arms at the sides.",
+          "Curl one arm, lower fully, then repeat on the other side."
+        ],
+        "cues": [
+          "Keep the resting arm quiet."
+        ],
+        "mistakes": [
+          "Leaning toward the working arm."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "incline_dumbbell_curl",
+      "name": "Incline Dumbbell Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "incline_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Sit against an incline bench with arms hanging comfortably beside it.",
+          "Curl the weights without bringing the elbows forward, then lower slowly."
+        ],
+        "cues": [
+          "Use a modest bench recline initially."
+        ],
+        "mistakes": [
+          "Forcing the shoulders into an extreme backward stretch."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "concentration_curl",
+      "name": "Concentration Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "flat_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit with feet apart and brace the working upper arm against the inner thigh.",
+          "Curl the dumbbell toward the shoulder and lower before changing sides."
+        ],
+        "cues": [
+          "Keep the arm support in place."
+        ],
+        "mistakes": [
+          "Lifting the elbow off the thigh to finish."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "ez_bar_curl",
+      "name": "EZ-Bar Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "ez_bar",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Grip the angled sections with a comfortable semi-supinated hand position.",
+          "Curl toward the shoulders and lower without swinging the hips."
+        ],
+        "cues": [
+          "Let the bar shape guide a comfortable wrist angle."
+        ],
+        "mistakes": [
+          "Moving the hips to launch the bar."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "cable_curl",
+      "name": "Cable Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face a low pulley holding a suitable bar with palms upward.",
+          "Curl the handle toward the chest and lower while keeping the stack controlled."
+        ],
+        "cues": [
+          "Keep the elbows near the sides."
+        ],
+        "mistakes": [
+          "Walking backward during a repetition."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "rope_hammer_curl",
+      "name": "Cable Rope Hammer Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Attach a rope low and grip the ends with palms facing inward.",
+          "Curl the ends upward and lower without spreading the elbows widely."
+        ],
+        "cues": [
+          "Keep the rope grip steady as the elbows bend.",
+          "Lower the attachment without swinging the torso."
+        ],
+        "mistakes": [
+          "Pulling the shoulders upward with the rope."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "bayesian_cable_curl",
+      "name": "Behind-Body Cable Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face away from a low pulley with the working arm slightly behind the torso.",
+          "Curl the handle forward while the upper arm stays comfortable, then extend slowly."
+        ],
+        "cues": [
+          "Keep the shoulder from rolling forward."
+        ],
+        "mistakes": [
+          "Standing so far ahead that the shoulder is forced backward."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "high_cable_curl",
+      "name": "High Cable Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "crossover_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand between high pulleys with arms out to the sides and a handle in each hand.",
+          "Bend the elbows to bring hands toward the head, then extend slowly."
+        ],
+        "cues": [
+          "Keep upper arms at a manageable height."
+        ],
+        "mistakes": [
+          "Allowing the cables to pull the shoulders beyond comfort."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "spider_curl",
+      "name": "Spider Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "incline_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie chest-down over an incline bench with the arms hanging off its upper edge.",
+          "Curl both weights and lower while keeping chest contact with the pad."
+        ],
+        "cues": [
+          "Let the arms hang vertically."
+        ],
+        "mistakes": [
+          "Lifting the chest to shorten the curl."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "machine_biceps_curl",
+      "name": "Machine Biceps Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "bicep_curl_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the seat so elbows line up with the machine pivot and arms rest on the pad.",
+          "Curl the handles and lower without lifting the upper arms."
+        ],
+        "cues": [
+          "Keep the pivot aligned."
+        ],
+        "mistakes": [
+          "Choosing a seat height that puts the elbows off the pad."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "dumbbell_preacher_curl",
+      "name": "Single-Arm Dumbbell Preacher Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "preacher_curl_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Place one upper arm fully on the preacher pad with a dumbbell in the hand.",
+          "Curl upward and lower to a comfortable elbow extension."
+        ],
+        "cues": [
+          "Keep the shoulder behind the pad."
+        ],
+        "mistakes": [
+          "Dropping quickly into a locked elbow."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "reverse_barbell_curl",
+      "name": "Reverse Barbell Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold a light bar with palms down and arms beside the torso.",
+          "Curl upward without bending the wrists, then lower steadily."
+        ],
+        "cues": [
+          "Keep knuckles facing forward."
+        ],
+        "mistakes": [
+          "Letting the wrists collapse under the bar."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "band_biceps_curl",
+      "name": "Band Biceps Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "loop_bands"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "band",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand on the middle of a band and hold both ends palms upward.",
+          "Curl against the increasing tension, then lower smoothly."
+        ],
+        "cues": [
+          "Keep both feet pinning the band."
+        ],
+        "mistakes": [
+          "Pulling on a band with cracks or worn edges."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "cross_body_hammer_curl",
+      "name": "Cross-Body Hammer Curl",
+      "exercise_type": "accessory",
+      "primary_muscle": "biceps",
+      "secondary_muscles": [
+        "forearms"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "flexion",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "alternating",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand with neutral-grip dumbbells beside the thighs.",
+          "Curl one weight toward the opposite upper chest and return before switching."
+        ],
+        "cues": [
+          "Move through the elbow rather than rotating the torso."
+        ],
+        "mistakes": [
+          "Swinging the dumbbell across the abdomen."
+        ],
+        "benefits": "Builds elbow-flexor strength with a controlled curl and lowering phase.",
+        "beginner_guidance": "Use a light load that does not require a forward shoulder swing."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Bicep Curl",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/70/bicep-curl/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Curls train elbow flexion while the torso remains stable."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "rope_triceps_pushdown",
+      "name": "Rope Triceps Pushdown",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face a high pulley with a rope and elbows beside the ribs.",
+          "Straighten the elbows toward the thighs and return to a comfortable bend."
+        ],
+        "cues": [
+          "Keep the upper arms still."
+        ],
+        "mistakes": [
+          "Driving the shoulders backward to move the stack."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "single_arm_pushdown",
+      "name": "Single-Arm Cable Pushdown",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold a high cable handle with the working elbow beside the torso.",
+          "Extend the elbow downward and return slowly before switching sides."
+        ],
+        "cues": [
+          "Keep the wrist aligned."
+        ],
+        "mistakes": [
+          "Rotating the trunk toward the working hand."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "overhead_cable_extension",
+      "name": "Overhead Cable Triceps Extension",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face away from the cable with a suitable attachment behind the head and a stable staggered stance.",
+          "Straighten the elbows overhead and bend them again without moving the torso."
+        ],
+        "cues": [
+          "Keep the upper arms comfortably elevated."
+        ],
+        "mistakes": [
+          "Arching the back to create room for the cable."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "single_arm_overhead_cable_extension",
+      "name": "Single-Arm Overhead Cable Extension",
+      "exercise_type": "accessory",
+      "primary_muscle": "triceps",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "extension",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Face away from a pulley holding one handle behind the head.",
+          "Extend the elbow overhead and return while the upper arm stays steady."
+        ],
+        "cues": [
+          "Keep the ribs down."
+        ],
+        "mistakes": [
+          "Letting the elbow swing far outward each repetition."
+        ],
+        "benefits": "Trains elbow extension while the shoulder position is kept relatively steady.",
+        "beginner_guidance": "First find a comfortable elbow and shoulder position, then add resistance gradually."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Triceps Extension",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/74/triceps-extension/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Triceps extensions straighten the elbows against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    }
+  ]
+}

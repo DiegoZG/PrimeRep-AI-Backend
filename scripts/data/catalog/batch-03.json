@@ -1,0 +1,1221 @@
+{
+  "schema_version": 1,
+  "exercises": [
+    {
+      "id": "smith_incline_press",
+      "name": "Smith Machine Incline Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "smith_machine",
+        "incline_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set a low incline beneath the guided bar and adjust stops above the torso.",
+          "Lower toward the upper chest and press up without lifting the seat."
+        ],
+        "cues": [
+          "Keep the bench centered beneath the bar."
+        ],
+        "mistakes": [
+          "Using the fixed path despite an uncomfortable shoulder position."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "machine_chest_press",
+      "name": "Machine Chest Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "bench_press_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the seat so the handles begin around mid-chest and place feet on the floor.",
+          "Press the handles forward, then return until the chest remains comfortably open."
+        ],
+        "cues": [
+          "Keep your back on the pad."
+        ],
+        "mistakes": [
+          "Allowing the handles to pull the shoulders too far backward."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "dumbbell_squeeze_press",
+      "name": "Dumbbell Squeeze Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "dumbbells",
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on a bench holding two suitable flat-sided dumbbells together above the chest.",
+          "Keep gentle inward pressure as you lower to the chest and press upward."
+        ],
+        "cues": [
+          "Use controllable weights that stay together."
+        ],
+        "mistakes": [
+          "Letting a dumbbell roll or slip toward the face."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "standing_cable_press",
+      "name": "Standing Cable Chest Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "crossover_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set handles near chest height and face away from the columns in a split stance.",
+          "Press both handles forward and return without letting the cables pull the trunk backward."
+        ],
+        "cues": [
+          "Press the cable handles without rocking forward.",
+          "Keep the chosen stance stable as the handles return."
+        ],
+        "mistakes": [
+          "Arching the back to finish the press."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "single_arm_cable_press",
+      "name": "Single-Arm Cable Chest Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Place one pulley at chest height and face away with a staggered stance.",
+          "Press one handle ahead of the shoulder and bring it back without rotating the hips."
+        ],
+        "cues": [
+          "Keep the opposite hip facing forward."
+        ],
+        "mistakes": [
+          "Twisting toward the cable on the return."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "band_chest_press",
+      "name": "Band Chest Press",
+      "exercise_type": "strength",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "loop_bands"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "band",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Secure an undamaged band to a rated chest-height anchor and face away in a split stance.",
+          "Press the ends forward and return slowly while the anchor stays fixed."
+        ],
+        "cues": [
+          "Check the anchor before every set."
+        ],
+        "mistakes": [
+          "Using furniture or a loose door as an improvised anchor."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed. A rated band anchor is required but has no current equipment ID: resolve equipment taxonomy before approving this draft.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "incline_push_up",
+      "name": "Incline Push-Up",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Place hands on a stable bench and step back into a straight-body position.",
+          "Bend the elbows to bring the chest toward the edge, then push the bench away."
+        ],
+        "cues": [
+          "Move hips and shoulders together."
+        ],
+        "mistakes": [
+          "Using a bench that can slide or tip."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "kneeling_push_up",
+      "name": "Kneeling Push-Up",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Start with hands on the floor and knees behind the hips so the torso forms a long line.",
+          "Lower chest toward the floor and press up while keeping that line."
+        ],
+        "cues": [
+          "Keep the hips forward of the knees."
+        ],
+        "mistakes": [
+          "Bending at the hips instead of the elbows."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "decline_push_up",
+      "name": "Decline Push-Up",
+      "exercise_type": "bodyweight",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "plyo_box"
+      ],
+      "aliases": [],
+      "movement_pattern": "horizontal_push",
+      "resistance_modality": "bodyweight",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "bodyweight",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Place feet on a low stable box and hands on the floor below the shoulders.",
+          "Lower the chest between the hands and press up without dropping the hips."
+        ],
+        "cues": [
+          "Start with a low elevation."
+        ],
+        "mistakes": [
+          "Choosing a high box before controlling the standard push-up."
+        ],
+        "benefits": "Practise moving the load away from the chest while keeping a stable support position.",
+        "beginner_guidance": "Choose a light resistance and a range you can lower without losing your setup."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (barbell, exercise 5)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/5/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Chest pressing involves shoulder movement and elbow extension."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "dumbbell_fly",
+      "name": "Dumbbell Chest Fly",
+      "exercise_type": "accessory",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "flat_bench",
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "adduction",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Lie on a bench with dumbbells above the chest and elbows slightly bent.",
+          "Open the arms in a wide arc within a comfortable shoulder range, then bring them together."
+        ],
+        "cues": [
+          "Keep elbow bend nearly unchanged."
+        ],
+        "mistakes": [
+          "Lowering the weights far beneath the torso."
+        ],
+        "benefits": "Trains bringing the upper arms across the torso with limited elbow movement.",
+        "beginner_guidance": "Start with a short, comfortable arc and light resistance; a deeper stretch is not a requirement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (dumbbells, exercise 19)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/19/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference establishes chest-training anatomy; the fly variation requires separate trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "low_cable_fly",
+      "name": "Low-to-High Cable Fly",
+      "exercise_type": "accessory",
+      "primary_muscle": "chest",
+      "secondary_muscles": [
+        "shoulders"
+      ],
+      "equipment_ids": [
+        "crossover_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "adduction",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Set both pulleys low and take a staggered stance with arms slightly behind the hips.",
+          "Sweep the handles upward and inward toward upper-chest height, then retrace the arc."
+        ],
+        "cues": [
+          "Keep a soft elbow bend."
+        ],
+        "mistakes": [
+          "Leaning backward to raise the handles."
+        ],
+        "benefits": "Trains bringing the upper arms across the torso with limited elbow movement.",
+        "beginner_guidance": "Start with a short, comfortable arc and light resistance; a deeper stretch is not a requirement."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Chest Press (dumbbells, exercise 19)",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/19/chest-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Reference establishes chest-training anatomy; the fly variation requires separate trainer verification."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "standing_dumbbell_press",
+      "name": "Standing Dumbbell Shoulder Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Stand with two dumbbells beside the shoulders and knees softly extended.",
+          "Press overhead and lower to shoulder height without using leg drive."
+        ],
+        "cues": [
+          "Keep the ribs from flaring as the dumbbells rise.",
+          "Lower both weights without leaning backward."
+        ],
+        "mistakes": [
+          "Turning each repetition into a push press."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "single_arm_dumbbell_overhead_press",
+      "name": "Single-Arm Dumbbell Overhead Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold one dumbbell at the shoulder and stand with a comfortable stance.",
+          "Press the dumbbell overhead and lower without leaning away; repeat on the other side."
+        ],
+        "cues": [
+          "Keep the belt line level."
+        ],
+        "mistakes": [
+          "Side-bending to get the weight overhead."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "arnold_press",
+      "name": "Arnold Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "dumbbells",
+        "vertical_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Sit supported with dumbbells in front of the shoulders and palms toward the face.",
+          "Rotate the palms forward as you press, then reverse the rotation while lowering."
+        ],
+        "cues": [
+          "Let rotation happen smoothly."
+        ],
+        "mistakes": [
+          "Forcing the elbows behind the torso at the bottom."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "neutral_grip_shoulder_press",
+      "name": "Neutral-Grip Shoulder Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "dumbbells",
+        "vertical_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Sit against an upright pad with palms facing each other and elbows slightly forward.",
+          "Press overhead with the neutral grip and lower beside the shoulders."
+        ],
+        "cues": [
+          "Keep the palms facing each other through this press.",
+          "Lower the dumbbells in the same controlled path."
+        ],
+        "mistakes": [
+          "Flaring the elbows outward despite the neutral setup."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+    },
+    {
+      "id": "machine_shoulder_press",
+      "name": "Machine Shoulder Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "overhead_press_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the seat so the handles start around shoulder level and support the feet.",
+          "Press through the machine arc and lower smoothly to the starting position."
+        ],
+        "cues": [
+          "Keep the back against the pad."
+        ],
+        "mistakes": [
+          "Sliding down the seat under the load."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "smith_shoulder_press",
+      "name": "Smith Machine Shoulder Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "smith_machine",
+        "vertical_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Position an upright bench so the bar travels just in front of the face and set stops.",
+          "Press from upper-chest height overhead, then lower in front of the head."
+        ],
+        "cues": [
+          "Check the rail path before loading."
+        ],
+        "mistakes": [
+          "Lowering the bar behind the neck."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "half_kneeling_landmine_press",
+      "name": "Half-Kneeling Landmine Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "landmine",
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Secure the bar in its socket and kneel with the knee on the pressing side down.",
+          "Press the bar end forward and upward, then return toward the shoulder."
+        ],
+        "cues": [
+          "Keep hips facing the bar."
+        ],
+        "mistakes": [
+          "Arching the lower back to extend the reach."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "standing_landmine_press",
+      "name": "Standing Landmine Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "landmine",
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold the secured bar end at one shoulder in a staggered stance.",
+          "Press upward along the bar arc and lower without rotating the trunk."
+        ],
+        "cues": [
+          "Allow the shoulder blade to follow the reach."
+        ],
+        "mistakes": [
+          "Using an unsecured bar end in a room corner."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "seated_barbell_press",
+      "name": "Seated Barbell Shoulder Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "vertical_bench",
+        "squat_rack",
+        "olympic_barbell",
+        "plates"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "barbell",
+      "difficulty": "intermediate",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "total",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Sit supported inside a rack, set safeties and hold the bar in front of the shoulders.",
+          "Press overhead and lower in front of the face with the torso steady."
+        ],
+        "cues": [
+          "Keep feet firmly supported."
+        ],
+        "mistakes": [
+          "Leaning far backward as the bar rises."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "kettlebell_overhead_press",
+      "name": "Single-Arm Kettlebell Press",
+      "exercise_type": "strength",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [
+        "triceps"
+      ],
+      "equipment_ids": [
+        "kettlebells"
+      ],
+      "aliases": [],
+      "movement_pattern": "vertical_push",
+      "resistance_modality": "kettlebell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Hold a kettlebell in the rack position with a straight wrist and stable stance.",
+          "Press overhead, allowing the arm to rotate naturally, then return to the rack."
+        ],
+        "cues": [
+          "Keep the bell resting comfortably against the forearm."
+        ],
+        "mistakes": [
+          "Bending the wrist backward under the bell."
+        ],
+        "benefits": "Builds controlled overhead pressing strength through the shoulders and triceps.",
+        "beginner_guidance": "First demonstrate the overhead range without weight; use only a range that stays comfortable."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Seated Overhead Press",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/45/seated-overhead-press/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Overhead pressing combines elbow extension with raising the arms overhead."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "seated_lateral_raise",
+      "name": "Seated Dumbbell Lateral Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "dumbbells",
+        "flat_bench"
+      ],
+      "aliases": [],
+      "movement_pattern": "abduction",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 2
+      },
+      "structured_content": {
+        "steps": [
+          "Sit on a bench holding dumbbells beside the thighs.",
+          "Raise the arms out to the sides toward shoulder height and lower slowly."
+        ],
+        "cues": [
+          "Keep the torso still."
+        ],
+        "mistakes": [
+          "Rocking forward and back to start the raise."
+        ],
+        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
+        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Lateral Raise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lateral raises lift the arms to the side against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "single_arm_lateral_raise",
+      "name": "Single-Arm Dumbbell Lateral Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "dumbbells"
+      ],
+      "aliases": [],
+      "movement_pattern": "abduction",
+      "resistance_modality": "dumbbell",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "per_implement",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand with one dumbbell beside the thigh and the free hand on a stable support if needed.",
+          "Lift the arm sideways to a comfortable height and lower before switching sides."
+        ],
+        "cues": [
+          "Lead with the upper arm."
+        ],
+        "mistakes": [
+          "Leaning sideways to increase the apparent range."
+        ],
+        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
+        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Lateral Raise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lateral raises lift the arms to the side against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "cable_lateral_raise",
+      "name": "Cable Lateral Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "hi_lo_pull_cable"
+      ],
+      "aliases": [],
+      "movement_pattern": "abduction",
+      "resistance_modality": "cable",
+      "difficulty": "beginner",
+      "laterality": "unilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Stand side-on to a low pulley and hold the handle in the farther hand.",
+          "Raise the arm sideways while the cable crosses in front, then lower with control."
+        ],
+        "cues": [
+          "Keep the elbow softly bent."
+        ],
+        "mistakes": [
+          "Turning the palm sharply downward at the top."
+        ],
+        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
+        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Lateral Raise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lateral raises lift the arms to the side against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    },
+    {
+      "id": "machine_lateral_raise",
+      "name": "Machine Lateral Raise",
+      "exercise_type": "accessory",
+      "primary_muscle": "shoulders",
+      "secondary_muscles": [],
+      "equipment_ids": [
+        "lateral_raise_machine"
+      ],
+      "aliases": [],
+      "movement_pattern": "abduction",
+      "resistance_modality": "machine",
+      "difficulty": "beginner",
+      "laterality": "bilateral",
+      "load_profile": {
+        "basis": "machine",
+        "implement_count": 1
+      },
+      "structured_content": {
+        "steps": [
+          "Adjust the seat and place the upper arms against the machine pads.",
+          "Raise the pads outward and lower smoothly without shrugging."
+        ],
+        "cues": [
+          "Keep both arms against their pads."
+        ],
+        "mistakes": [
+          "Lifting the torso out of the seat."
+        ],
+        "benefits": "Trains shoulder strength through an arm-raising motion with a relatively light load.",
+        "beginner_guidance": "Begin with a load that lets the arms move without a bounce from the legs."
+      },
+      "generation_eligible": false,
+      "tracking_mode": "reps",
+      "sources": [
+        {
+          "title": "ACE Exercise Library — Lateral Raise",
+          "url": "https://www.acefitness.org/resources/everyone/exercise-library/26/lateral-raise/",
+          "accessed_at": "2026-09-20",
+          "claims": [
+            "Lateral raises lift the arms to the side against resistance."
+          ]
+        }
+      ],
+      "review_notes": "Unapproved original editorial draft. Source claim is limited to the cited movement-family fact; it does not establish all variant details. Trainer must verify setup, equipment attachments, range, muscle classification and load interpretation. Generation remains disabled until explicitly reviewed.  Pending human review: Verify exercise-specific instructions and sources before publication; shared family benefits and beginner guidance are only editorial scaffolding."
+    }
+  ]
+}

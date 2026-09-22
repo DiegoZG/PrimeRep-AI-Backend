@@ -214,6 +214,15 @@ class ActivateProgramOut(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
 
+class SearchPagination(BaseModel):
+    limit: int
+    offset: int
+    total: int
+    has_more: bool
+
+
 class ExploreSearchOut(BaseModel):
     programs: list[WorkoutTemplateSummaryOut]
     exercises: list[ExerciseOut]
+    program_pagination: Optional[SearchPagination] = None
+    exercise_pagination: Optional[SearchPagination] = None

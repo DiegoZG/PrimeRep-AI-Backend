@@ -1,0 +1,674 @@
+{
+  "bench_press": {
+    "structured_content": {
+      "cues": [
+        "Keep a closed grip on the bar.",
+        "Lower smoothly; do not bounce off the chest."
+      ],
+      "benefits": "Trains chest and arm strength with a supported barbell press.",
+      "beginner_guidance": "Have a qualified trainer demonstrate the rack, spotter communication, and safety setup before loading the bar.",
+      "steps": [
+        "Before loading, have a qualified trainer check the rack, safety supports and spotter arrangement for this bench.",
+        "Lie with stable foot and bench contact and take a closed grip on the bar.",
+        "Lower the bar in a controlled path, then press it upward without bouncing.",
+        "Return the bar to its supports under control; rehearse the setup and return with a trainer before increasing load."
+      ]
+    },
+    "review_questions": "BLOCKING: verify spotter/safety-arm requirements and model them as equipment/profile gates before generation. This draft is not a bailout guide. Confirm a suitable alternative when a safe setup is unavailable."
+  },
+  "incline_dumbbell_press": {
+    "structured_content": {
+      "cues": [
+        "Keep the dumbbells balanced above the forearms.",
+        "Maintain contact with the bench as you press."
+      ],
+      "benefits": "Trains chest and shoulder pressing strength on an inclined support.",
+      "beginner_guidance": "Use a manageable pair and get help learning how to enter and leave the bench with the weights."
+    },
+    "review_questions": "Verify the bench angle, wrist alignment, and a safe setup/dismount sequence; do not assume the proposed thigh-kick or dismount is appropriate for every lifter.",
+    "sources": [
+      {
+        "title": "ACE Exercise Library — Incline Chest Press (dumbbells)",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/25/incline-chest-press/",
+        "accessed_at": "2026-09-21",
+        "claims": [
+          "Supports the inclined dumbbell setup, support contact and neutral wrist position; does not establish a universal dismount procedure."
+        ]
+      }
+    ]
+  },
+  "push_up": {
+    "structured_content": {
+      "cues": [
+        "Move the torso and hips together.",
+        "Keep the head aligned with the body."
+      ],
+      "benefits": "Trains upper-body pushing strength while maintaining trunk control.",
+      "beginner_guidance": "If full push-ups are not controlled, ask a trainer to select a wall, stable elevated-support, or knee-supported variation. Those are different setups, not added weight on this record.",
+      "steps": [
+        "Place the hands around shoulder width and support the body on hands and toes with the head aligned with the torso.",
+        "Bend the elbows to lower the body as a unit through a controlled range.",
+        "Push the floor away to return without letting the hips lag behind."
+      ]
+    },
+    "review_questions": "Confirm the regression choices and their equipment requirements. Added-load and assistance logging are not implemented by this bodyweight record. Do not infer readiness from years of training."
+  },
+  "chest_fly_machine": {
+    "structured_content": {
+      "cues": [
+        "Keep the elbow bend consistent through the arc.",
+        "Return the handles slowly without letting the stack slam."
+      ],
+      "benefits": "Trains bringing the upper arms together against machine resistance.",
+      "beginner_guidance": "Ask staff to fit the seat and starting position to the specific machine before adding resistance.",
+      "steps": [
+        "Have staff adjust the seat, handles or forearm pads for your size according to the machine's instructions.",
+        "Take the handles with a comfortable elbow bend and keep that bend consistent as the arms move together.",
+        "Return under control through a comfortable range without letting the stack drop."
+      ]
+    },
+    "review_questions": "BLOCKING: obtain the actual machine's setup reference, including handle/pad position and seat height. A chest-press source is not evidence for fly-machine setup.",
+    "sources": [
+      {
+        "title": "ACE — What Are the Top 3 Most Effective Chest Exercises?",
+        "url": "https://www.acefitness.org/certifiednewsarticle/3003/what-are-the-top-3-most-effective-chest-exercises/",
+        "accessed_at": "2026-09-21",
+        "claims": [
+          "Identifies pec-deck and dip movements in a chest-exercise study. Context only: does not establish machine seat settings, safe dip depth, or clinical contraindications."
+        ]
+      }
+    ]
+  },
+  "cable_crossover": {
+    "structured_content": {
+      "cues": [
+        "Keep a small, consistent elbow bend.",
+        "Bring the handles together without rocking the torso."
+      ],
+      "benefits": "Trains chest strength through a cable-resisted fly.",
+      "beginner_guidance": "Start with a controlled arc and have a trainer set the pulley height for the intended variation.",
+      "steps": [
+        "Set the two pulleys and attachments for the intended fly variation and choose manageable settings.",
+        "Take a stable stance and bring the handles together while keeping a small, consistent elbow bend.",
+        "Return the arms under control; keep the same chosen cable path rather than changing direction to move the load."
+      ],
+      "mistakes": [
+        "Changing the elbow bend to turn the fly into a press.",
+        "Rocking the torso to move resistance that cannot be controlled.",
+        "Switching the cable path mid-set instead of using the chosen variation consistently."
+      ]
+    },
+    "review_questions": "BLOCKING: decide per-stack versus combined weight and preserve old logged values. Different cable directions are variations, not inherently mistakes. Validate attachments, pulley ratios, and the exercise identity.",
+    "sources": [
+      {
+        "title": "ACE Exercise Library — Standing Chest Fly (cables)",
+        "url": "https://www.acefitness.org/resources/everyone/exercise-library/160/standing-chest-fly/",
+        "accessed_at": "2026-09-21",
+        "claims": [
+          "Supports a two-cable fly with a maintained elbow bend; does not specify PrimeRep's stack-weight logging convention."
+        ]
+      }
+    ]
+  },
+  "overhead_press": {
+    "structured_content": {
+      "cues": [
+        "Keep the wrists aligned with the forearms.",
+        "Avoid leaning back to finish the press."
+      ],
+      "benefits": "Trains an overhead barbell press while stabilizing the trunk.",
+      "beginner_guidance": "Learn the press and bar setup with a light implement before adding plates. Ask a trainer for an alternative if a comfortable overhead position is unavailable."
+    },
+    "review_questions": "Verify wrist setup, trunk-muscle classification, and bar pickup/rack requirements. Alternatives for restricted movement need individual review, not an automatic clinical rule."
+  },
+  "dumbbell_shoulder_press": {
+    "structured_content": {
+      "cues": [
+        "Press both dumbbells without lifting off the back support.",
+        "Lower each weight with the same control."
+      ],
+      "benefits": "Trains overhead pressing with independently held dumbbells.",
+      "beginner_guidance": "Use weights you can position and put down under control; ask for help learning the setup."
+    },
+    "review_questions": "AI editorial review is not approval. Verify getting the weights into position, exit technique, and whether a neutral-grip variation belongs under this ID."
+  },
+  "lateral_raise": {
+    "structured_content": {
+      "cues": [
+        "Raise the dumbbells without bouncing from the legs.",
+        "Keep a soft, consistent bend in the elbows."
+      ],
+      "benefits": "Trains shoulder strength with a sideways arm raise.",
+      "beginner_guidance": "Use a light pair and a range you can control without swinging.",
+      "mistakes": [
+        "Swinging from the legs to start the raise.",
+        "Shrugging to move a load that cannot be raised with control.",
+        "Changing the elbow bend substantially between repetitions."
+      ]
+    },
+    "review_questions": "Confirm the upper-back/trapezius role within the existing muscle taxonomy; it has no separate traps value. Avoid blanket injury claims about elbow lockout."
+  },
+  "front_raise": {
+    "structured_content": {
+      "cues": [
+        "Raise both dumbbells together.",
+        "Keep the torso still as the weights return."
+      ],
+      "benefits": "Trains the front of the shoulders with a forward arm raise.",
+      "beginner_guidance": "Use a light pair; keep both arms moving together for this bilateral record.",
+      "steps": [
+        "Hold one dumbbell in each hand in front of the thighs with a stable stance.",
+        "Raise both arms together in front of the body through a controlled range without leaning back.",
+        "Lower both weights smoothly. Alternating and single-arm versions are separate variations."
+      ]
+    },
+    "review_questions": "Review whether this accessory belongs in generated plans and how to avoid redundant shoulder volume. Selection weighting is not implemented in this correction."
+  },
+  "reverse_fly": {
+    "structured_content": {
+      "cues": [
+        "Open the arms without jerking the torso upward.",
+        "Keep the elbow bend consistent as the weights lower."
+      ],
+      "benefits": "Trains the rear shoulders and upper back with a dumbbell fly.",
+      "beginner_guidance": "If holding the hinged position is difficult, ask about a chest-supported variation using an incline bench; it needs different equipment from this record."
+    },
+    "review_questions": "Validate the unsupported and chest-supported identities separately; do not silently require a bench for this dumbbells-only ID. Replace the row reference with direct fly guidance.",
+    "sources": [
+      {
+        "title": "ACE — Correct Cues for Scapular Motion",
+        "url": "https://www.acefitness.org/certifiednewsarticle/2384/correct-cues-for-scapular-motion/",
+        "accessed_at": "2026-09-21",
+        "claims": [
+          "Discusses scapular motion during reverse flys. Does not verify a machine setup or prescribe the chest-supported variation."
+        ]
+      }
+    ]
+  },
+  "deadlift": {
+    "structured_content": {
+      "cues": [
+        "Keep the bar close during the lift.",
+        "Stand up without leaning back at the top."
+      ],
+      "benefits": "Trains a coordinated floor lift through hip and knee extension with trunk stabilization.",
+      "beginner_guidance": "Learn the start position, grip, bracing and controlled return with qualified instruction before adding load.",
+      "steps": [
+        "Have a trainer establish the stance, bar position, secure grip and bracing setup before adding load.",
+        "With the bar close and balanced foot pressure, extend the knees and hips to stand without jerking the bar.",
+        "Return the bar under control using the practiced hip and knee motion. Stop if the setup cannot be maintained."
+      ]
+    },
+    "review_questions": "BLOCKING: keep reference-only pending generator policy. Confirm hip-extensor primary classification and secondary muscles, mid-foot balance, grip choice and bracing. Do not add an unsourced mixed-grip injury claim.",
+    "metadata": {
+      "primary_muscle": "glutes",
+      "secondary_muscles": [
+        "hamstrings",
+        "quads",
+        "back",
+        "abs"
+      ]
+    }
+  },
+  "romanian_deadlift": {
+    "structured_content": {
+      "cues": [
+        "Send the hips back while the bar stays close.",
+        "Keep the chosen knee bend steady through the descent."
+      ],
+      "benefits": "Trains hip-hinge strength with the bar starting from standing.",
+      "beginner_guidance": "First learn how to bring the bar to the standing start position and return it safely. Hinge only as far as you can maintain control."
+    },
+    "review_questions": "AI editorial review is not approval. Verify the starting setup, individualized knee bend and end range; do not prescribe a universal 15–20 degree angle."
+  },
+  "pull_up": {
+    "structured_content": {
+      "cues": [
+        "Keep the body from swinging.",
+        "Lower under control instead of dropping."
+      ],
+      "benefits": "Trains vertical pulling against bodyweight.",
+      "beginner_guidance": "If you cannot perform a controlled repetition, ask a trainer to select an appropriately supported or assisted alternative rather than forcing this unassisted movement."
+    },
+    "review_questions": "BLOCKING: decide assistance/load tracking and readiness assessment before generation; the proposed three-rep threshold is not validated. Advanced is a provisional editorial rating, not a clinical classification.",
+    "metadata": {
+      "difficulty": "advanced"
+    },
+    "sources": [
+      {
+        "title": "ACE — 4 Moves to Help You Master the Pull-up",
+        "url": "https://www.acefitness.org/resources/pros/expert-articles/5565/4-moves-to-help-you-master-the-pull-up/",
+        "accessed_at": "2026-09-21",
+        "claims": [
+          "Discusses the pulling movement and building capacity before unassisted repetitions. Does not validate a three-rep gate or the advanced label."
+        ]
+      }
+    ]
+  },
+  "lat_pulldown": {
+    "structured_content": {
+      "cues": [
+        "Pull the elbows down without swinging backward.",
+        "Guide the bar back up without releasing control."
+      ],
+      "benefits": "Trains vertical pulling with an adjustable cable resistance.",
+      "beginner_guidance": "Have the thigh support and seat fitted before starting; use a resistance that lets you stay seated and control the return."
+    },
+    "review_questions": "AI editorial review is not approval. Verify the machine setup and thigh-pad adjustment against its manufacturer guidance."
+  },
+  "seated_row": {
+    "structured_content": {
+      "cues": [
+        "Pull without rocking the torso back.",
+        "Control the reach as the handle returns."
+      ],
+      "benefits": "Trains upper-back and arm strength through a seated cable pull.",
+      "beginner_guidance": "Have a trainer show how to take and return the handle while maintaining a supported position."
+    },
+    "review_questions": "Verify safe entry/exit, knee bend and trunk setup on the actual apparatus; the family bent-over-row reference does not validate a seated machine's setup."
+  },
+  "t_bar_row": {
+    "structured_content": {
+      "cues": [
+        "Keep the torso steady as the handle rises.",
+        "Lower the plates without a sudden drop."
+      ],
+      "benefits": "Trains pulling strength against a plate-loaded lever.",
+      "beginner_guidance": "Ask staff to demonstrate the specific T-bar apparatus, including supports, loading and how to set it down."
+    },
+    "review_questions": "BLOCKING: the existing equipment ID is plate_loaded_t_bar, not proof of an unsupported landmine. Confirm exact apparatus and whether load means plates only or includes starting resistance before changing load metadata. Back-issue exclusions require a separate profile/clinical policy.",
+    "metadata": {
+      "difficulty": "intermediate"
+    }
+  },
+  "barbell_curl": {
+    "structured_content": {
+      "cues": [
+        "Keep the upper arms beside the torso.",
+        "Lower the bar without using a backward lean."
+      ],
+      "benefits": "Trains elbow flexion with a two-handed bar.",
+      "beginner_guidance": "Start with a light bar you can control. An EZ-bar is a separate equipment choice; do not assume it weighs the same."
+    },
+    "review_questions": "Beginner is a provisional skill rating. Confirm the barbell/short-bar/EZ-bar identities and weight convention before adding aliases or substitutions.",
+    "metadata": {
+      "difficulty": "beginner"
+    }
+  },
+  "dumbbell_curl": {
+    "structured_content": {
+      "cues": [
+        "Keep the palms facing forward for this variation.",
+        "Curl both arms together without swinging the hips."
+      ],
+      "benefits": "Trains elbow flexion with a dumbbell held in each hand.",
+      "beginner_guidance": "Use a manageable pair and perform the simultaneous palms-forward version. Hammer and alternating curls have separate catalog identities.",
+      "steps": [
+        "Hold a dumbbell in each hand with palms facing forward and upper arms near the torso.",
+        "Bend both elbows together to lift the weights without swinging the body.",
+        "Lower both dumbbells under control. Use separate entries for hammer or alternating curls."
+      ]
+    },
+    "review_questions": "Confirm bilateral supinated identity. Preserve the existing per-implement convention; changing grip or sequencing must not silently redefine historical sets."
+  },
+  "preacher_curl": {
+    "structured_content": {
+      "cues": [
+        "Keep the upper arms in contact with the pad.",
+        "Lower the bar smoothly without bouncing at the bottom."
+      ],
+      "benefits": "Trains a supported two-handed curl with a bar.",
+      "beginner_guidance": "Ask staff to adjust the seat and pad before loading the short bar; do not substitute a dumbbell under this record.",
+      "steps": [
+        "Have the seat adjusted so the upper arms rest comfortably against the preacher pad.",
+        "Grip the short bar with the palms up and curl while keeping the upper arms supported.",
+        "Lower the bar smoothly through the range taught by your trainer without bouncing at the bottom."
+      ]
+    },
+    "review_questions": "Verify seat/pad fit and bottom-range wording, including the legacy lockout injury claim. Beginner is provisional. Confirm total bar-plus-plates convention.",
+    "metadata": {
+      "difficulty": "beginner"
+    }
+  },
+  "tricep_pushdown": {
+    "structured_content": {
+      "cues": [
+        "Keep the upper arms near the torso.",
+        "Return the attachment without letting the stack drop."
+      ],
+      "benefits": "Trains elbow extension against a high cable.",
+      "beginner_guidance": "Use a light stack setting and keep the same attachment when comparing sessions."
+    },
+    "review_questions": "AI editorial review is not approval. Rope and bar attachments currently share this ID; determine variant tracking before comparing their loads."
+  },
+  "skull_crushers": {
+    "structured_content": {
+      "cues": [
+        "Lower the EZ-bar deliberately.",
+        "Keep the grip secure throughout the return."
+      ],
+      "benefits": "Trains elbow extension while lying on a bench with an EZ-bar.",
+      "beginner_guidance": "Learn this setup with a qualified trainer. If you cannot control the load or it causes discomfort, stop and ask for a suitable alternative.",
+      "steps": [
+        "Have a trainer demonstrate the bench setup, handling and return of the EZ-bar before adding load.",
+        "Lie supported on the bench and hold the EZ-bar securely above the upper body.",
+        "Bend and extend the elbows through a controlled range; stop before the bar becomes difficult to control.",
+        "Return the bar using the setup practiced with your trainer; do not improvise a failed-repetition bailout."
+      ]
+    },
+    "review_questions": "BLOCKING: validate solo-lifter/spotter setup and exit before generation. Do not adopt the AI's behind-the-head bailout instruction without qualified review. Confirm EZ-bar mass in total load and individualized elbow precautions."
+  },
+  "dip": {
+    "structured_content": {
+      "cues": [
+        "Keep the body from swinging between the bars.",
+        "Press back up without bouncing from the bottom."
+      ],
+      "benefits": "Trains a compound bodyweight press using the chest, triceps and shoulders.",
+      "beginner_guidance": "Ask a trainer to assess whether you can support and lower your body under control. Assisted alternatives need their own equipment and tracking."
+    },
+    "review_questions": "BLOCKING: resolve chest- versus triceps-emphasis identity, shoulder range and readiness; do not add blanket clinical contraindications. Assistance/added-load modes are a separate product decision. Intermediate is provisional.",
+    "metadata": {
+      "difficulty": "intermediate"
+    },
+    "sources": [
+      {
+        "title": "ACE — What Are the Top 3 Most Effective Chest Exercises?",
+        "url": "https://www.acefitness.org/certifiednewsarticle/3003/what-are-the-top-3-most-effective-chest-exercises/",
+        "accessed_at": "2026-09-21",
+        "claims": [
+          "Identifies pec-deck and dip movements in a chest-exercise study. Context only: does not establish machine seat settings, safe dip depth, or clinical contraindications."
+        ]
+      }
+    ]
+  },
+  "squat": {
+    "structured_content": {
+      "cues": [
+        "Keep steady foot pressure as you descend.",
+        "Stand without letting the bar shift on the back."
+      ],
+      "benefits": "Trains leg and hip strength with a back-supported barbell.",
+      "beginner_guidance": "Learn the rack, walkout and return with a qualified trainer before loading; use a depth you can control.",
+      "steps": [
+        "Have a trainer fit the rack and safety supports and teach the unrack, walkout and return before loading.",
+        "Support the bar on the upper-back position taught for the chosen squat variation, not on the neck.",
+        "Bend the hips and knees through a depth that allows stable balance and trunk control, then stand.",
+        "Return to the rack under control using the practiced sequence."
+      ]
+    },
+    "review_questions": "BLOCKING: validate bar position, rack-safety setup, spotter/failed-rep procedure and equipment gates before generation. Do not prescribe a universal depth or teach an unsupervised bailout from AI text."
+  },
+  "front_squat": {
+    "structured_content": {
+      "cues": [
+        "Keep the bar supported on the front of the shoulders.",
+        "Maintain the rack position while standing up."
+      ],
+      "benefits": "Trains leg strength while supporting a barbell in a front-rack position.",
+      "beginner_guidance": "Have a trainer teach a comfortable front-rack setup and rack return before loading.",
+      "steps": [
+        "Have a trainer establish the front-rack grip and safety setup, with the bar supported on the front shoulders rather than held up by the hands.",
+        "With stable foot contact, bend the hips and knees through a depth that preserves the rack position and control.",
+        "Stand and return the bar to the rack using the practiced sequence."
+      ]
+    },
+    "review_questions": "BLOCKING: review grip/rack options, shoulder rather than hand support, depth and failed-rep procedure. Do not assume prior back-squat experience is a sufficient eligibility gate."
+  },
+  "leg_press": {
+    "structured_content": {
+      "cues": [
+        "Keep the pelvis supported through the repetition.",
+        "Return the platform under control."
+      ],
+      "benefits": "Trains leg pressing against a machine's resistance.",
+      "beginner_guidance": "Have staff demonstrate the seat, selector and start/stop mechanism on the actual machine.",
+      "steps": [
+        "Have staff adjust the seat and explain the start/stop mechanism of this selectorized leg press.",
+        "With the back and pelvis supported and feet securely on the platform, press through a controlled range.",
+        "Return without letting the pelvis lift off the pad or the stack drop.",
+        "Let the resistance settle and follow the machine's instructions before leaving the seat."
+      ],
+      "mistakes": [
+        "Losing pelvis or back contact with the support.",
+        "Letting the resistance return faster than it can be controlled.",
+        "Using a machine without first learning its adjustment and stopping mechanism."
+      ]
+    },
+    "review_questions": "BLOCKING: this ID uses a selectorized machine, not necessarily a sled with safety catches. Obtain manufacturer instructions before inserting catch/bail guidance. Remove unsupported universal knee/hand-position rules; do not compare loads across different machines."
+  },
+  "leg_extension": {
+    "structured_content": {
+      "cues": [
+        "Keep the thighs supported on the seat.",
+        "Lower the shin pad without dropping the stack."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "leg_curl": {
+    "structured_content": {
+      "cues": [
+        "Keep the hips supported as the knees bend.",
+        "Return the pad at a controlled pace."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "walking_lunge": {
+    "structured_content": {
+      "cues": [
+        "Step into a stable stance before lowering.",
+        "Alternate legs without rushing the next step."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "hip_thrust": {
+    "structured_content": {
+      "cues": [
+        "Keep the upper back supported on the bench.",
+        "Finish with the hips rather than lifting the ribs."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "glute_bridge": {
+    "structured_content": {
+      "cues": [
+        "Press through the feet while raising the hips.",
+        "Lower the pelvis without losing control."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "standing_calf_raise": {
+    "structured_content": {
+      "cues": [
+        "Rise through the ankles without bouncing.",
+        "Lower both heels at a steady pace."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "seated_calf_raise": {
+    "structured_content": {
+      "cues": [
+        "Keep the knees beneath the support pads.",
+        "Raise and lower the heels without bouncing."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "plank": {
+    "structured_content": {
+      "cues": [
+        "Hold the torso steady between elbows and feet.",
+        "Keep breathing while maintaining the hold."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "crunch_machine": {
+    "structured_content": {
+      "cues": [
+        "Curl the trunk without pulling only with the arms.",
+        "Control the machine's return."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "hanging_leg_raise": {
+    "structured_content": {
+      "cues": [
+        "Keep the hanging body from swinging.",
+        "Lower the legs without dropping them."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "ab_wheel_rollout": {
+    "structured_content": {
+      "cues": [
+        "Roll only as far as you can keep control.",
+        "Bring the wheel back without jerking the hips."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "rowing_machine": {
+    "structured_content": {
+      "cues": [
+        "Move the seat and handle through a smooth stroke.",
+        "Keep the recovery controlled rather than rushing forward."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "stationary_bike": {
+    "structured_content": {
+      "cues": [
+        "Pedal smoothly without rocking on the saddle.",
+        "Keep a relaxed grip on the handlebars."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "treadmill_run": {
+    "structured_content": {
+      "cues": [
+        "Stay centered on the moving belt.",
+        "Change speed gradually using the controls."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "air_bike": {
+    "structured_content": {
+      "cues": [
+        "Coordinate the pedals and handles smoothly.",
+        "Reduce effort gradually before stopping."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  },
+  "standing_cable_press": {
+    "structured_content": {
+      "cues": [
+        "Press the cable handles without rocking forward.",
+        "Keep the chosen stance stable as the handles return."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "standing_dumbbell_press": {
+    "structured_content": {
+      "cues": [
+        "Keep the ribs from flaring as the dumbbells rise.",
+        "Lower both weights without leaning backward."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "neutral_grip_shoulder_press": {
+    "structured_content": {
+      "cues": [
+        "Keep the palms facing each other through this press.",
+        "Lower the dumbbells in the same controlled path."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "band_pull_apart": {
+    "structured_content": {
+      "cues": [
+        "Separate the hands without thrusting the chest forward.",
+        "Bring the hands back without letting the band snap."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "underhand_barbell_row": {
+    "structured_content": {
+      "cues": [
+        "Keep the underhand grip secure as you row.",
+        "Maintain the hinged torso position while lowering the bar."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "underhand_lat_pulldown": {
+    "structured_content": {
+      "cues": [
+        "Keep the palms facing you during the pull.",
+        "Return the bar without rocking backward to finish."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "single_arm_lat_pulldown": {
+    "structured_content": {
+      "cues": [
+        "Pull the working elbow down without tilting the torso.",
+        "Control the overhead return with the same arm."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "dumbbell_pullover": {
+    "structured_content": {
+      "cues": [
+        "Keep the elbow bend consistent as the dumbbell travels.",
+        "Limit the overhead reach to a range you can control."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "rope_hammer_curl": {
+    "structured_content": {
+      "cues": [
+        "Keep the rope grip steady as the elbows bend.",
+        "Lower the attachment without swinging the torso."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "single_leg_glute_bridge": {
+    "structured_content": {
+      "cues": [
+        "Keep the pelvis level as one foot presses into the floor.",
+        "Lower under control before repeating on the same side."
+      ]
+    },
+    "review_questions": "Exercise-specific cue revision only; remaining family-derived benefits, beginner guidance and source coverage still require human review."
+  },
+  "ski_erg": {
+    "structured_content": {
+      "cues": [
+        "Pull the handles in a controlled downward stroke.",
+        "Let the handles return without a sudden recoil."
+      ]
+    },
+    "review_questions": "New exercise-specific cues are an unapproved editorial proposal. The rest of this legacy record still needs a complete technique, source, machine-setup and load review."
+  }
+}
