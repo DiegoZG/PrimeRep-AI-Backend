@@ -11,7 +11,7 @@ Recorded September 22, 2026. Implementation uses `feat/profile-support-export`; 
   - `tests/test_workout_templates.py::test_scheduled_cancel_requires_a_valid_caller_local_date`
   - `tests/test_workouts_next.py::test_workout_rotation_upper_lower`
   - `tests/test_workouts_next.py::test_workout_default_split_preference`
-- After the final canonical-weight export fix, the focused profile, portability, and security run passed **75 tests**. The full-suite result above predates that final fix; it is not a claim of a fresh zero-failure full run.
+- After the final canonical-weight export fix, the focused portability and Coach suites passed **75 tests** (18 portability and 57 Coach). The full-suite result above predates that final fix; it is not a claim of a fresh zero-failure full run.
 - Disposable-database migration upgrade/downgrade/upgrade passed, preserving the sentinel user ID, name, and onboarding body values. Avatar storage and internal per-field guards were restored on re-upgrade.
 - `git diff --check` passed. Testing and migration databases were isolated from the development database.
 
