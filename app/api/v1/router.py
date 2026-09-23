@@ -8,6 +8,8 @@ from app.api.v1.exercises.favorites_router import router as exercise_favorites_r
 from app.api.v1.exercises.router import router as exercises_router
 from app.api.v1.onboarding.router import router as onboarding_router
 from app.api.v1.users.router import router as users_router
+from app.api.v1.users.profile_router import router as profile_router
+from app.api.v1.users.portability_router import router as portability_router
 from app.api.v1.workouts.logging_router import router as workout_logging_router
 from app.api.v1.workouts.router import router as workouts_router
 from app.api.v1.workout_templates.router import (
@@ -20,6 +22,8 @@ from app.core.database import get_db
 api_router = APIRouter()
 api_router.include_router(auth_router)
 api_router.include_router(users_router)
+api_router.include_router(profile_router)
+api_router.include_router(portability_router)
 api_router.include_router(onboarding_router)
 api_router.include_router(equipment_router, prefix="/equipment", tags=["equipment"])
 api_router.include_router(

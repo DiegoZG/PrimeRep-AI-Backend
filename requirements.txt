@@ -12,6 +12,7 @@ passlib[bcrypt]
 
 # Validation
 pydantic[email]
+Pillow>=11.3.0,<13
 
 # Env
 python-dotenv

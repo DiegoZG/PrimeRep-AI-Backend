@@ -17,6 +17,7 @@ class OnboardingProfile(Base):
         nullable=False,
     )
     data = Column(JSONB, nullable=False)
+    profile_managed_fields = Column(JSONB, nullable=False, default=list, server_default="[]")
 
     created_at = Column(
         DateTime(timezone=True),

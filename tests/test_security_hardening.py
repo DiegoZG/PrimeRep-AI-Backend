@@ -164,7 +164,13 @@ def test_onboarding_accepts_explicit_null_weight_arrays():
         json={"data": {"dumbbellWeights": None, "plateWeights": None}},
     )
     assert response.status_code == 200
-    assert response.json()["data"] == {"dumbbellWeights": None, "plateWeights": None}
+    assert response.json()["data"] == {
+        "dumbbellWeights": None,
+        "plateWeights": None,
+        "preferredName": "Security",
+        "lastName": None,
+        "email": tokens["email"],
+    }
 
 
 def test_cors_allows_only_configured_local_origin():
