@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.security.deps import get_current_user
-from app.core.onboarding_service import get_onboarding_by_user_id, upsert_onboarding
+from app.core.onboarding_service import canonical_onboarding_data, get_onboarding_by_user_id, upsert_onboarding
 from app.models.user import User
 from app.schemas.onboarding import OnboardingUpsertRequest, OnboardingResponse
 
@@ -21,7 +21,9 @@ def get_my_onboarding(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Onboarding profile not found",
         )
-    return profile
+    return OnboardingResponse.model_validate(profile).model_copy(
+        update={"data": canonical_onboarding_data(profile, current_user)}
+    )
 
 
 @router.post("/me", response_model=OnboardingResponse)
@@ -40,4 +42,6 @@ def save_my_onboarding(
         db.commit()
 
     db.refresh(profile)
-    return profile
+    return OnboardingResponse.model_validate(profile).model_copy(
+        update={"data": canonical_onboarding_data(profile, current_user)}
+    )

@@ -16,6 +16,8 @@ from sqlalchemy import and_, case, func, or_
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
+from app.core.achievement_service import workout_milestones
+from app.core.coach_weight_data import public_weight_data
 from app.core.coach_service import _is_coach_eligible
 from app.core.progression_service import suggest_weight_kg
 from app.core.settings import settings
@@ -559,9 +561,7 @@ def _consistency_candidates(db: Session, user_id: str, local_date: date) -> list
         .all()
     )
     total = len(completed_sessions)
-    milestones = [5, 10, 25, 50, 100]
-    if total >= 150:
-        milestones.extend(range(150, total + 1, 50))
+    milestones = workout_milestones(total)
     result = []
     for milestone in milestones:
         if total >= milestone:
@@ -575,7 +575,7 @@ def _consistency_candidates(db: Session, user_id: str, local_date: date) -> list
                     evidence_data={"statusSessionIds": [session.id]},
                     evidence_at=session.completed_at,
                     priority=40,
-                    title=f"{milestone} workouts completed",
+                    title=f"{milestone} {'workout' if milestone == 1 else 'workouts'} completed",
                     body="Your completed sessions are adding up. Keep following the schedule that works for you.",
                     detail=None,
                     protected_facts={
@@ -975,34 +975,6 @@ def _decode_cursor(cursor: str) -> tuple[int, datetime, str]:
 
 def _item_out(item: CoachFeedItem, *, ai_eligible: bool) -> CoachFeedItemOut:
     ai = ai_eligible and item.ai_status == "enriched" and bool(item.ai_title and item.ai_body)
-    facts = item.protected_facts or {}
-    weight_data = None
-    if item.kind == "progression":
-        weight_data = {
-            "context": "target",
-            "exerciseName": facts.get("exerciseName"),
-            "weightKg": facts.get("targetWeightKg"),
-            "currentWeightKg": facts.get("currentWeightKg"),
-            "recommendation": facts.get("recommendation"),
-            "equipmentIds": facts.get("equipmentIds") or [],
-            "loadProfile": facts.get("loadProfile"),
-        }
-    elif item.kind == "personal_record":
-        weight_data = {
-            "context": "record",
-            "exerciseName": facts.get("exerciseName"),
-            "weightKg": facts.get("recordWeightKg"),
-            "equipmentIds": facts.get("equipmentIds") or [],
-            "loadProfile": facts.get("loadProfile"),
-        }
-    if weight_data and (
-        not isinstance(weight_data["exerciseName"], str)
-        or not weight_data["exerciseName"].strip()
-        or not isinstance(weight_data["weightKg"], (int, float))
-        or isinstance(weight_data["weightKg"], bool)
-        or weight_data["weightKg"] <= 0
-    ):
-        weight_data = None
     return CoachFeedItemOut(
         id=item.id,
         kind=item.kind,
@@ -1011,7 +983,7 @@ def _item_out(item: CoachFeedItem, *, ai_eligible: bool) -> CoachFeedItemOut:
         body=item.ai_body if ai else item.body,
         detail=item.ai_detail if ai else item.detail,
         target=TARGET_ADAPTER.validate_python(item.target_data),
-        weightData=weight_data,
+        weightData=public_weight_data(item),
         isAiAssisted=ai,
         readAt=item.read_at,
         createdAt=item.created_at,
