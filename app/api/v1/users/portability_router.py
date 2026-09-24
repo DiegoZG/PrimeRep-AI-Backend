@@ -9,6 +9,7 @@ from app.core.database import get_db
 from app.core.export_service import ExportArchive, ExportTooLarge, create_export
 from app.core.rate_limit import user_limiter
 from app.core.security.deps import get_current_user
+from app.core.settings import settings
 from app.models.user import User
 from app.schemas.portability import AchievementsOut
 
@@ -41,7 +42,7 @@ def achievements(
 
 
 @router.get("/me/export", response_class=FileResponse)
-@user_limiter.limit("3/hour")
+@user_limiter.limit(f"{settings.PERSONAL_EXPORTS_PER_HOUR}/hour")
 def export_personal_data(
     request: Request,
     weight_unit: Literal["LB", "KG"] = "KG",

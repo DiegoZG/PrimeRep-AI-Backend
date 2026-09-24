@@ -13,6 +13,7 @@ class Settings:
     JWT_REFRESH_SECRET: str = os.getenv("JWT_REFRESH_SECRET", "")
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("JWT_REFRESH_TOKEN_EXPIRE_DAYS", "30"))
     RATE_LIMIT_STORAGE_URI: str = os.getenv("RATE_LIMIT_STORAGE_URI", "memory://")
+    PERSONAL_EXPORTS_PER_HOUR: int = int(os.getenv("PERSONAL_EXPORTS_PER_HOUR", "3"))
     RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
     EMAIL_FROM: str = os.getenv("EMAIL_FROM", "")
     PASSWORD_RESET_URL_BASE: str = os.getenv(
