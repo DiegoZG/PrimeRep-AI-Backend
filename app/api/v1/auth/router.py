@@ -38,11 +38,9 @@ from app.core.refresh_token_service import revoke_refresh_token
 from app.core.rate_limit import limiter
 from app.core.email_service import (
     EmailSender,
-    deliver_email,
     get_email_sender,
-    password_changed_email,
-    password_reset_email,
 )
+from app.core.email_outbox_service import send_email_outbox
 from app.core.legal import PRIVACY_VERSION, TERMS_VERSION
 from app.core.password_reset_service import (
     InvalidPasswordResetToken,
@@ -243,13 +241,7 @@ async def request_password_reset_endpoint(
     finally:
         await response_budget.wait(started_at)
     if delivery is not None:
-        message = password_reset_email(
-            delivery.recipient,
-            delivery.preferred_name,
-            delivery.reset_url,
-            delivery.reset_id,
-        )
-        background_tasks.add_task(deliver_email, email_sender, message)
+        background_tasks.add_task(send_email_outbox, email_sender, f"password-reset/{delivery.reset_id}")
     return PasswordResetAcceptedResponse(
         message="If an account exists for that email, a password reset link has been sent."
     )
@@ -272,10 +264,5 @@ def confirm_password_reset_endpoint(
             detail="This password reset link is invalid or has expired",
         )
 
-    message = password_changed_email(
-        delivery.recipient,
-        delivery.preferred_name,
-        delivery.reset_id,
-    )
-    background_tasks.add_task(deliver_email, email_sender, message)
+    background_tasks.add_task(send_email_outbox, email_sender, f"password-changed/{delivery.reset_id}")
     return Response(status_code=status.HTTP_204_NO_CONTENT)

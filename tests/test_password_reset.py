@@ -18,6 +18,7 @@ from app.core.email_service import (
     deliver_email,
     get_email_sender,
 )
+from app.core.email_outbox_service import process_email
 from app.core.response_timing import (
     MinimumResponseBudget,
     get_password_reset_response_budget,
@@ -27,6 +28,7 @@ from app.core.security.jwt import create_access_token
 from app.core.settings import settings
 from app.main import app
 from app.models.password_reset_token import PasswordResetToken
+from app.models.email_outbox import EmailOutbox
 from app.models.user import User
 from conftest import LEGAL_ACCEPTANCE
 
@@ -106,6 +108,53 @@ def test_request_is_generic_hashes_token_and_enforces_cooldown(capture_sender):
         stored = db.query(PasswordResetToken).filter_by(token_hash=hashlib.sha256(raw_token.encode()).hexdigest()).one()
         assert stored.used_at is None
         assert raw_token not in stored.token_hash
+
+
+def test_failed_delivery_is_durable_encrypted_and_retryable(capture_sender):
+    class FailingSender:
+        def send(self, message):
+            raise RuntimeError("temporary provider failure")
+
+    tokens = _signup("retry_email")
+    app.dependency_overrides[get_email_sender] = lambda: FailingSender()
+    assert _request(tokens["email"]).status_code == 202
+
+    with SessionLocal() as db:
+        row = db.query(EmailOutbox).order_by(EmailOutbox.created_at.desc()).first()
+        assert row.status == "pending"
+        assert row.attempts == 1
+        assert b"reset-password" not in row.encrypted_message
+        key = row.idempotency_key
+        row.next_attempt_at = datetime.now(timezone.utc) - timedelta(seconds=1)
+        db.commit()
+
+        assert process_email(db, capture_sender, key=key) == "sent"
+        assert process_email(db, capture_sender, key=key) is None
+        db.refresh(row)
+        assert row.encrypted_message is None
+        assert len(capture_sender.messages) == 1
+
+
+def test_expired_reset_message_is_purged_without_delivery(capture_sender):
+    class FailingSender:
+        def send(self, message):
+            raise RuntimeError("temporary provider failure")
+
+    tokens = _signup("expired_email")
+    app.dependency_overrides[get_email_sender] = lambda: FailingSender()
+    assert _request(tokens["email"]).status_code == 202
+
+    with SessionLocal() as db:
+        row = db.query(EmailOutbox).order_by(EmailOutbox.created_at.desc()).first()
+        row.expires_at = datetime.now(timezone.utc) - timedelta(seconds=1)
+        row.next_attempt_at = row.expires_at
+        key = row.idempotency_key
+        db.commit()
+
+        assert process_email(db, capture_sender, key=key) == "expired"
+        db.refresh(row)
+        assert row.encrypted_message is None
+        assert capture_sender.messages == []
 
 
 def test_public_request_waits_on_the_same_budget_for_known_and_unknown_emails(

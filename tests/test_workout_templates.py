@@ -1447,7 +1447,8 @@ def test_deactivation_rejects_arbitrary_historical_and_future_dates():
     headers, _ = _signup("deactivate_date")
     body, _ = _activate(headers)
     monday = date.fromisoformat(body["weekStart"])
-    for effective_date in (date.today() - timedelta(days=2), date.today() + timedelta(days=2)):
+    server_today = datetime.now(timezone.utc).date()
+    for effective_date in (server_today - timedelta(days=2), server_today + timedelta(days=2)):
         response = client.delete(
             "/v1/workout-templates/active",
             headers=headers,
@@ -1584,7 +1585,7 @@ def test_scheduled_cancel_requires_a_valid_caller_local_date():
     assert client.delete(
         "/v1/workout-templates/active/scheduled",
         headers=headers,
-        params={"effectiveDate": (date.today() + timedelta(days=2)).isoformat()},
+        params={"effectiveDate": (datetime.now(timezone.utc).date() + timedelta(days=2)).isoformat()},
     ).status_code == 422
 
 
