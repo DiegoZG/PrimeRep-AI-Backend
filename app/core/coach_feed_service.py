@@ -1124,6 +1124,8 @@ def get_feed(
             CoachFeedItem.invalidated_at.is_(None),
         ),
     )
+    if not settings.HEALTH_COLLECTION_ENABLED:
+        query = query.filter(CoachFeedItem.kind != "health_context")
     if view == "now":
         query = query.filter(
             CoachFeedItem.expires_at > now,
@@ -1213,6 +1215,8 @@ def get_item(db: Session, user_id: str, item_id: str) -> Optional[CoachFeedItemO
 
 
 def is_item_current(db: Session, item: CoachFeedItem) -> bool:
+    if item.kind == "health_context" and not settings.HEALTH_COLLECTION_ENABLED:
+        return False
     target = item.target_data or {"type": "none"}
     target_type = target.get("type")
     if target_type == "active_workout":

@@ -263,6 +263,41 @@ def test_health_coach_requires_four_valid_baseline_days_and_prefers_sleep(accoun
         assert len(_active_health_items(db, user_id)) == 1
 
 
+def test_health_kill_switch_hides_persisted_coach_items(accounts, monkeypatch):
+    user_id, headers = accounts[0]
+    today = datetime.now(timezone.utc).date()
+    revision = _connect(headers)["connectionRevision"]
+    days = _coach_days(
+        today,
+        sleep_baseline=[470] * 7,
+        steps_baseline=[6000] * 7,
+        observed_sleep=300,
+        observed_steps=None,
+    )
+    assert _days(headers, revision, days=days).status_code == 200
+    assert client.put("/v1/users/me/health/preferences", headers=headers, json={
+        "primarySource": "apple_health", "coachEnabled": True,
+    }).status_code == 200
+    with SessionLocal() as db:
+        coach_feed_service.reconcile_feed(db, user_id, today)
+        item = _active_health_items(db, user_id)[0]
+        item_id = item.id
+    params = {"localDate": (today + timedelta(days=1)).isoformat(), "view": "last7Days"}
+    before = client.get("/v1/coach/feed", headers=headers, params=params)
+    assert before.status_code == 200
+    assert item_id in [item["id"] for item in before.json()["items"]]
+
+    monkeypatch.setattr(settings, "HEALTH_COLLECTION_ENABLED", False)
+    after = client.get("/v1/coach/feed", headers=headers, params=params)
+    assert after.status_code == 200
+    assert item_id not in [item["id"] for item in after.json()["items"]]
+    with SessionLocal() as db:
+        item = db.query(CoachFeedItem).filter_by(id=item_id).one()
+        assert coach_feed_service.is_item_current(db, item) is False
+    assert client.get(f"/v1/coach/items/{item_id}", headers=headers).status_code == 404
+    assert client.post(f"/v1/coach/items/{item_id}/read", headers=headers, json={"reason": "expanded"}).status_code == 404
+
+
 def test_health_coach_steps_source_switch_opt_out_and_disconnect(accounts, monkeypatch):
     user_id, headers = accounts[0]
     today = datetime.now(timezone.utc).date()
