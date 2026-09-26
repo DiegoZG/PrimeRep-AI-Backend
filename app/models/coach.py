@@ -61,7 +61,7 @@ class CoachFeedItem(Base):
     __table_args__ = (
         CheckConstraint(
             "kind IN ('progression', 'recovery', 'missed_workout', "
-            "'personal_record', 'consistency', 'program_review', 'upcoming_workout')",
+            "'personal_record', 'consistency', 'program_review', 'upcoming_workout', 'health_context')",
             name="ck_coach_feed_items_kind",
         ),
         CheckConstraint(

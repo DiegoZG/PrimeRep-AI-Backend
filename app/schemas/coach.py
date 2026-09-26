@@ -48,7 +48,7 @@ class ProgramReviewTarget(BaseModel):
 
 class SettingsTarget(BaseModel):
     type: Literal["settings"]
-    section: Literal["notifications", "training_preferences"]
+    section: Literal["notifications", "training_preferences", "health"]
 
 
 CoachTarget = Annotated[
@@ -94,6 +94,7 @@ class CoachFeedItemOut(BaseModel):
         "consistency",
         "program_review",
         "upcoming_workout",
+        "health_context",
     ]
     priority: int
     title: str

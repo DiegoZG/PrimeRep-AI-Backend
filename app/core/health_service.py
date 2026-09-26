@@ -5,6 +5,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from app.core.settings import settings
+from app.core.coach_feed_service import reconcile_after_mutation
 from app.models.health import HealthDay, HealthPreference, HealthSource
 from app.models.coach import CoachFeedItem
 from app.schemas.health import HealthDaysRequest, HealthPreferencesRequest, HealthSourceRequest
@@ -101,6 +102,7 @@ def enable_source(db: Session, user_id: str, body: HealthSourceRequest) -> dict:
             if prefs and prefs.primary_source == body.source:
                 prefs.primary_source = None
                 prefs.coach_enabled = False
+        reconcile_after_mutation(db, user_id, invalidate_health_items=True, commit=False, strict=True)
         db.commit()
         return _source_out(row)
     except Exception:
@@ -122,6 +124,7 @@ def update_preferences(db: Session, user_id: str, body: HealthPreferencesRequest
         prefs = db.query(HealthPreference).filter_by(user_id=user_id).with_for_update().one()
         prefs.primary_source = body.primary_source
         prefs.coach_enabled = body.coach_enabled
+        reconcile_after_mutation(db, user_id, invalidate_health_items=True, commit=False, strict=True)
         db.commit()
         return read_health(db, user_id)
     except Exception:
@@ -150,6 +153,7 @@ def upsert_days(db: Session, user_id: str, body: HealthDaysRequest) -> dict:
             db.execute(statement.on_conflict_do_update(index_elements=["user_id", "source", "local_date", "time_zone"], set_={"steps": day.steps, "asleep_minutes": day.asleep_minutes, "updated_at": now}))
         source.last_successful_sync_at = now
         _purge(db, user_id, now)
+        reconcile_after_mutation(db, user_id, invalidate_health_items=True, commit=False, strict=True)
         db.commit()
         return {"source": body.source, "connectionRevision": body.connection_revision, "acceptedDays": len(unique_days), "lastSuccessfulSyncAt": now}
     except Exception:
@@ -175,6 +179,7 @@ def disconnect_source(db: Session, user_id: str, source_name: str) -> None:
             prefs.primary_source = None
             prefs.coach_enabled = False
         db.query(CoachFeedItem).filter(CoachFeedItem.user_id == user_id, CoachFeedItem.kind == "health_context").delete(synchronize_session=False)
+        reconcile_after_mutation(db, user_id, invalidate_health_items=True, commit=False, strict=True)
         db.commit()
     except Exception:
         db.rollback()
