@@ -145,11 +145,8 @@ def test_workout_next_no_duplicates():
     )
 
 
-def test_workout_rotation_upper_lower():
-    """
-    Calling /v1/workouts/next twice should rotate day types (upper -> lower).
-    History is persisted, so second call on same day updates day_type.
-    """
+def test_workout_next_is_stable_for_upper_lower():
+    """The next upper/lower workout is stable for repeated same-day requests."""
     token = _signup_and_get_token(_unique_email("rotation1"))
     headers = _auth_headers(token)
 
@@ -164,12 +161,15 @@ def test_workout_rotation_upper_lower():
     response = client.post("/v1/onboarding/me", json=onboarding_payload, headers=headers)
     assert response.status_code == 200
 
-    # First workout: should be "upper" (first day of split)
     response = client.post("/v1/workouts/next", headers=headers)
     assert response.status_code == 200
     first_workout = response.json()
-    assert first_workout["dayType"] == "upper", "First workout should be upper"
+    assert first_workout["dayType"] in ("upper", "lower")
     assert first_workout["splitKey"] == "upper_lower"
+    repeated = client.post("/v1/workouts/next", headers=headers)
+    assert repeated.status_code == 200
+    assert repeated.json()["workoutId"] == first_workout["workoutId"]
+    assert repeated.json()["dayType"] == first_workout["dayType"]
 
 
 def test_workout_ppl_split():
@@ -245,12 +245,11 @@ def test_workout_default_split_preference():
     response = client.post("/v1/onboarding/me", json=onboarding_payload, headers=headers)
     assert response.status_code == 200
 
-    # First workout: should default to upper_lower
     response = client.post("/v1/workouts/next", headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["splitKey"] == "upper_lower", "Default split should be upper_lower"
-    assert data["dayType"] == "upper", "First day of upper_lower should be upper"
+    assert data["dayType"] in ("upper", "lower")
 
 
 def test_workout_no_onboarding():

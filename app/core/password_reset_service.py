@@ -12,6 +12,8 @@ from sqlalchemy.orm import Session
 from app.core.security.emails import normalize_email
 from app.core.security.passwords import hash_password
 from app.core.settings import settings
+from app.core.email_service import password_changed_email, password_reset_email
+from app.core.email_outbox_service import enqueue_email
 from app.models.password_reset_token import PasswordResetToken
 from app.models.user import User
 
@@ -93,12 +95,19 @@ def request_password_reset(db: Session, email: str) -> PasswordResetDelivery | N
         expires_at=now + RESET_TOKEN_LIFETIME,
     )
     db.add(reset)
-    db.commit()
-    db.refresh(reset)
+    db.flush()
 
     separator = "&" if "?" in settings.PASSWORD_RESET_URL_BASE else "?"
     query = urlencode({"token": raw_token})
     reset_url = f"{settings.PASSWORD_RESET_URL_BASE}{separator}{query}"
+    enqueue_email(
+        db,
+        password_reset_email(user.email, user.preferred_name, reset_url, reset.id),
+        kind="reset",
+        reset_token_id=reset.id,
+        expires_at=reset.expires_at,
+    )
+    db.commit()
     return PasswordResetDelivery(
         reset_id=reset.id,
         recipient=user.email,
@@ -147,6 +156,13 @@ def confirm_password_reset(
         PasswordResetToken.used_at.is_(None),
     ).update({PasswordResetToken.used_at: now}, synchronize_session=False)
     db.add(user)
+    enqueue_email(
+        db,
+        password_changed_email(user.email, user.preferred_name, reset.id),
+        kind="changed",
+        reset_token_id=reset.id,
+        expires_at=now + timedelta(days=7),
+    )
     db.commit()
 
     return PasswordChangedDelivery(

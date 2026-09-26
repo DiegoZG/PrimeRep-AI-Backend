@@ -319,20 +319,25 @@ and always returns a generic `202` response. `POST /v1/auth/password-reset/confi
 accepts `{ "token": "<opaque-token>", "newPassword": "..." }` and returns `204`
 when the single-use reset link is valid.
 
-Reset email delivery uses FastAPI `BackgroundTasks` and is intentionally
-best-effort. Provider failures are logged without the recipient or reset link;
-the user can request a fresh link after the one-minute request cooldown. For
-durable delivery retries, move this task to an external queue in a later phase.
+Reset and password-change emails are persisted in an encrypted database outbox
+in the same transaction as the account change. A background task attempts
+immediate delivery; run `python scripts/run_email_worker.py` every minute to
+retry after API restarts or provider outages. Reset links are never delivered
+after expiry or invalidation. Payloads are cleared after send, expiry, or the
+eighth failed attempt. Production requires a stable, separate Fernet key in
+`EMAIL_OUTBOX_ENCRYPTION_KEY`; generate one with
+`python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'`
+and keep it in the secret store. Changing this key while messages are pending
+makes those messages unreadable, so drain or re-encrypt before rotation.
 
 ---
 
 ## Environment Variables
 
-Create a .env file (not committed to git):
-
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/primerep  
-JWT_SECRET_KEY=your-secret-key  
-JWT_ACCESS_TOKEN_EXPIRE_MINUTES=60
+Create an uncommitted `.env` from `.env.example`. The active setting names are
+`JWT_SECRET` and `JWT_REFRESH_SECRET`; `JWT_SECRET_KEY` is not used. For preview
+and production requirements, preflight, workers, backup, and rollback, see
+[Part 9 release operations](docs/part9-release-operations.md).
 
 ---
 

@@ -13,6 +13,7 @@ from app.models.user_equipment_weights import UserEquipmentWeights  # noqa: F401
 from app.models.push_token import PushToken  # noqa: F401
 from app.models.revoked_refresh_token import RevokedRefreshToken  # noqa: F401
 from app.models.password_reset_token import PasswordResetToken  # noqa: F401
+from app.models.email_outbox import EmailOutbox  # noqa: F401
 from app.models.workout_session_operation import WorkoutSessionOperation  # noqa: F401
 from app.models.workout_session_exercise_feedback import WorkoutSessionExerciseFeedback  # noqa: F401
 from app.models.user_exercise_note import UserExerciseNote  # noqa: F401

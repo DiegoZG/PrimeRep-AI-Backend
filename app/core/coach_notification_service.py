@@ -9,7 +9,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import or_
+from sqlalchemy import func, or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -708,6 +708,9 @@ def run_worker_once(db: Session, now: Optional[datetime] = None) -> dict[str, in
     sent = send_due_jobs(db, now)
     receipts = poll_receipts(db, now)
     items, deliveries = purge_expired(db, limit=PURGE_LIMIT)
+    backlog, oldest = db.query(func.count(CoachNotificationJob.id), func.min(CoachNotificationJob.scheduled_at)).filter(
+        CoachNotificationJob.status.in_(["pending", "retry"])
+    ).one()
     return {
         "jobsEnqueued": jobs,
         "jobsSent": sent,
@@ -715,4 +718,6 @@ def run_worker_once(db: Session, now: Optional[datetime] = None) -> dict[str, in
         "receiptsChecked": receipts,
         "itemsPurged": items,
         "deliveriesPurged": deliveries,
+        "pendingJobs": backlog,
+        "oldestPendingSeconds": max(0, int((now - oldest).total_seconds())) if oldest else 0,
     }
