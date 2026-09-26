@@ -6,13 +6,13 @@
 - Add production startup guards for secrets, Redis-backed rate limiting, HTTPS reset/CORS settings, and a verified sending address.
 - Add lightweight liveness and dependency readiness checks, request IDs, safe route-template timing logs, a container recipe, and a release preflight command.
 - Add the Part 9 implementation plan and operator runbook, including backend-first rollout, backup/restore, incident, and release-manifest procedures.
-- Make two existing program-date tests deterministic across local/UTC day boundaries; program behavior is unchanged.
+- Make two existing program-date tests deterministic across local/UTC day boundaries, and update stale `/workouts/next` assertions to reflect next-scheduled-day selection; program behavior is unchanged.
 - Add regression coverage for logging missed sets after a session is completed, including idempotent replay, snapshot and account isolation, duplicate-slot rejection, and updated workout metrics. The existing set-logging API supports this flow; this follow-up adds no backend endpoint or migration.
 
 ## Verification
 
-- Latest focused completed-workout correction suite: **33 passed**.
-- Latest full backend suite: **467 passed, 3 failed**. The three failures are in unrelated current workout-generator/date tests; they remain open and should be resolved or confirmed against the target environment before merge.
+- Focused workout-editing, release-readiness, and password-reset suites: **38 passed**.
+- Full backend suite: **470 passed**.
 - Alembic upgrade → downgrade → upgrade passed on a disposable database on the local PostgreSQL server; the normal local database is at head `v7w8x9y0z1a2`.
 - Release preflight passed against the local database with `APP_ENV=preview`; this is not a deployed preview environment.
 - `git diff --check` passed.
