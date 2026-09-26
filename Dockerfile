@@ -9,7 +9,7 @@ RUN useradd --system --uid 10001 --create-home appuser
 COPY alembic /app/alembic
 COPY alembic.ini /app/alembic.ini
 COPY app /app/app
-COPY scripts/run_coach_worker.py scripts/run_email_worker.py scripts/release_preflight.py /app/scripts/
+COPY scripts/run_coach_worker.py scripts/run_email_worker.py scripts/purge_health_days.py scripts/release_preflight.py /app/scripts/
 
 EXPOSE 8000
 USER appuser

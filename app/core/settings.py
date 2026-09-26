@@ -18,6 +18,7 @@ class Settings:
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("JWT_REFRESH_TOKEN_EXPIRE_DAYS", "30"))
     RATE_LIMIT_STORAGE_URI: str = os.getenv("RATE_LIMIT_STORAGE_URI", "memory://")
     PERSONAL_EXPORTS_PER_HOUR: int = int(os.getenv("PERSONAL_EXPORTS_PER_HOUR", "3"))
+    HEALTH_COLLECTION_ENABLED: bool = os.getenv("HEALTH_COLLECTION_ENABLED", "false").lower() == "true"
     RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
     EMAIL_FROM: str = os.getenv("EMAIL_FROM", "")
     EMAIL_OUTBOX_ENCRYPTION_KEY: str = os.getenv("EMAIL_OUTBOX_ENCRYPTION_KEY", "")

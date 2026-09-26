@@ -3,9 +3,10 @@ import json
 import shutil
 import tempfile
 from dataclasses import dataclass
-from datetime import date, datetime, time, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
+from zoneinfo import ZoneInfo
 
 from fastapi import HTTPException
 from sqlalchemy import func, select, text
@@ -17,6 +18,7 @@ from app.core.coach_weight_data import public_weight_data
 from app.models.coach import CoachFeedItem, CoachPreference
 from app.models.exercise import Exercise, user_exercise_favorites
 from app.models.exercise_question import ExerciseQuestion
+from app.models.health import HealthDay, HealthPreference, HealthSource
 from app.models.onboarding_profile import OnboardingProfile
 from app.models.set_log import SetLog
 from app.models.user import User
@@ -196,6 +198,13 @@ def _coach_items(db, user_id):
         yield value
 
 
+def _retained_health_days(db, user_id):
+    now = datetime.now(timezone.utc)
+    for row in db.query(HealthDay).filter(HealthDay.user_id == user_id).order_by(HealthDay.local_date, HealthDay.source, HealthDay.time_zone).yield_per(BATCH_SIZE):
+        if row.local_date >= now.astimezone(ZoneInfo(row.time_zone)).date() - timedelta(days=90):
+            yield row
+
+
 def _collections(db, user_id):
     sessions = db.query(WorkoutSession.id).filter(WorkoutSession.user_id == user_id)
     yield "favorites", (
@@ -225,12 +234,21 @@ def _collections(db, user_id):
     yield "exercise_notes", _rows(db, UserExerciseNote, user_id, "id exercise_id note updated_at")
     yield "exercise_questions", _rows(db, ExerciseQuestion, user_id, "id exercise_id question answer content_version created_at")
     yield "coach_items", _coach_items(db, user_id)
+    yield "health_sources", (
+        record(row, "source connection_revision enabled read_enabled export_enabled connected_at disconnected_at last_successful_sync_at")
+        for row in db.query(HealthSource).filter(HealthSource.user_id == user_id).order_by(HealthSource.source)
+    )
+    yield "health_days", (
+        record(row, "source local_date time_zone steps asleep_minutes updated_at")
+        for row in _retained_health_days(db, user_id)
+    )
 
 
 def _write_json(archive, budget, db, user, now, unit):
     profile = db.get(OnboardingProfile, user.id)
     equipment = db.get(UserEquipmentWeights, user.id)
     coach = db.get(CoachPreference, user.id)
+    health = db.get(HealthPreference, user.id)
     metadata = {
         "schema_version": 1, "generated_at": now, "csv_weight_unit": unit,
         "account": record(user, "id email preferred_name last_name has_completed_onboarding subscription_tier coach_insights_enabled terms_accepted_version privacy_accepted_version legal_accepted_at created_at updated_at"),
@@ -238,6 +256,7 @@ def _write_json(archive, budget, db, user, now, unit):
         "onboarding": project(canonical_onboarding_data(profile, user), ONBOARDING) if profile else None,
         "equipment_weights": record(equipment, "dumbbell_weights plate_weights updated_at") if equipment else None,
         "coach_preferences": record(coach, "notifications_enabled reminder_time time_zone") if coach else None,
+        "health_preferences": record(health, "primary_source coach_enabled") if health else None,
     }
     encoder = json.JSONEncoder(default=json_default, ensure_ascii=False, allow_nan=False)
     with archive.open("account.json", "w") as stream:
@@ -285,6 +304,11 @@ def _write_csv(archive, budget, db, user_id, unit):
                 if item.get("exercise", {}).get("id") == row.exercise_id and item["exercise"].get("name")
             ), name)
             writer.writerow([safe_csv(value) for value in [row.session_id, row.id, row.exercise_id, name, row.set_number, row.reps, round(row.weight_kg * factor, 3) if row.weight_kg is not None else None, row.logged_at.isoformat()]])
+    with archive.open("health-days.csv", "w") as stream:
+        writer = csv.writer(ZipText(stream, budget))
+        writer.writerow(["source", "local_date", "time_zone", "steps", "asleep_minutes"])
+        for row in _retained_health_days(db, user_id):
+            writer.writerow([row.source, row.local_date, row.time_zone, row.steps, row.asleep_minutes])
 
 
 def create_export(bind, user_id: str, auth_version: int, weight_unit: str) -> ExportArchive:
@@ -324,6 +348,8 @@ workouts.csv includes completed sessions only; duration_seconds is elapsed time.
 sets.csv includes current (nonremoved) sets in completed sessions only. CSV weights
 and total volume use {weight_unit}. Volume is recorded external weight multiplied by
 repetitions; bodyweight is not estimated. Blank weight means no weight was recorded.
+health-days.csv contains retained daily steps and asleep minutes, separated by source
+and local date/time zone. Blank health values mean not recorded, not zero.
 Timestamps use ISO 8601 with timezone offsets; scheduled dates are calendar dates.
 CSV text beginning with spreadsheet formula characters is prefixed with an apostrophe.
 

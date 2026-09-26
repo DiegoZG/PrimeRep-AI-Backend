@@ -1,4 +1,5 @@
 from app.models.user import User  # noqa: F401
+from app.models.health import HealthSource, HealthPreference, HealthDay  # noqa: F401
 from app.models.user_avatar import UserAvatar  # noqa: F401
 from app.models.onboarding_profile import OnboardingProfile  # noqa: F401
 from app.models.equipment import Equipment  # noqa: F401
