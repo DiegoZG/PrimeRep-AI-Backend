@@ -263,6 +263,98 @@ def test_completed_history_and_stats_use_effective_non_deleted_sets():
     assert client.get("/v1/workouts/sessions/stats", headers=_headers(token)).json()["totalVolumeKg"] == 0
 
 
+def test_late_set_on_completed_workout_updates_detail_history_and_stats_once():
+    token = _token()
+    session = _session(token)
+    session_id = session["id"]
+    completed = client.patch(
+        f"/v1/workouts/sessions/{session_id}/complete", headers=_headers(token)
+    )
+    assert completed.status_code == 200
+    assert completed.json()["summary"]["completedSetCount"] == 0
+
+    operation_id = str(uuid.uuid4())
+    payload = {
+        "exerciseId": "push_up",
+        "setNumber": 1,
+        "reps": 12,
+        "weightKg": 25,
+        "clientOperationId": operation_id,
+    }
+    first = client.post(
+        f"/v1/workouts/sessions/{session_id}/sets",
+        headers=_headers(token),
+        json=payload,
+    )
+    replay = client.post(
+        f"/v1/workouts/sessions/{session_id}/sets",
+        headers=_headers(token),
+        json=payload,
+    )
+    assert first.status_code == replay.status_code == 201
+    assert first.json()["id"] == replay.json()["id"]
+
+    detail = client.get(
+        f"/v1/workouts/sessions/{session_id}", headers=_headers(token)
+    )
+    assert detail.status_code == 200
+    assert detail.json()["status"] == "completed"
+    assert len(detail.json()["setLogs"]) == 1
+    assert detail.json()["summary"]["completedSetCount"] == 1
+    assert detail.json()["summary"]["totalVolumeKg"] == 300
+
+    history = client.get("/v1/workouts/sessions/history", headers=_headers(token))
+    assert history.status_code == 200
+    history_item = next(item for item in history.json()["items"] if item["id"] == session_id)
+    assert history_item["setCount"] == 1
+    assert history_item["totalVolumeKg"] == 300
+    stats = client.get("/v1/workouts/sessions/stats", headers=_headers(token))
+    assert stats.status_code == 200
+    assert stats.json()["totalVolumeKg"] == 300
+
+    duplicate_slot = client.post(
+        f"/v1/workouts/sessions/{session_id}/sets",
+        headers=_headers(token),
+        json={**payload, "clientOperationId": str(uuid.uuid4())},
+    )
+    assert duplicate_slot.status_code == 409
+    assert len(client.get(
+        f"/v1/workouts/sessions/{session_id}", headers=_headers(token)
+    ).json()["setLogs"]) == 1
+
+
+def test_late_set_on_completed_workout_is_private_and_snapshot_bound():
+    owner = _token()
+    other = _token()
+    session = _session(owner)
+    session_id = session["id"]
+    assert client.patch(
+        f"/v1/workouts/sessions/{session_id}/complete", headers=_headers(owner)
+    ).status_code == 200
+
+    payload = {
+        "exerciseId": "push_up",
+        "setNumber": 1,
+        "reps": 10,
+        "clientOperationId": str(uuid.uuid4()),
+    }
+    denied = client.post(
+        f"/v1/workouts/sessions/{session_id}/sets",
+        headers=_headers(other),
+        json=payload,
+    )
+    assert denied.status_code == 404
+    outside_snapshot = client.post(
+        f"/v1/workouts/sessions/{session_id}/sets",
+        headers=_headers(owner),
+        json={**payload, "exerciseId": "squat"},
+    )
+    assert outside_snapshot.status_code == 422
+    assert client.get(
+        f"/v1/workouts/sessions/{session_id}", headers=_headers(owner)
+    ).json()["setLogs"] == []
+
+
 def test_notes_and_feedback_are_private_and_session_scoped():
     token = _token()
     other = _token()
