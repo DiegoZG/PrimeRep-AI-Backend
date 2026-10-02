@@ -19,12 +19,14 @@ from sqlalchemy.orm import Session
 from app.core.achievement_service import workout_milestones
 from app.core.coach_weight_data import public_weight_data
 from app.core.coach_service import _is_coach_eligible
+from app.core.legal import PRIVACY_VERSION
 from app.core.progression_service import suggest_weight_kg
 from app.core.settings import settings
 from app.models.coach import CoachFeedItem, CoachNotificationJob, CoachPreference
 from app.models.exercise import Exercise
 from app.models.health import HealthDay, HealthPreference, HealthSource
 from app.models.set_log import SetLog
+from app.models.user import User
 from app.models.workout_session import WorkoutSession
 from app.models.workout_session_exercise_feedback import WorkoutSessionExerciseFeedback
 from app.models.workout_template import UserProgramActivation
@@ -678,6 +680,9 @@ def _program_review_candidates(db: Session, user_id: str) -> list[dict]:
 def _health_context_candidates(db: Session, user_id: str) -> list[dict]:
     if not settings.HEALTH_COLLECTION_ENABLED:
         return []
+    user = db.get(User, user_id)
+    if user is None or user.privacy_accepted_version != PRIVACY_VERSION:
+        return []
     preference = db.get(HealthPreference, user_id)
     if preference is None or not preference.coach_enabled or not preference.primary_source:
         return []
@@ -1124,7 +1129,8 @@ def get_feed(
             CoachFeedItem.invalidated_at.is_(None),
         ),
     )
-    if not settings.HEALTH_COLLECTION_ENABLED:
+    user = db.get(User, user_id)
+    if not settings.HEALTH_COLLECTION_ENABLED or user is None or user.privacy_accepted_version != PRIVACY_VERSION:
         query = query.filter(CoachFeedItem.kind != "health_context")
     if view == "now":
         query = query.filter(
@@ -1215,8 +1221,10 @@ def get_item(db: Session, user_id: str, item_id: str) -> Optional[CoachFeedItemO
 
 
 def is_item_current(db: Session, item: CoachFeedItem) -> bool:
-    if item.kind == "health_context" and not settings.HEALTH_COLLECTION_ENABLED:
-        return False
+    if item.kind == "health_context":
+        user = db.get(User, str(item.user_id))
+        if not settings.HEALTH_COLLECTION_ENABLED or user is None or user.privacy_accepted_version != PRIVACY_VERSION:
+            return False
     target = item.target_data or {"type": "none"}
     target_type = target.get("type")
     if target_type == "active_workout":

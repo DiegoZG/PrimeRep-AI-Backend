@@ -60,6 +60,43 @@ def _days(headers, revision, source="apple_health", days=None):
     })
 
 
+def test_updated_privacy_acceptance_gates_new_health_collection_but_allows_withdrawal(accounts):
+    user_id, headers = accounts[0]
+    connection = _connect(headers, read=True, export=True)
+    with SessionLocal() as db:
+        user = db.get(User, user_id)
+        user.privacy_accepted_version = "2026-09-12"
+        db.commit()
+
+    state = client.get("/v1/users/me/health", headers=headers).json()
+    assert state["collectionAvailable"] is False
+    assert len(state["sources"]) == 1
+    assert _days(headers, connection["connectionRevision"]).status_code == 403
+    assert client.put("/v1/users/me/health/preferences", headers=headers, json={
+        "primarySource": "apple_health", "coachEnabled": True,
+    }).status_code == 403
+    assert client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": False, "exportEnabled": True,
+        "expectedConnectionRevision": connection["connectionRevision"],
+    }).status_code == 200
+    assert client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True, "exportEnabled": True,
+    }).status_code == 403
+
+    assert client.put("/v1/users/me/legal-acceptance", headers=headers, json={
+        "accepted": True, "termsVersion": "2026-09-12", "privacyVersion": "2026-09-12",
+    }).status_code == 422
+    accepted = client.put("/v1/users/me/legal-acceptance", headers=headers, json={
+        "accepted": True, "termsVersion": "2026-09-12", "privacyVersion": "2026-10-02",
+    })
+    assert accepted.status_code == 200
+    assert accepted.json()["privacy_accepted_version"] == "2026-10-02"
+    assert client.get("/v1/users/me/health", headers=headers).json()["collectionAvailable"] is True
+    assert client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True, "exportEnabled": True,
+    }).status_code == 200
+
+
 def test_collection_is_disabled_by_default_and_requires_auth(accounts, monkeypatch):
     _, headers = accounts[0]
     assert client.get("/v1/users/me/health").status_code == 401
@@ -371,6 +408,35 @@ def test_health_kill_switch_hides_persisted_coach_items(accounts, monkeypatch):
         assert coach_feed_service.is_item_current(db, item) is False
     assert client.get(f"/v1/coach/items/{item_id}", headers=headers).status_code == 404
     assert client.post(f"/v1/coach/items/{item_id}/read", headers=headers, json={"reason": "expanded"}).status_code == 404
+
+
+def test_stale_privacy_acceptance_hides_persisted_health_coach_items(accounts):
+    user_id, headers = accounts[0]
+    today = datetime.now(timezone.utc).date()
+    revision = _connect(headers)["connectionRevision"]
+    assert _days(headers, revision, days=_coach_days(
+        today,
+        sleep_baseline=[470] * 7,
+        steps_baseline=[6000] * 7,
+        observed_sleep=300,
+        observed_steps=None,
+    )).status_code == 200
+    assert client.put("/v1/users/me/health/preferences", headers=headers, json={
+        "primarySource": "apple_health", "coachEnabled": True,
+    }).status_code == 200
+    with SessionLocal() as db:
+        coach_feed_service.reconcile_feed(db, user_id, today)
+        item_id = _active_health_items(db, user_id)[0].id
+        user = db.get(User, user_id)
+        user.privacy_accepted_version = "2026-09-12"
+        db.commit()
+        assert coach_feed_service._health_context_candidates(db, user_id) == []
+
+    params = {"localDate": (today + timedelta(days=1)).isoformat(), "view": "last7Days"}
+    feed = client.get("/v1/coach/feed", headers=headers, params=params)
+    assert feed.status_code == 200
+    assert item_id not in [item["id"] for item in feed.json()["items"]]
+    assert client.get(f"/v1/coach/items/{item_id}", headers=headers).status_code == 404
 
 
 def test_health_coach_steps_source_switch_opt_out_and_disconnect(accounts, monkeypatch):

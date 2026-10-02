@@ -12,6 +12,8 @@ class UserResponse(BaseModel):
     has_completed_onboarding: bool
     subscription_tier: Literal["free", "premium"] = "free"
     coach_insights_enabled: bool = False
+    terms_accepted_version: Optional[str] = None
+    privacy_accepted_version: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
@@ -20,4 +22,3 @@ class UserResponse(BaseModel):
 
 class UserPreferencesRequest(BaseModel):
     coach_insights_enabled: bool
-

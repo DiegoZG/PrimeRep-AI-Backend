@@ -1,10 +1,11 @@
-from datetime import date
+from datetime import date, datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.legal import PRIVACY_VERSION, TERMS_VERSION
 from app.core.coach_feed_service import reconcile_after_mutation, sync_ai_eligibility
 from app.core.equipment_weights_service import (
     get_equipment_weight_arrays,
@@ -25,6 +26,7 @@ from app.core.workout_template_service import (
 from app.core.push_token_service import register_push_token, unregister_push_token
 from app.models.user import User
 from app.schemas.user import UserPreferencesRequest, UserResponse
+from app.schemas.auth import LegalAcceptanceRequest
 from app.schemas.workout_logging import UserExerciseNoteOut, UserExerciseNoteRequest
 from app.schemas.equipment_weights import (
     EquipmentWeightsPayload,
@@ -98,6 +100,22 @@ def delete_private_exercise(
 def read_me(
     current_user: User = Depends(get_current_user),
 ):
+    return current_user
+
+
+@router.put("/me/legal-acceptance", response_model=UserResponse)
+def accept_current_legal(
+    body: LegalAcceptanceRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if not body.accepted or body.terms_version != TERMS_VERSION or body.privacy_version != PRIVACY_VERSION:
+        raise HTTPException(status_code=422, detail="Current Terms and Privacy Policy must be accepted")
+    current_user.terms_accepted_version = TERMS_VERSION
+    current_user.privacy_accepted_version = PRIVACY_VERSION
+    current_user.legal_accepted_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(current_user)
     return current_user
 
 

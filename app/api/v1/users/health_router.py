@@ -5,9 +5,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.legal import PRIVACY_VERSION
 from app.core.health_service import HealthConflict, HealthInvalid, HealthUnavailable, disconnect_source, enable_source, read_health, update_preferences, upsert_days
 from app.core.security.deps import get_current_user
 from app.models.user import User
+from app.models.health import HealthSource
 from app.schemas.health import HealthDaysRequest, HealthDaysResult, HealthPreferencesRequest, HealthSourceOut, HealthSourceRequest, HealthStateOut
 
 
@@ -28,11 +30,20 @@ def _error(error: Exception) -> HTTPException:
 
 @router.get("", response_model=HealthStateOut)
 def get_health(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    return read_health(db, str(user.id))
+    state = read_health(db, str(user.id))
+    state["collectionAvailable"] = state["collectionAvailable"] and user.privacy_accepted_version == PRIVACY_VERSION
+    return state
 
 
 @router.post("/sources", response_model=HealthSourceOut)
 def post_source(body: HealthSourceRequest, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    existing = db.query(HealthSource).filter_by(user_id=str(user.id), source=body.source, enabled=True).one_or_none()
+    if user.privacy_accepted_version != PRIVACY_VERSION and (
+        existing is None
+        or (body.read_enabled and not existing.read_enabled)
+        or (body.export_enabled and not existing.export_enabled)
+    ):
+        raise HTTPException(status_code=403, detail="Accept the updated Privacy Policy before connecting Health")
     try:
         return enable_source(db, str(user.id), body)
     except (HealthUnavailable, HealthInvalid, HealthConflict) as error:
@@ -41,6 +52,8 @@ def post_source(body: HealthSourceRequest, db: Session = Depends(get_db), user: 
 
 @router.put("/preferences", response_model=HealthStateOut)
 def put_preferences(body: HealthPreferencesRequest, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    if body.coach_enabled and user.privacy_accepted_version != PRIVACY_VERSION:
+        raise HTTPException(status_code=403, detail="Accept the updated Privacy Policy before using Health in Coach")
     try:
         return update_preferences(db, str(user.id), body)
     except (HealthUnavailable, HealthInvalid) as error:
@@ -49,6 +62,8 @@ def put_preferences(body: HealthPreferencesRequest, db: Session = Depends(get_db
 
 @router.put("/days", response_model=HealthDaysResult)
 def put_days(body: HealthDaysRequest, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    if user.privacy_accepted_version != PRIVACY_VERSION:
+        raise HTTPException(status_code=403, detail="Accept the updated Privacy Policy before syncing Health")
     try:
         return upsert_days(db, str(user.id), body)
     except (HealthUnavailable, HealthConflict, HealthInvalid) as error:
