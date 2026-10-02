@@ -12,6 +12,7 @@ class HealthSourceRequest(BaseModel):
     source: HealthSourceName
     read_enabled: bool = Field(False, alias="readEnabled")
     export_enabled: bool = Field(False, alias="exportEnabled")
+    expected_connection_revision: Optional[int] = Field(None, alias="expectedConnectionRevision", ge=0)
     model_config = ConfigDict(populate_by_name=True)
 
 
@@ -20,6 +21,7 @@ class HealthSourceOut(BaseModel):
     connection_revision: int = Field(alias="connectionRevision")
     read_enabled: bool = Field(alias="readEnabled")
     export_enabled: bool = Field(alias="exportEnabled")
+    export_enabled_at: Optional[datetime] = Field(None, alias="exportEnabledAt")
     connected_at: datetime = Field(alias="connectedAt")
     last_successful_sync_at: Optional[datetime] = Field(None, alias="lastSuccessfulSyncAt")
     model_config = ConfigDict(populate_by_name=True)
@@ -98,6 +100,7 @@ class HealthDayOut(BaseModel):
 class HealthStateOut(BaseModel):
     collection_available: bool = Field(alias="collectionAvailable")
     sources: list[HealthSourceOut]
+    source_revisions: dict[str, int] = Field(alias="sourceRevisions")
     primary_source: Optional[HealthSourceName] = Field(alias="primarySource")
     coach_enabled: bool = Field(alias="coachEnabled")
     days: list[HealthDayOut]

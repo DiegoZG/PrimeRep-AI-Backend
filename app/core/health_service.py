@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from typing import Optional
 from zoneinfo import ZoneInfo
 
 from sqlalchemy.dialects.postgresql import insert
@@ -56,6 +57,7 @@ def _source_out(row: HealthSource) -> dict:
         "connectionRevision": row.connection_revision,
         "readEnabled": row.read_enabled,
         "exportEnabled": row.export_enabled,
+        "exportEnabledAt": row.export_enabled_at,
         "connectedAt": row.connected_at,
         "lastSuccessfulSyncAt": row.last_successful_sync_at,
     }
@@ -64,13 +66,15 @@ def _source_out(row: HealthSource) -> dict:
 def read_health(db: Session, user_id: str) -> dict:
     now = datetime.now(timezone.utc)
     _purge(db, user_id, now)
-    sources = db.query(HealthSource).filter(HealthSource.user_id == user_id, HealthSource.enabled.is_(True)).order_by(HealthSource.source).all()
+    all_sources = db.query(HealthSource).filter(HealthSource.user_id == user_id).order_by(HealthSource.source).all()
+    sources = [source for source in all_sources if source.enabled]
     prefs = db.get(HealthPreference, user_id)
     days = db.query(HealthDay).filter(HealthDay.user_id == user_id).order_by(HealthDay.local_date.desc(), HealthDay.source, HealthDay.time_zone).all()
     db.commit()
     return {
         "collectionAvailable": settings.HEALTH_COLLECTION_ENABLED,
         "sources": [_source_out(source) for source in sources],
+        "sourceRevisions": {source.source: source.connection_revision for source in all_sources},
         "primarySource": prefs.primary_source if prefs else None,
         "coachEnabled": prefs.coach_enabled if prefs else False,
         "days": [{"source": day.source, "localDate": day.local_date, "timeZone": day.time_zone, "steps": day.steps, "asleepMinutes": day.asleep_minutes} for day in days],
@@ -78,18 +82,29 @@ def read_health(db: Session, user_id: str) -> dict:
 
 
 def enable_source(db: Session, user_id: str, body: HealthSourceRequest) -> dict:
-    _require_collection()
     if not body.read_enabled and not body.export_enabled:
         raise HealthInvalid("Enable reading or workout export")
     now = datetime.now(timezone.utc)
     try:
         inserted = db.execute(insert(HealthSource).values(user_id=user_id, source=body.source, connection_revision=1, enabled=False).on_conflict_do_nothing(index_elements=["user_id", "source"]).returning(HealthSource.user_id)).first() is not None
         row = db.query(HealthSource).filter_by(user_id=user_id, source=body.source).with_for_update().one()
+        if body.expected_connection_revision is not None and body.expected_connection_revision != (0 if inserted else row.connection_revision):
+            raise HealthConflict("Health connection changed; refresh and try again")
+        if not settings.HEALTH_COLLECTION_ENABLED and (
+            not row.enabled
+            or (body.read_enabled and not row.read_enabled)
+            or (body.export_enabled and not row.export_enabled)
+        ):
+            raise HealthUnavailable("Health collection is not available yet")
         if row.enabled and row.read_enabled == body.read_enabled and row.export_enabled == body.export_enabled:
             db.commit()
             return _source_out(row)
         if not inserted:
             row.connection_revision += 1
+        if body.export_enabled and (not row.enabled or not row.export_enabled):
+            row.export_enabled_at = now
+        elif not body.export_enabled:
+            row.export_enabled_at = None
         row.enabled = True
         row.read_enabled = body.read_enabled
         row.export_enabled = body.export_enabled
@@ -161,16 +176,19 @@ def upsert_days(db: Session, user_id: str, body: HealthDaysRequest) -> dict:
         raise
 
 
-def disconnect_source(db: Session, user_id: str, source_name: str) -> None:
+def disconnect_source(db: Session, user_id: str, source_name: str, expected_connection_revision: Optional[int] = None) -> None:
     now = datetime.now(timezone.utc)
     try:
         row = db.query(HealthSource).filter_by(user_id=user_id, source=source_name).with_for_update().one_or_none()
+        if expected_connection_revision is not None and row is not None and row.connection_revision != expected_connection_revision:
+            raise HealthConflict("Health connection changed; refresh and try again")
         if row is None or not row.enabled:
             return
         row.connection_revision += 1
         row.enabled = False
         row.read_enabled = False
         row.export_enabled = False
+        row.export_enabled_at = None
         row.disconnected_at = now
         row.last_successful_sync_at = None
         db.query(HealthDay).filter_by(user_id=user_id, source=source_name).delete(synchronize_session=False)

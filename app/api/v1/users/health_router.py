@@ -1,6 +1,7 @@
 from typing import Literal
+from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -34,7 +35,7 @@ def get_health(db: Session = Depends(get_db), user: User = Depends(get_current_u
 def post_source(body: HealthSourceRequest, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     try:
         return enable_source(db, str(user.id), body)
-    except (HealthUnavailable, HealthInvalid) as error:
+    except (HealthUnavailable, HealthInvalid, HealthConflict) as error:
         raise _error(error) from error
 
 
@@ -55,6 +56,9 @@ def put_days(body: HealthDaysRequest, db: Session = Depends(get_db), user: User 
 
 
 @router.delete("/sources/{source_name}", status_code=204)
-def delete_source(source_name: Literal["apple_health", "health_connect"], db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    disconnect_source(db, str(user.id), source_name)
+def delete_source(source_name: Literal["apple_health", "health_connect"], expected_connection_revision: Optional[int] = Query(None, alias="expectedConnectionRevision", ge=1), db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    try:
+        disconnect_source(db, str(user.id), source_name, expected_connection_revision)
+    except HealthConflict as error:
+        raise _error(error) from error
     return Response(status_code=204)

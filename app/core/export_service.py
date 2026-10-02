@@ -235,7 +235,7 @@ def _collections(db, user_id):
     yield "exercise_questions", _rows(db, ExerciseQuestion, user_id, "id exercise_id question answer content_version created_at")
     yield "coach_items", _coach_items(db, user_id)
     yield "health_sources", (
-        record(row, "source connection_revision enabled read_enabled export_enabled connected_at disconnected_at last_successful_sync_at")
+        record(row, "source connection_revision enabled read_enabled export_enabled export_enabled_at connected_at disconnected_at last_successful_sync_at")
         for row in db.query(HealthSource).filter(HealthSource.user_id == user_id).order_by(HealthSource.source)
     )
     yield "health_days", (

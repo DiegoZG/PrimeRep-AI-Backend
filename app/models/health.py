@@ -12,6 +12,7 @@ class HealthSource(Base):
     enabled = Column(Boolean, nullable=False, server_default=text("false"))
     read_enabled = Column(Boolean, nullable=False, server_default=text("false"))
     export_enabled = Column(Boolean, nullable=False, server_default=text("false"))
+    export_enabled_at = Column(DateTime(timezone=True), nullable=True)
     connected_at = Column(DateTime(timezone=True), nullable=True)
     disconnected_at = Column(DateTime(timezone=True), nullable=True)
     last_successful_sync_at = Column(DateTime(timezone=True), nullable=True)

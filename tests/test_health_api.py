@@ -100,6 +100,81 @@ def test_connection_revisions_upserts_isolation_and_disconnect(accounts):
     assert _days(headers, revision).status_code == 409
 
 
+def test_export_consent_epoch_is_independent_of_read_setting_and_revision_fenced(accounts):
+    _, headers = accounts[0]
+    first = _connect(headers, read=False, export=True)
+    epoch = first["exportEnabledAt"]
+    assert epoch is not None
+    assert _connect(headers, read=False, export=True)["exportEnabledAt"] == epoch
+    changed = client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True, "exportEnabled": True,
+        "expectedConnectionRevision": first["connectionRevision"],
+    })
+    assert changed.status_code == 200, changed.text
+    assert changed.json()["exportEnabledAt"] == epoch
+    assert changed.json()["connectedAt"] != first["connectedAt"]
+    stale = client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True, "exportEnabled": False,
+        "expectedConnectionRevision": first["connectionRevision"],
+    })
+    assert stale.status_code == 409
+    assert client.get("/v1/users/me/health", headers=headers).json()["sources"][0]["exportEnabledAt"] == epoch
+    off = client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True, "exportEnabled": False,
+        "expectedConnectionRevision": changed.json()["connectionRevision"],
+    })
+    assert off.status_code == 200, off.text
+    assert off.json()["exportEnabledAt"] is None
+    again = _connect(headers, read=True, export=True)
+    assert datetime.fromisoformat(again["exportEnabledAt"].replace("Z", "+00:00")) > datetime.fromisoformat(epoch.replace("Z", "+00:00"))
+    stale_delete = client.delete(
+        f"/v1/users/me/health/sources/apple_health?expectedConnectionRevision={changed.json()['connectionRevision']}",
+        headers=headers,
+    )
+    assert stale_delete.status_code == 409
+    assert client.get("/v1/users/me/health", headers=headers).json()["sources"][0]["exportEnabledAt"] == again["exportEnabledAt"]
+    assert client.delete("/v1/users/me/health/sources/apple_health", headers=headers).status_code == 204
+    assert _connect(headers, read=False, export=True)["exportEnabledAt"] != again["exportEnabledAt"]
+
+
+def test_hidden_inactive_source_revision_fences_reconnection(accounts):
+    _, headers = accounts[0]
+    empty = client.get("/v1/users/me/health", headers=headers).json()
+    assert empty["sourceRevisions"] == {}
+    first = client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True, "expectedConnectionRevision": 0,
+    })
+    assert first.status_code == 200, first.text
+    assert client.delete("/v1/users/me/health/sources/apple_health", headers=headers).status_code == 204
+    hidden = client.get("/v1/users/me/health", headers=headers).json()
+    assert hidden["sources"] == []
+    assert hidden["sourceRevisions"]["apple_health"] > first.json()["connectionRevision"]
+    stale = client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True, "expectedConnectionRevision": 0,
+    })
+    assert stale.status_code == 409
+    current = client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True,
+        "expectedConnectionRevision": hidden["sourceRevisions"]["apple_health"],
+    })
+    assert current.status_code == 200, current.text
+
+
+def test_feature_gate_allows_revocation_but_not_new_collection(accounts, monkeypatch):
+    _, headers = accounts[0]
+    source = _connect(headers, read=True, export=True)
+    monkeypatch.setattr(settings, "HEALTH_COLLECTION_ENABLED", False)
+    assert client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "health_connect", "readEnabled": True, "expectedConnectionRevision": 0,
+    }).status_code == 503
+    stopped = client.post("/v1/users/me/health/sources", headers=headers, json={
+        "source": "apple_health", "readEnabled": True, "exportEnabled": False,
+        "expectedConnectionRevision": source["connectionRevision"],
+    })
+    assert stopped.status_code == 200, stopped.text
+    assert stopped.json()["exportEnabledAt"] is None
+
+
 def test_primary_source_and_coach_preferences(accounts):
     _, headers = accounts[0]
     assert client.put("/v1/users/me/health/preferences", headers=headers, json={"primarySource": "apple_health", "coachEnabled": True}).status_code == 422
