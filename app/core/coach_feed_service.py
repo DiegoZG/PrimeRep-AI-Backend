@@ -19,11 +19,14 @@ from sqlalchemy.orm import Session
 from app.core.achievement_service import workout_milestones
 from app.core.coach_weight_data import public_weight_data
 from app.core.coach_service import _is_coach_eligible
+from app.core.legal import PRIVACY_VERSION
 from app.core.progression_service import suggest_weight_kg
 from app.core.settings import settings
 from app.models.coach import CoachFeedItem, CoachNotificationJob, CoachPreference
 from app.models.exercise import Exercise
+from app.models.health import HealthDay, HealthPreference, HealthSource
 from app.models.set_log import SetLog
+from app.models.user import User
 from app.models.workout_session import WorkoutSession
 from app.models.workout_session_exercise_feedback import WorkoutSessionExerciseFeedback
 from app.models.workout_template import UserProgramActivation
@@ -55,6 +58,7 @@ FEED_KINDS = {
     "consistency",
     "program_review",
     "upcoming_workout",
+    "health_context",
 }
 
 
@@ -673,6 +677,100 @@ def _program_review_candidates(db: Session, user_id: str) -> list[dict]:
     ]
 
 
+def _health_context_candidates(db: Session, user_id: str) -> list[dict]:
+    if not settings.HEALTH_COLLECTION_ENABLED:
+        return []
+    user = db.get(User, user_id)
+    if user is None or user.privacy_accepted_version != PRIVACY_VERSION:
+        return []
+    preference = db.get(HealthPreference, user_id)
+    if preference is None or not preference.coach_enabled or not preference.primary_source:
+        return []
+    source = db.query(HealthSource).filter_by(
+        user_id=user_id,
+        source=preference.primary_source,
+        enabled=True,
+        read_enabled=True,
+    ).one_or_none()
+    if source is None or source.last_successful_sync_at is None:
+        return []
+    latest_row = db.query(HealthDay).filter_by(
+        user_id=user_id, source=source.source
+    ).order_by(HealthDay.local_date.desc()).first()
+    if latest_row is None:
+        return []
+    try:
+        zone = ZoneInfo(latest_row.time_zone)
+    except Exception:
+        return []
+    today = _now().astimezone(zone).date()
+    if source.last_successful_sync_at.astimezone(zone).date() < today:
+        return []
+    observed_date = today - timedelta(days=1)
+    first_baseline = observed_date - timedelta(days=7)
+    rows = db.query(HealthDay).filter(
+        HealthDay.user_id == user_id,
+        HealthDay.source == source.source,
+        HealthDay.local_date >= first_baseline,
+        HealthDay.local_date <= observed_date,
+    ).order_by(HealthDay.local_date, HealthDay.updated_at).all()
+    by_date = {row.local_date: row for row in rows}
+    observed = by_date.get(observed_date)
+    if observed is None:
+        return []
+    baseline = [
+        by_date[day]
+        for day in (first_baseline + timedelta(days=offset) for offset in range(7))
+        if day in by_date
+    ]
+    sleep_values = [row.asleep_minutes for row in baseline if row.asleep_minutes is not None]
+    step_values = [row.steps for row in baseline if row.steps is not None]
+    sleep_median = statistics.median(sleep_values) if len(sleep_values) >= 4 else None
+    step_median = statistics.median(step_values) if len(step_values) >= 4 else None
+    sleep_flag = (
+        observed.asleep_minutes is not None
+        and sleep_median is not None
+        and observed.asleep_minutes < 360
+        and observed.asleep_minutes <= sleep_median - 60
+    )
+    steps_flag = (
+        observed.steps is not None
+        and step_median is not None
+        and observed.steps > 10_000
+        and observed.steps > step_median * 1.5
+    )
+    if not sleep_flag and not steps_flag:
+        return []
+    source_label = "Apple Health" if source.source == "apple_health" else "Health Connect"
+    if sleep_flag:
+        title = "Check in before your next workout"
+        median_minutes = int(sleep_median + 0.5)
+        detail = (
+            f"{source_label} recorded {observed.asleep_minutes // 60} h "
+            f"{observed.asleep_minutes % 60} min asleep for the night ending "
+            f"{observed_date.isoformat()}, compared with your previous seven-day "
+            f"median of {median_minutes // 60} h {median_minutes % 60} min."
+        )
+    else:
+        title = "Check in after a busy day"
+        detail = (
+            f"{source_label} recorded {observed.steps:,} steps on "
+            f"{observed_date.isoformat()}, compared with your previous seven-day "
+            f"median of {step_median:,.0f} steps."
+        )
+    expires_at = datetime.combine(today + timedelta(days=1), time.min, tzinfo=zone).astimezone(timezone.utc)
+    return [_candidate(
+        kind="health_context",
+        evidence=[observed_date],
+        priority=55,
+        title=title,
+        body="Notice how you feel before your next workout. Keep your planned session as written, or adjust it yourself if needed.",
+        detail=detail,
+        target={"type": "settings", "section": "health"},
+        expires_at=expires_at,
+    )]
+
+
 def reconcile_feed(
     db: Session,
     user_id: str,
@@ -702,6 +800,7 @@ def reconcile_feed(
         + _pr_candidates(db, user_id)
         + _consistency_candidates(db, user_id, local_date)
         + _program_review_candidates(db, user_id)
+        + _health_context_candidates(db, user_id)
     )
     now = _now()
     candidates = [candidate for candidate in candidates if candidate["expires_at"] > now]
@@ -815,6 +914,9 @@ def reconcile_after_mutation(
     template_ids: Optional[list[str]] = None,
     invalidate_plan_items: bool = False,
     invalidate_program_items: bool = False,
+    invalidate_health_items: bool = False,
+    commit: bool = True,
+    strict: bool = False,
 ) -> int:
     """Mark reconciliation first, then expire only dependent projections."""
     requested_at = _now()
@@ -867,6 +969,8 @@ def reconcile_after_mutation(
                 dependent = True
             if invalidate_program_items and item.kind == "program_review":
                 dependent = True
+            if invalidate_health_items and item.kind == "health_context":
+                dependent = True
             if dependent:
                 item.expires_at = requested_at
                 item.invalidated_at = requested_at
@@ -880,10 +984,15 @@ def reconcile_after_mutation(
                 {"status": "cancelled", "locked_at": None},
                 synchronize_session=False,
             )
-        db.commit()
+        if commit:
+            db.commit()
+        else:
+            db.flush()
         return 1
     except Exception as error:
         db.rollback()
+        if strict:
+            raise
         marker_saved = False
         try:
             with db.no_autoflush:
@@ -1015,7 +1124,14 @@ def get_feed(
         CoachFeedItem.available_at <= now,
         CoachFeedItem.dismissed_at.is_(None),
         CoachFeedItem.kind != "upcoming_workout",
+        or_(
+            CoachFeedItem.kind != "health_context",
+            CoachFeedItem.invalidated_at.is_(None),
+        ),
     )
+    user = db.get(User, user_id)
+    if not settings.HEALTH_COLLECTION_ENABLED or user is None or user.privacy_accepted_version != PRIVACY_VERSION:
+        query = query.filter(CoachFeedItem.kind != "health_context")
     if view == "now":
         query = query.filter(
             CoachFeedItem.expires_at > now,
@@ -1105,6 +1221,10 @@ def get_item(db: Session, user_id: str, item_id: str) -> Optional[CoachFeedItemO
 
 
 def is_item_current(db: Session, item: CoachFeedItem) -> bool:
+    if item.kind == "health_context":
+        user = db.get(User, str(item.user_id))
+        if not settings.HEALTH_COLLECTION_ENABLED or user is None or user.privacy_accepted_version != PRIVACY_VERSION:
+            return False
     target = item.target_data or {"type": "none"}
     target_type = target.get("type")
     if target_type == "active_workout":

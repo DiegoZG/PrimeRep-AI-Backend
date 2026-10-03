@@ -495,5 +495,5 @@ def test_signup_records_server_timestamp_and_legal_versions():
     with SessionLocal() as db:
         user = db.query(User).filter_by(email=tokens["email"]).one()
         assert user.terms_accepted_version == "2026-09-12"
-        assert user.privacy_accepted_version == "2026-09-12"
+        assert user.privacy_accepted_version == "2026-10-02"
         assert user.legal_accepted_at is not None

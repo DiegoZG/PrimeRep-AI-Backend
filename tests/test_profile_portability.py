@@ -161,7 +161,7 @@ def test_populated_export_allowlist_csv_and_isolation(accounts):
     assert response.headers["cache-control"] == "no-store"
     assert "attachment" in response.headers["content-disposition"]
     with ZipFile(io.BytesIO(response.content)) as archive:
-        assert set(archive.namelist()) == {"account.json", "workouts.csv", "sets.csv", "README.txt", "profile-photo.jpg"}
+        assert set(archive.namelist()) == {"account.json", "workouts.csv", "sets.csv", "health-days.csv", "README.txt", "profile-photo.jpg"}
         raw = archive.read("account.json").decode()
         data = json.loads(raw)
         for forbidden in ["password_hash", "auth_version", "ONBOARDING_SECRET", "NESTED_SECRET", "OPERATIONAL_SECRET", "COACH_SECRET", "PROTECTED_SECRET", "OTHER_ACCOUNT_PRIVATE", "profile_managed_fields"]:
