@@ -117,6 +117,7 @@ def create_session(
         db.query(WorkoutSession)
         .filter(WorkoutSession.user_id == user_id, WorkoutSession.status == "in_progress")
         .with_for_update()
+        .populate_existing()
         .first()
     )
     if active is not None:
@@ -163,6 +164,8 @@ def create_session(
         workout_date=workout_date,
         day_type=day_type,
         workout_snapshot=snapshot,
+        arranged_workout=copy.deepcopy(snapshot),
+        arrangement_revision=0,
         client_session_id=client_session_id,
     )
     db.add(session)
@@ -234,6 +237,7 @@ def transition_session(db: Session, session_id: str, user_id: str, target_status
         db.query(WorkoutSession)
         .filter(WorkoutSession.id == session_id, WorkoutSession.user_id == user_id)
         .with_for_update()
+        .populate_existing()
         .first()
     )
     if session is None:
@@ -255,6 +259,7 @@ def _editable_session(db: Session, session_id: str, user_id: str) -> Optional[Wo
         db.query(WorkoutSession)
         .filter(WorkoutSession.id == session_id, WorkoutSession.user_id == user_id)
         .with_for_update()
+        .populate_existing()
         .first()
     )
     if session is None:
@@ -328,6 +333,7 @@ def log_set(
         db.query(WorkoutSession)
         .filter(WorkoutSession.id == session_id, WorkoutSession.user_id == user_id)
         .with_for_update()
+        .populate_existing()
         .first()
     )
     if session is None:
@@ -344,7 +350,11 @@ def log_set(
     )
     if existing is not None:
         return existing
-    allowed_exercise_ids = _snapshot_exercise_ids(session.workout_snapshot)
+    if db.query(WorkoutSessionOperation.id).filter_by(
+        session_id=session_id, client_operation_id=client_operation_id
+    ).first() is not None:
+        raise InvalidOperationReuse
+    allowed_exercise_ids = _snapshot_exercise_ids(session.effective_workout)
     if allowed_exercise_ids and exercise_id not in allowed_exercise_ids:
         raise ExerciseNotInWorkout
     set_log = SetLog(
@@ -399,6 +409,7 @@ def update_set(
         db.query(SetLog)
         .filter(SetLog.id == set_log_id, SetLog.session_id == session_id, SetLog.deleted_at.is_(None))
         .with_for_update()
+        .populate_existing()
         .first()
     )
     if set_log is None:
@@ -429,6 +440,7 @@ def delete_set(db: Session, session_id: str, user_id: str, set_log_id: str, clie
         db.query(SetLog)
         .filter(SetLog.id == set_log_id, SetLog.session_id == session_id)
         .with_for_update()
+        .populate_existing()
         .first()
     )
     if set_log is None:
@@ -452,6 +464,7 @@ def restore_set(db: Session, session_id: str, user_id: str, set_log_id: str, cli
         db.query(SetLog)
         .filter(SetLog.id == set_log_id, SetLog.session_id == session_id)
         .with_for_update()
+        .populate_existing()
         .first()
     )
     if set_log is None:
@@ -494,7 +507,7 @@ def update_exercise_feedback(
     session = _editable_session(db, session_id, user_id)
     if session is None:
         return None
-    if exercise_id not in _snapshot_exercise_ids(session.workout_snapshot):
+    if exercise_id not in _snapshot_exercise_ids(session.effective_workout):
         raise ExerciseNotInWorkout
     existing = _operation(
         db,

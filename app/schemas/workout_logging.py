@@ -147,6 +147,8 @@ class SessionOut(BaseModel):
     workout_date: date = Field(..., alias="workoutDate")
     day_type: str = Field(..., alias="dayType")
     workout_snapshot: Optional[dict] = Field(None, alias="workoutSnapshot")
+    effective_workout: Optional[dict] = Field(None, alias="effectiveWorkout")
+    arrangement_revision: int = Field(0, alias="arrangementRevision")
     recovery_required: bool = Field(False, alias="recoveryRequired")
     client_session_id: Optional[str] = Field(None, alias="clientSessionId")
     status: str
@@ -188,5 +190,43 @@ class StatsOut(BaseModel):
     total_completed: int = Field(..., alias="totalCompleted")
     prs_this_week: int = Field(..., alias="prsThisWeek")
     total_volume_kg: float = Field(..., alias="totalVolumeKg")
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class ReplacementRequest(MutationOperationRequest):
+    replacement_exercise_id: str = Field(..., alias="replacementExerciseId", min_length=1)
+    expected_revision: int = Field(..., alias="expectedRevision", ge=0)
+
+
+class OrderPreviewRequest(BaseModel):
+    exercise_ids: list[str] = Field(..., alias="exerciseIds", min_length=1, max_length=100)
+    expected_revision: int = Field(..., alias="expectedRevision", ge=0)
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class OrderRequest(OrderPreviewRequest):
+    client_operation_id: str = Field(..., alias="clientOperationId", min_length=1, max_length=128)
+    apply_revised_targets: bool = Field(False, alias="applyRevisedTargets")
+
+
+class OrderTargetChangeOut(BaseModel):
+    exercise_id: str = Field(..., alias="exerciseId")
+    from_block_type: str = Field(..., alias="fromBlockType")
+    to_block_type: str = Field(..., alias="toBlockType")
+    before: dict
+    after: dict
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class OrderPreviewOut(BaseModel):
+    arrangement_revision: int = Field(..., alias="arrangementRevision")
+    exercise_ids: list[str] = Field(..., alias="exerciseIds")
+    targets_changed: bool = Field(..., alias="targetsChanged")
+    target_changes: list[OrderTargetChangeOut] = Field(..., alias="targetChanges")
+    effective_workout: dict = Field(..., alias="effectiveWorkout")
+    message: str
 
     model_config = ConfigDict(populate_by_name=True)

@@ -6,6 +6,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core import workout_arrangement_service as arrangement
+from app.schemas.exercise import ExerciseSubstitutionsOut
 from app.core.coach_feed_service import reconcile_after_mutation
 from app.core.security.deps import get_current_user
 from app.core.workout_logging_service import (
@@ -35,6 +37,10 @@ from app.models.user import User
 from app.models.set_log import SetLog
 from app.schemas.workout_logging import (
     SessionCreateRequest,
+    ReplacementRequest,
+    OrderRequest,
+    OrderPreviewRequest,
+    OrderPreviewOut,
     SessionListOut,
     SessionOut,
     SessionSummaryOut,
@@ -138,6 +144,8 @@ def log_set_endpoint(
         raise HTTPException(status_code=409, detail="An abandoned workout is read-only.")
     except ExerciseNotInWorkout:
         raise HTTPException(status_code=422, detail="Exercise is not part of this workout.")
+    except InvalidOperationReuse:
+        raise HTTPException(status_code=409, detail="Use a new operation ID for a different mutation.")
     except DuplicateSetSlot:
         raise HTTPException(status_code=409, detail="That set number already exists for this exercise.")
     if logged_set is None:
@@ -424,3 +432,58 @@ def get_session_endpoint(
     if session is None:
         raise HTTPException(status_code=404, detail="Session not found.")
     return session
+
+
+def _arrangement_call(db: Session, action):
+    try:
+        result = action()
+    except arrangement.ArrangementConflict as error:
+        db.rollback()
+        raise HTTPException(status_code=409, detail=str(error))
+    except arrangement.InvalidArrangement as error:
+        db.rollback()
+        raise HTTPException(status_code=422, detail=str(error))
+    except InvalidOperationReuse:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Use a new operation ID for a different arrangement payload.")
+    if result is None:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    return result
+
+
+@router.get("/sessions/{session_id}/exercises/{exercise_id}/replacement-candidates", response_model=ExerciseSubstitutionsOut)
+def replacement_candidates_endpoint(
+    session_id: str, exercise_id: str, db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return _arrangement_call(db, lambda: arrangement.replacement_candidates(
+        db, session_id, str(current_user.id), exercise_id))
+
+
+@router.post("/sessions/{session_id}/exercises/{exercise_id}/replace", response_model=SessionOut)
+def replace_exercise_endpoint(
+    session_id: str, exercise_id: str, request: ReplacementRequest,
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
+):
+    return _arrangement_call(db, lambda: arrangement.replace_exercise(
+        db, session_id, str(current_user.id), exercise_id, request.replacement_exercise_id,
+        request.expected_revision, request.client_operation_id))
+
+
+@router.post("/sessions/{session_id}/order/preview", response_model=OrderPreviewOut)
+def preview_order_endpoint(
+    session_id: str, request: OrderPreviewRequest,
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
+):
+    return _arrangement_call(db, lambda: arrangement.preview_order(
+        db, session_id, str(current_user.id), request.exercise_ids, request.expected_revision))
+
+
+@router.patch("/sessions/{session_id}/order", response_model=SessionOut)
+def update_order_endpoint(
+    session_id: str, request: OrderRequest,
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
+):
+    return _arrangement_call(db, lambda: arrangement.update_order(
+        db, session_id, str(current_user.id), request.exercise_ids, request.expected_revision,
+        request.client_operation_id, request.apply_revised_targets))
