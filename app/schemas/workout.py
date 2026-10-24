@@ -59,6 +59,9 @@ class WorkoutExerciseBlockOut(BaseModel):
 class WorkoutNextResponseOut(BaseModel):
     """Response for POST /v1/workouts/next."""
 
+    planning_mode: Optional[str] = Field(None, alias="planningMode")
+    time_budget_minutes: Optional[int] = Field(None, alias="timeBudgetMinutes")
+    planning_source: Optional[str] = Field(None, alias="planningSource")
     workout_id: str = Field(..., alias="workoutId")
     title: str
     split_key: str = Field(..., alias="splitKey")

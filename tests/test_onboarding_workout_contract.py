@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from types import SimpleNamespace
 import uuid
 
@@ -682,6 +682,7 @@ def test_full_body_duration_growth_adds_complementary_exercises():
     headers = _signup_with_onboarding(
         _mobile_onboarding(
             workoutFrequency="3-days",
+            experienceLevel="advanced",
             workoutSplit="ai-optimized",
             selectedEquipment=[
                 "dumbbells",
@@ -698,14 +699,14 @@ def test_full_body_duration_growth_adds_complementary_exercises():
             ],
         )
     )
-    week = client.get("/v1/workouts/week", headers=headers)
+    week = client.get("/v1/workouts/week", headers=headers, params={"weekStart": (date.today() + timedelta(days=7-date.today().weekday())).isoformat()})
     assert week.status_code == 200
     workout = week.json()["workouts"][0]
     workout_id = workout["workoutDayId"]
 
     previous_ids: set[str] = set()
-    for duration, expected_count in ((35, 4), (45, 6), (60, 7)):
-        if duration != 35:
+    for duration, expected_count in ((35, 3), (45, 5), (60, 7)):
+        if duration in (35, 45, 60):
             response = client.patch(
                 "/v1/workouts/week/duration",
                 json={"workoutDayId": workout_id, "durationMinutes": duration},

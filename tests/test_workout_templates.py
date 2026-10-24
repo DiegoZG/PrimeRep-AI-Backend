@@ -841,10 +841,11 @@ def test_activation_preserves_an_in_progress_workout_snapshot():
             "weekStart": week["weekStart"],
         },
     )
-    assert changed.status_code == 200
+    assert changed.status_code == 409
+    assert changed.json()["detail"]["code"] == "workout_planning_locked"
     changed_program_workouts = {
         item["workoutDayId"]: item
-        for item in changed.json()["workouts"]
+        for item in client.get("/v1/workouts/week", headers=headers).json()["workouts"]
         if item.get("programActivationId")
     }
     assert changed_program_workouts == program_workouts

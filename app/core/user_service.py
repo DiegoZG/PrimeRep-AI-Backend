@@ -43,6 +43,9 @@ def create_user(
         password_hash=password_hash,
     )
     db.add(user)
+    db.flush()
+    from app.models.onboarding_profile import OnboardingProfile
+    db.add(OnboardingProfile(user_id=str(user.id), data={"workoutPlanningMode": "trainer_led", "preferredWorkoutMinutes": 35}))
     if commit:
         db.commit()
         db.refresh(user)

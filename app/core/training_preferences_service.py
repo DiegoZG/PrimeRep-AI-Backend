@@ -15,6 +15,8 @@ from app.models.workout_template import UserProgramActivation
 
 
 PREFERENCE_FIELDS = (
+    "workoutPlanningMode",
+    "preferredWorkoutMinutes",
     "fitnessGoal",
     "experienceLevel",
     "workoutFrequency",
@@ -25,6 +27,8 @@ PREFERENCE_FIELDS = (
 )
 
 _LEGACY_FIELDS = {
+    "workoutPlanningMode": (),
+    "preferredWorkoutMinutes": (),
     "fitnessGoal": ("fitness_goal", "goal"),
     "experienceLevel": ("experience_level",),
     "workoutFrequency": ("workout_frequency", "days_per_week"),
@@ -88,6 +92,7 @@ def update_training_preferences(
     *,
     week_start: Optional[date] = None,
     effective_date: Optional[date] = None,
+    plan_update_scope: str = "refresh",
 ) -> dict[str, Any]:
     mutation_week_start, _ = _resolve_mutation_calendar(
         week_start=week_start, effective_date=effective_date
@@ -138,7 +143,7 @@ def update_training_preferences(
                 "equipmentReviewRevision": revision,
             }
             flag_modified(active_program, "activation_snapshot")
-    if not current_programs:
+    if not current_programs and plan_update_scope != "preserve":
         scheduled_week_start = min(
             (
                 item.effective_date - timedelta(days=item.effective_date.weekday())
@@ -172,6 +177,9 @@ def _canonical_preferences(data: dict[str, Any]) -> dict[str, Any]:
         canonical = _canonical_preference_value(field, value)
         if canonical is not None:
             preferences[field] = canonical
+    from app.core.workout_planning import planning_defaults
+    mode, minutes = planning_defaults(data)
+    preferences.update(workoutPlanningMode=mode, preferredWorkoutMinutes=minutes)
     return preferences
 
 

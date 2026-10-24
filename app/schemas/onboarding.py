@@ -1,6 +1,6 @@
 from datetime import datetime
 import math
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -15,6 +15,8 @@ class CustomWorkout(BaseModel):
 
 
 class OnboardingData(BaseModel):
+    workoutPlanningMode: Optional[Literal["trainer_led", "time_budget"]] = None
+    preferredWorkoutMinutes: Optional[int] = Field(None, ge=15, le=120, strict=True)
     preferredName: Optional[str] = None
     lastName: Optional[str] = None
     email: Optional[str] = None
@@ -40,6 +42,12 @@ class OnboardingData(BaseModel):
     deadlift1RM: Optional[float] = Field(default=None, ge=0, le=1500)
 
     model_config = ConfigDict(extra="allow")
+
+    @model_validator(mode="after")
+    def planning_fields_cannot_be_null(self):
+        if any(field in self.model_fields_set and getattr(self, field) is None for field in ("workoutPlanningMode", "preferredWorkoutMinutes")):
+            raise ValueError("Planning settings cannot be null")
+        return self
 
     @field_validator("dumbbellWeights", "plateWeights", mode="before")
     @classmethod

@@ -11,6 +11,7 @@ from sqlalchemy.orm.attributes import flag_modified
 
 from app.core.coach_service import generate_coach_content, generate_week_coach_content
 from app.core.progression_service import suggest_weight_kg
+from app.core.workout_planning import PROFILE_EXERCISE_COUNTS, apply_time_budget, normalized_day
 from app.core.schedule_lock import lock_user_schedule
 from app.core.workout_service import (
     LOWER_MUSCLES,
@@ -47,15 +48,6 @@ DAYS_PER_WEEK_TEMPLATES = {
     5: [0, 1, 2, 4, 5],  # Mon, Tue, Wed, Fri, Sat
     6: [0, 1, 2, 3, 4, 5],
     7: [0, 1, 2, 3, 4, 5, 6],
-}
-
-# Duration → exercise count mapping
-# Returns (main_count, accessory_count)
-DURATION_EXERCISE_COUNTS = {
-    25: (2, 1),   # ≤25 min → 3 exercises (2 main, 1 accessory)
-    40: (2, 2),   # 30-40 min → 4 exercises (2 main, 2 accessory)
-    55: (3, 3),   # 45-55 min → 6 exercises (3 main, 3 accessory)
-    120: (3, 4),  # 60+ min → 7 exercises (3 main, 4 accessory)
 }
 
 DEFAULT_DURATION_MINUTES = 35
@@ -96,15 +88,6 @@ def _check_and_increment_force_regen(db: Session, user_id: str) -> None:
     else:
         db.add(UserDailyForceRegen(user_id=user_id, regen_date=today, count=1))
     db.commit()
-
-
-def _get_exercise_counts(duration_minutes: int) -> tuple[int, int]:
-    """Get (main_count, accessory_count) based on duration."""
-    for threshold, counts in sorted(DURATION_EXERCISE_COUNTS.items()):
-        if duration_minutes <= threshold:
-            return counts
-    # Fallback for very long durations
-    return (3, 4)
 
 
 def _full_body_role(exercise) -> str:
@@ -303,6 +286,9 @@ def _generate_single_workout(
     workout_day_id: Optional[str] = None,
     db: Optional[Session] = None,
     user_id: Optional[str] = None,
+    planning_mode: str = "time_budget",
+    experience_level: Optional[str] = None,
+    planning_source: str = "default",
 ) -> tuple[dict[str, Any], list[tuple]]:
     """Generate a single workout day entry.
 
@@ -316,7 +302,7 @@ def _generate_single_workout(
 
     day_pool = _filter_by_day_type(all_eligible, day_type, day_definition.muscles)
 
-    main_count, accessory_count = _get_exercise_counts(duration_minutes)
+    main_count, accessory_count = PROFILE_EXERCISE_COUNTS.get(experience_level, (2, 2))
     selected_ids: set[str] = set()
     deferred_muscles: list[str] = []
     unavailable_muscles: list[str] = []
@@ -406,7 +392,14 @@ def _generate_single_workout(
             accessory_block.model_dump(by_alias=True),
         ],
     }
-    return workout_dict, all_items
+    workout_dict = apply_time_budget(workout_dict, planning_mode, duration_minutes if planning_mode == "time_budget" else None, planning_source)
+    kept = {item["exercise"]["id"] for block in workout_dict["exerciseBlocks"] for item in block["items"]}
+    kept_muscles = {exercise.primary_muscle for exercise, _ in all_items if exercise.id in kept}
+    requested = day_definition.ordered_muscles if day_definition.restrict_to_muscles else tuple(sorted(day_definition.muscles))
+    available = {exercise.primary_muscle for exercise in day_pool}
+    workout_dict["unavailableMuscles"] = [muscle for muscle in requested if muscle not in available]
+    workout_dict["deferredMuscles"] = [muscle for muscle in requested if muscle in available and muscle not in kept_muscles]
+    return workout_dict, [(exercise, prescription) for exercise, prescription in all_items if exercise.id in kept]
 
 
 def _stamp_coach_content(workout_dict: dict[str, Any], coach) -> None:
@@ -430,6 +423,7 @@ def _generate_week_plan(
     days_per_week: int,
     personalization_seed: str = "",
     existing_durations: Optional[dict[int, int]] = None,
+    existing_planning_configs: Optional[dict[int, dict]] = None,
     existing_workout_day_ids: Optional[dict[int, str]] = None,
     force_new_ids: bool = False,
     skip_week_coach: bool = False,
@@ -447,6 +441,7 @@ def _generate_week_plan(
         (plan_json, coach_items_by_workout_id) where coach_items_by_workout_id maps
         workoutDayId -> exercise_items tuples for single-day coach calls.
     """
+    settings = get_onboarding_settings(db, user_id=user_id)
     capped_days = max(1, min(7, days_per_week))
     template_dates = _get_template_dates(week_start, capped_days)
 
@@ -476,9 +471,12 @@ def _generate_week_plan(
         day_type = day_definition.day_type
 
         # Get duration (preserved or default)
-        duration = DEFAULT_DURATION_MINUTES
-        if existing_durations and slot_index in existing_durations:
-            duration = existing_durations[slot_index]
+        config = (existing_planning_configs or {}).get(slot_index)
+        mode, duration, source = settings.planning_mode, settings.preferred_workout_minutes, "default"
+        if config:
+            mode, duration, source = config["planningMode"], config.get("timeBudgetMinutes") or settings.preferred_workout_minutes, config.get("planningSource", "default")
+        elif existing_durations and slot_index in existing_durations:
+            mode, duration, source = "time_budget", existing_durations[slot_index], "override"
 
         # Get workout_day_id (preserved or new)
         workout_day_id = None
@@ -486,12 +484,15 @@ def _generate_week_plan(
             workout_day_id = existing_workout_day_ids[slot_index]
 
         workout_dict, all_items = _generate_single_workout(
-            rng=rng,
+            rng=random.Random(f"{seed_str}:{workout_date.isoformat()}:{day_type}"),
             all_eligible=all_eligible,
             day_type=day_type,
             split_preference=split_preference,
             day_definition=day_definition,
             duration_minutes=duration,
+            planning_mode=mode,
+            experience_level=settings.experience_level,
+            planning_source=source,
             workout_date=workout_date,
             slot_index=slot_index,
             workout_day_id=workout_day_id,
@@ -667,13 +668,15 @@ def get_or_create_week_plan(
 
     # Extract existing durations to preserve (by slotIndex)
     existing_durations: Optional[dict[int, int]] = None
+    existing_planning_configs: dict[int, dict] = {}
     existing_workout_day_ids: Optional[dict[int, str]] = None
     if existing_plan:
         existing_durations = {}
         existing_workout_day_ids = {}
         for w in existing_plan.plan_json.get("workouts", []):
             slot_idx = w.get("slotIndex", 0)
-            existing_durations[slot_idx] = w.get("durationMinutes", DEFAULT_DURATION_MINUTES)
+            if "planningMode" not in w or w.get("planningSource") == "override":
+                existing_planning_configs[slot_idx] = normalized_day(w)
             workout_day_id = w.get("workoutDayId")
             if isinstance(workout_day_id, str):
                 existing_workout_day_ids[slot_idx] = workout_day_id
@@ -722,7 +725,8 @@ def get_or_create_week_plan(
         day_cycle=settings.day_cycle,
         days_per_week=days_per_week,
         personalization_seed=settings.selection_seed,
-        existing_durations=existing_durations,
+        existing_durations=None,
+        existing_planning_configs=existing_planning_configs,
         existing_workout_day_ids=(
             None if force_regenerate else existing_workout_day_ids
         ),
@@ -878,7 +882,9 @@ def skip_workout_day(
         day_type=new_day_type,
         split_preference=split_preference,
         day_definition=new_day,
-        duration_minutes=DEFAULT_DURATION_MINUTES,
+        duration_minutes=settings.preferred_workout_minutes,
+        planning_mode=settings.planning_mode,
+        experience_level=settings.experience_level,
         workout_date=new_date,
         slot_index=new_slot_index,
         workout_day_id=None,
@@ -917,188 +923,13 @@ def skip_workout_day(
 
 
 def update_workout_duration(
-    db: Session,
-    *,
-    user_id: str,
-    workout_day_id: str,
-    duration_minutes: int,
+    db: Session, *, user_id: str, workout_day_id: str, duration_minutes: int,
     week_start: Optional[date] = None,
 ) -> Optional[WorkoutWeekResponseOut]:
-    """
-    Update duration for a workout day and regenerate the week (preserving IDs and all durations).
-    
-    Returns None if the workout_day_id is not found in the current plan.
-    """
-    if week_start is None:
-        week_start = get_week_start(date.today())
-    lock_user_schedule(db, user_id)
-
-    plan = _resolve_plan_for_workout_day(
-        db,
-        user_id=user_id,
-        workout_day_id=workout_day_id,
-        week_start=week_start,
-    )
-    if not plan:
-        return None
-
-    week_start = plan.week_start_date
-
-    workouts = plan.plan_json.get("workouts", [])
-
-    workout = next(
-        (item for item in workouts if item.get("workoutDayId") == workout_day_id),
-        None,
-    )
-    if workout is None:
-        return None
-    if workout.get("programActivationId"):
-        server_today = datetime.now(timezone.utc).date()
-        earliest_current_week = min(
-            get_week_start(server_today + timedelta(days=offset)) for offset in (-1, 0, 1)
-        )
-        if plan.week_start_date < earliest_current_week:
-            raise HistoricalProgramPlanLockedError(
-                "Historical program weeks cannot be changed"
-            )
-        raise ProgramDurationLockedError(
-            "Program workout duration is fixed by the active program"
-        )
-    workout["durationMinutes"] = duration_minutes
-
-    if any(item.get("programActivationId") for item in workouts):
-        settings = get_onboarding_settings(db, user_id=user_id)
-        owned_equipment_ids = _get_owned_equipment_ids_from_settings(db, settings)
-        day_definition = next(
-            (
-                item
-                for item in settings.day_cycle
-                if item.day_type == workout.get("dayType")
-            ),
-            _standard_day(workout.get("dayType", "full_body")),
-        )
-        regenerated, exercise_items = _generate_single_workout(
-            rng=random.Random(
-                f"{user_id}:{week_start.isoformat()}:{settings.selection_seed}:"
-                f"duration:{workout_day_id}:{duration_minutes}"
-            ),
-            all_eligible=get_eligible_exercises(
-                db,
-                owned_equipment_ids=owned_equipment_ids,
-                user_id=user_id,
-            ),
-            day_type=day_definition.day_type,
-            split_preference=settings.split_preference,
-            day_definition=day_definition,
-            duration_minutes=duration_minutes,
-            workout_date=date.fromisoformat(workout["date"]),
-            slot_index=workout.get("slotIndex", 0),
-            workout_day_id=workout_day_id,
-            db=db,
-            user_id=user_id,
-        )
-        coach = generate_coach_content(
-            db,
-            user_id=user_id,
-            day_type=regenerated["dayType"],
-            title=regenerated["title"],
-            exercise_items=exercise_items,
-        )
-        _stamp_coach_content(regenerated, coach)
-        workouts[workouts.index(workout)] = regenerated
-        updated_plan = dict(plan.plan_json)
-        updated_plan["workouts"] = workouts
-        updated_plan["generatedAt"] = datetime.now(timezone.utc).isoformat().replace(
-            "+00:00", "Z"
-        )
-        plan.plan_json = updated_plan
-        flag_modified(plan, "plan_json")
-        db.commit()
-        db.refresh(plan)
-        return _plan_json_to_response(plan.plan_json)
-
-    # Snapshot existing coach content by workoutDayId before regeneration
-    old_coach: dict[str, dict] = {
-        w["workoutDayId"]: {
-            "workoutIntent": w.get("workoutIntent"),
-            "exerciseRationale": {
-                item["exercise"]["id"]: item.get("exerciseRationale")
-                for block in w.get("exerciseBlocks", [])
-                for item in block.get("items", [])
-                if item.get("exercise", {}).get("id")
-            },
-        }
-        for w in workouts
-        if w.get("workoutDayId")
-    }
-
-    # Extract durations and IDs by slotIndex
-    existing_durations: dict[int, int] = {}
-    existing_workout_day_ids: dict[int, str] = {}
-    for w in workouts:
-        slot_idx = w.get("slotIndex", 0)
-        existing_durations[slot_idx] = w.get("durationMinutes", DEFAULT_DURATION_MINUTES)
-        existing_workout_day_ids[slot_idx] = w.get("workoutDayId")
-
-    # Load settings
-    settings = get_onboarding_settings(db, user_id=user_id)
-    split_preference = settings.split_preference
-    days_per_week = settings.days_per_week
-    owned_equipment_ids = _get_owned_equipment_ids_from_settings(db, settings)
-
-    # Regenerate week with preserved IDs and durations (no batched coach call)
-    new_plan_json, coach_items_by_id = _generate_week_plan(
-        db,
-        user_id=user_id,
-        week_start=week_start,
-        owned_equipment_ids=owned_equipment_ids,
-        split_preference=split_preference,
-        day_cycle=settings.day_cycle,
-        days_per_week=days_per_week,
-        personalization_seed=settings.selection_seed,
-        existing_durations=existing_durations,
-        existing_workout_day_ids=existing_workout_day_ids,
-        force_new_ids=False,
-        skip_week_coach=True,
-    )
-
-    # Restore cached coach content for unchanged days only
-    for w in new_plan_json.get("workouts", []):
-        day_id = w.get("workoutDayId")
-        if day_id == workout_day_id:
-            continue
-        cached = old_coach.get(day_id or "")
-        if cached and cached.get("workoutIntent"):
-            w["workoutIntent"] = cached["workoutIntent"]
-            for block in w.get("exerciseBlocks", []):
-                for item in block.get("items", []):
-                    ex_id = item.get("exercise", {}).get("id")
-                    stored = cached["exerciseRationale"].get(ex_id) if ex_id else None
-                    if stored:
-                        item["exerciseRationale"] = stored
-
-    # Single-day coach call for the duration-changed workout only
-    changed_workout = next(
-        (w for w in new_plan_json.get("workouts", []) if w.get("workoutDayId") == workout_day_id),
-        None,
-    )
-    if changed_workout:
-        coach = generate_coach_content(
-            db,
-            user_id=user_id,
-            day_type=changed_workout["dayType"],
-            title=changed_workout["title"],
-            exercise_items=coach_items_by_id.get(workout_day_id, []),
-        )
-        _stamp_coach_content(changed_workout, coach)
-
-    plan.plan_json = new_plan_json
-    flag_modified(plan, "plan_json")
-    db.add(plan)
-    db.commit()
-    db.refresh(plan)
-
-    return _plan_json_to_response(plan.plan_json)
+    from app.core.workout_planning_service import update_day_planning
+    return update_day_planning(db, user_id=user_id, workout_day_id=workout_day_id,
+                               planning_mode="time_budget", time_budget_minutes=duration_minutes,
+                               week_start=week_start, effective_date=datetime.now(timezone.utc).date())
 
 
 def select_next_scheduled_workout(
@@ -1153,7 +984,8 @@ def _get_owned_equipment_ids_from_settings(
 def _plan_json_to_response(plan_json: dict[str, Any]) -> WorkoutWeekResponseOut:
     """Convert stored plan_json to WorkoutWeekResponseOut schema."""
     workouts = []
-    for w in plan_json.get("workouts", []):
+    for stored in plan_json.get("workouts", []):
+        w = normalized_day(stored)
         # Convert exercise blocks from dict to schema
         exercise_blocks = []
         for block_dict in w.get("exerciseBlocks", []):
@@ -1165,6 +997,10 @@ def _plan_json_to_response(plan_json: dict[str, Any]) -> WorkoutWeekResponseOut:
             slot_index=w["slotIndex"],
             date=date.fromisoformat(w["date"]),
             duration_minutes=w["durationMinutes"],
+            planning_mode=w["planningMode"],
+            time_budget_minutes=w["timeBudgetMinutes"],
+            planning_source=w["planningSource"],
+            planning_editable=False if (w.get("programActivationId") or w.get("templateId") or w.get("splitKey") == "program") else None,
             title=w["title"],
             split_key=w["splitKey"],
             day_type=w["dayType"],

@@ -441,7 +441,7 @@ def test_duration_updates_and_regenerates():
     assert response.status_code == 200
 
     # Get initial plan
-    response = client.get("/v1/workouts/week", headers=headers)
+    response = client.get("/v1/workouts/week", headers=headers, params={"weekStart": (date.today() + timedelta(days=7-date.today().weekday())).isoformat()})
     assert response.status_code == 200
     initial_plan = response.json()
     workout_id = initial_plan["workouts"][0]["workoutDayId"]
@@ -480,7 +480,7 @@ def test_duration_preserves_workout_day_ids():
     assert response.status_code == 200
 
     # Get initial plan
-    response = client.get("/v1/workouts/week", headers=headers)
+    response = client.get("/v1/workouts/week", headers=headers, params={"weekStart": (date.today() + timedelta(days=7-date.today().weekday())).isoformat()})
     initial_plan = response.json()
     initial_ids = [w["workoutDayId"] for w in initial_plan["workouts"]]
     workout_id = initial_ids[0]
@@ -610,7 +610,7 @@ def test_duration_preserves_all_durations():
     assert response.status_code == 200
 
     # Get initial plan
-    response = client.get("/v1/workouts/week", headers=headers)
+    response = client.get("/v1/workouts/week", headers=headers, params={"weekStart": (date.today() + timedelta(days=7-date.today().weekday())).isoformat()})
     initial_plan = response.json()
 
     # Update first workout's duration
@@ -675,11 +675,11 @@ def test_duration_affects_exercise_count():
     assert response.status_code == 200
 
     # Get initial plan
-    response = client.get("/v1/workouts/week", headers=headers)
+    response = client.get("/v1/workouts/week", headers=headers, params={"weekStart": (date.today() + timedelta(days=7-date.today().weekday())).isoformat()})
     initial_plan = response.json()
     workout_id = initial_plan["workouts"][0]["workoutDayId"]
 
-    # Set to short duration (25 min = 3 exercises)
+    # A short budget trims optional work while retaining the useful floor.
     response = client.patch(
         "/v1/workouts/week/duration",
         json={"workoutDayId": workout_id, "durationMinutes": 25},
@@ -690,7 +690,7 @@ def test_duration_affects_exercise_count():
     short_workout = next(w for w in short_plan["workouts"] if w["workoutDayId"] == workout_id)
     short_exercise_count = sum(len(b["items"]) for b in short_workout["exerciseBlocks"])
 
-    # Set to long duration (60 min = 7 exercises)
+    # A larger budget permits the complete experience-level profile.
     response = client.patch(
         "/v1/workouts/week/duration",
         json={"workoutDayId": workout_id, "durationMinutes": 60},

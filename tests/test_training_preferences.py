@@ -167,6 +167,8 @@ def test_legacy_preferences_are_canonicalized_without_profile_overwrites():
     response = client.get("/v1/users/me/training-preferences", headers=headers)
     assert response.status_code == 200
     assert response.json() == {
+        "workoutPlanningMode": "time_budget",
+        "preferredWorkoutMinutes": 35,
         "fitnessGoal": "build-muscle",
         "experienceLevel": "no-experience",
         "workoutFrequency": "3-days",

@@ -48,7 +48,7 @@ EXERCISE = {
     "loadProfile": LOAD, "load_profile": LOAD,
 }
 WORKOUT = {
-    **fields("workoutDayId slotIndex date durationMinutes title splitKey dayType estimatedMinutes workoutIntent programActivationId templateId templateVersion templateDayId templateDayPosition"),
+    **fields("workoutDayId slotIndex date planningMode timeBudgetMinutes planningSource durationMinutes title splitKey dayType estimatedMinutes workoutIntent programActivationId templateId templateVersion templateDayId templateDayPosition"),
     "deferredMuscles": [None], "unavailableMuscles": [None],
     "exerciseBlocks": [{
         "blockType": None,

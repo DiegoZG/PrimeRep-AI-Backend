@@ -1,4 +1,5 @@
 from __future__ import annotations
+from app.core.workout_planning import planning_summary
 
 import base64
 import hashlib
@@ -209,7 +210,7 @@ def build_next_action(db: Session, user_id: str, local_date: date) -> CoachNextA
         return CoachNextActionOut(
             type="planned_workout",
             title=workout.get("title") or "Next workout",
-            body=f"{date_copy} · {workout.get('durationMinutes', workout.get('estimatedMinutes', 0))} min",
+            body=f"{date_copy} · {planning_summary(workout)}",
             target={
                 "type": "planned_workout",
                 "workoutDayId": workout["workoutDayId"],
