@@ -14,6 +14,7 @@ class WorkoutSessionOperation(Base):
     operation_type = Column(String, nullable=False)
     target_set_log_id = Column(String, ForeignKey("set_logs.id", ondelete="SET NULL"), nullable=True)
     target_exercise_id = Column(String, ForeignKey("exercises.id", ondelete="SET NULL"), nullable=True)
+    payload_fingerprint = Column(String(64), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     __table_args__ = (

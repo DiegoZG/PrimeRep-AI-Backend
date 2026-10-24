@@ -2,7 +2,7 @@ import uuid
 
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, Date, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, func, text
+from sqlalchemy import Column, Date, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint, func, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
@@ -26,6 +26,8 @@ class WorkoutSession(Base):
     # regenerated after a session starts, but the active session must remain
     # renderable and resumable.
     workout_snapshot = Column(JSONB, nullable=True)
+    arranged_workout = Column("effective_workout", JSONB, nullable=True)
+    arrangement_revision = Column(Integer, nullable=False, default=0, server_default="0")
     client_session_id = Column(String, nullable=False)
     status = Column(String, nullable=False, default="in_progress")
     started_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -50,6 +52,10 @@ class WorkoutSession(Base):
         viewonly=True,
     )
     exercise_feedback = relationship("WorkoutSessionExerciseFeedback", cascade="all, delete-orphan")
+
+    @property
+    def effective_workout(self):
+        return self.arranged_workout if self.arranged_workout is not None else self.workout_snapshot
 
     @property
     def recovery_required(self) -> bool:
