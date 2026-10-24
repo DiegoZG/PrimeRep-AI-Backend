@@ -231,6 +231,21 @@ def test_trimmed_custom_muscles_are_reported_as_deferred():
     assert result["unavailableMuscles"] == []
 
 
+@pytest.mark.parametrize("mode,minutes", [("trainer_led", 35), ("time_budget", 25)])
+def test_standard_days_do_not_invent_custom_rotation_metadata(mode, minutes):
+    headers, _ = _account()
+    assert _save(headers, workoutSplit="upper-lower", workoutPlanningMode=mode,
+                 preferredWorkoutMinutes=minutes).status_code == 200
+    future = MONDAY + datetime.timedelta(days=7)
+    response = client.get("/v1/workouts/week", headers=headers, params={"weekStart": future.isoformat()})
+    assert response.status_code == 200, response.text
+    days = response.json()["workouts"]
+    assert any(day["dayType"] == "lower" for day in days)
+    for day in days:
+        assert day["deferredMuscles"] == []
+        assert day["unavailableMuscles"] == []
+
+
 def test_fully_protected_program_week_and_pending_refresh_are_not_rewritten():
     headers, user_id = _account()
     day = _day(headers)

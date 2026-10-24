@@ -394,11 +394,12 @@ def _generate_single_workout(
     }
     workout_dict = apply_time_budget(workout_dict, planning_mode, duration_minutes if planning_mode == "time_budget" else None, planning_source)
     kept = {item["exercise"]["id"] for block in workout_dict["exerciseBlocks"] for item in block["items"]}
-    kept_muscles = {exercise.primary_muscle for exercise, _ in all_items if exercise.id in kept}
-    requested = day_definition.ordered_muscles if day_definition.restrict_to_muscles else tuple(sorted(day_definition.muscles))
-    available = {exercise.primary_muscle for exercise in day_pool}
-    workout_dict["unavailableMuscles"] = [muscle for muscle in requested if muscle not in available]
-    workout_dict["deferredMuscles"] = [muscle for muscle in requested if muscle in available and muscle not in kept_muscles]
+    if day_definition.restrict_to_muscles:
+        kept_muscles = {exercise.primary_muscle for exercise, _ in all_items if exercise.id in kept}
+        requested = day_definition.ordered_muscles
+        available = {exercise.primary_muscle for exercise in day_pool}
+        workout_dict["unavailableMuscles"] = [muscle for muscle in requested if muscle not in available]
+        workout_dict["deferredMuscles"] = [muscle for muscle in requested if muscle in available and muscle not in kept_muscles]
     return workout_dict, [(exercise, prescription) for exercise, prescription in all_items if exercise.id in kept]
 
 
