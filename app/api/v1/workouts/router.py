@@ -7,8 +7,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.core.workout_planning_service import update_day_planning, apply_planning_preference, planning_editability
-from app.schemas.workout_week import WorkoutPlanningRequest, ApplyPlanningPreferenceRequest, ApplyPlanningPreferenceOut
+from app.core.workout_planning_service import update_day_planning, apply_planning_preference, planning_editability, add_workout_exercise, WorkoutExerciseConflict
+from app.core.workout_template_service import TemplateValidationError
+from app.schemas.workout_week import WorkoutPlanningRequest, ApplyPlanningPreferenceRequest, ApplyPlanningPreferenceOut, AddWorkoutExerciseRequest
 from app.core.coach_feed_service import reconcile_after_mutation
 from app.core.security.deps import get_current_user
 from app.core.workout_week_service import (
@@ -332,3 +333,22 @@ def apply_planning_preference_endpoint(request: ApplyPlanningPreferenceRequest, 
     result["weekPlan"] = planning_editability(db, str(current_user.id), result["weekPlan"])
     reconcile_after_mutation(db, str(current_user.id), invalidate_plan_items=True)
     return result
+
+
+@router.post("/week/exercises", response_model=WorkoutWeekResponseOut)
+def add_workout_exercise_endpoint(request: AddWorkoutExerciseRequest, db: Session = Depends(get_db),
+                                  current_user: User = Depends(get_current_user)):
+    try:
+        result = add_workout_exercise(db, user_id=str(current_user.id), workout_day_id=request.workout_day_id,
+            exercise_id=request.exercise_id, expected_exercise_ids=request.expected_exercise_ids,
+            week_start=request.week_start, effective_date=request.effective_date, allow_over_budget=request.allow_over_budget)
+    except WorkoutExerciseConflict as error:
+        raise HTTPException(status_code=409, detail=error.detail)
+    except ProgramDurationLockedError as error:
+        raise HTTPException(status_code=409, detail={"code": "program_duration_locked", "message": str(error)})
+    except (ValueError, TemplateValidationError) as error:
+        raise HTTPException(status_code=422, detail=str(error))
+    if result is None:
+        raise HTTPException(status_code=404, detail="Workout or exercise unavailable. Refresh your workout.")
+    reconcile_after_mutation(db, str(current_user.id), workout_day_ids=[request.workout_day_id])
+    return planning_editability(db, str(current_user.id), result)

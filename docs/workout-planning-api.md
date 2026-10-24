@@ -50,6 +50,37 @@ selected eligible workout and marks it `planningSource: override`.
 `PATCH /v1/workouts/week/duration` remains a compatibility adapter that sets a
 time-budget override. Past, started/completed and program workouts are protected.
 
+## Manual exercise addition
+
+`POST /v1/workouts/week/exercises` returns the existing weekly-plan response:
+
+```json
+{"workoutDayId":"opaque-id","exerciseId":"exercise-id",
+ "expectedExerciseIds":["first-id","second-id"],"weekStart":"2026-10-19",
+ "effectiveDate":"2026-10-24","allowOverBudget":false}
+```
+
+This changes only the selected unstarted generated workout. It appends a main
+block after all existing blocks with 3 sets, 8–12 reps and 90 seconds of rest,
+plus a load recommendation from the user's own completed history when available.
+Existing exercise order, prescriptions, other days and saved preferences stay
+unchanged. It creates no session. Active, completed, past and program workouts
+retain the planning locks above.
+
+Explicit selection accepts active shared catalog exercises and the user's own
+custom exercises with supported repetition tracking, including exercises excluded
+from automatic generation or requiring equipment the user has not selected.
+Unavailable/private exercises return 404; unsupported tracking returns 422.
+
+An already-present exercise is a no-op, including retries using the original
+`expectedExerciseIds`. Otherwise a changed ordered source list returns 409
+`workout_changed`. A timed addition that exceeds the cap returns 409
+`workout_time_budget_exceeded` with `estimatedMinutes` and `timeBudgetMinutes`,
+without changing the plan. Only an explicit retry with `allowOverBudget: true`
+adds it over the cap; no existing work is trimmed. The timed cap remains intact
+and the larger actual estimate is returned. Trainer-led duration follows its new
+estimate. Starting the workout and adding an exercise use the same schedule lock.
+
 ## Explicit application
 
 `POST /v1/workouts/week/apply-planning-preference` accepts paired `weekStart`

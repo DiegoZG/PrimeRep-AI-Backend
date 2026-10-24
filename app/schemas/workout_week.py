@@ -96,3 +96,13 @@ class ApplyPlanningPreferenceOut(BaseModel):
     updated_workout_count: int = Field(..., alias="updatedWorkoutCount")
     protected_workout_count: int = Field(..., alias="protectedWorkoutCount")
     model_config = ConfigDict(populate_by_name=True)
+
+
+class AddWorkoutExerciseRequest(BaseModel):
+    workout_day_id: str = Field(..., alias="workoutDayId", min_length=1)
+    exercise_id: str = Field(..., alias="exerciseId", min_length=1)
+    expected_exercise_ids: list[str] = Field(..., alias="expectedExerciseIds")
+    week_start: date = Field(..., alias="weekStart")
+    effective_date: date = Field(..., alias="effectiveDate")
+    allow_over_budget: bool = Field(False, alias="allowOverBudget", strict=True)
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")

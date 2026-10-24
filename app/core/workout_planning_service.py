@@ -6,13 +6,17 @@ from datetime import date, datetime, timedelta, timezone
 from sqlalchemy.orm import Session
 
 from app.core.schedule_lock import lock_user_schedule
+from app.core.exercise_service import get_exercise
 from app.core.training_preferences_service import _resolve_mutation_calendar
-from app.core.workout_planning import WorkoutPlanningLocked
-from app.core.workout_service import get_onboarding_settings, get_eligible_exercises, _standard_day
+from app.core.workout_planning import WorkoutPlanningLocked, estimate_minutes, normalized_day
+from app.core.workout_service import get_onboarding_settings, get_eligible_exercises, _standard_day, _exercise_to_schema
+from app.core.workout_template_service import _require_supported_tracking
 from app.core.workout_week_service import (
     _generate_single_workout, _get_owned_equipment_ids_from_settings, _plan_json_to_response,
     _resolve_plan_for_workout_day, get_or_create_week_plan, get_week_plan, get_week_start, ProgramDurationLockedError,
+    _prescription_with_suggestion,
 )
+from app.schemas.workout import WorkoutBlockItemOut, WorkoutPrescriptionOut
 from app.models.workout_session import WorkoutSession
 from app.models.workout_template import UserProgramActivation
 from app.models.workout_week_plan import WorkoutWeekPlan
@@ -119,3 +123,54 @@ def planning_editability(db, user_id, response):
         day.planning_editable = not (day.program_activation_id or day.template_id or day.split_key == "program"
                                      or day.workout_day_id in protected or day.date < earliest_today)
     return response
+
+
+class WorkoutExerciseConflict(Exception):
+    def __init__(self, detail):
+        self.detail = detail
+
+
+def add_workout_exercise(db: Session, *, user_id: str, workout_day_id: str, exercise_id: str,
+                         expected_exercise_ids: list[str], week_start: date, effective_date: date,
+                         allow_over_budget: bool = False):
+    if effective_date not in {datetime.now(timezone.utc).date() + timedelta(days=i) for i in (-1, 0, 1)}:
+        raise ValueError("effectiveDate must be the caller's current local date")
+    lock_user_schedule(db, user_id)
+    plan = _resolve_plan_for_workout_day(db, user_id=user_id, workout_day_id=workout_day_id, week_start=week_start)
+    if plan is None:
+        return None
+    days = copy.deepcopy(plan.plan_json.get("workouts", []))
+    day = next(item for item in days if item["workoutDayId"] == workout_day_id)
+    if (plan.plan_json.get("programActivationId") or day.get("programActivationId")
+            or day.get("templateId") or day.get("splitKey") == "program"):
+        raise ProgramDurationLockedError("Program workouts keep the exercises authored by their program")
+    if date.fromisoformat(day["date"]) < effective_date or workout_day_id in _protected_ids(db, user_id):
+        raise WorkoutPlanningLocked("Exercises cannot be added to a past, started or completed workout")
+    current_ids = [item["exercise"]["id"] for block in day.get("exerciseBlocks", []) for item in block["items"]]
+    if exercise_id in current_ids:
+        return _plan_json_to_response(plan.plan_json)
+    if current_ids != expected_exercise_ids:
+        raise WorkoutExerciseConflict({"code": "workout_changed", "message": "This workout changed. Refresh it before adding an exercise."})
+    exercise = get_exercise(db, exercise_id, user_id=user_id)
+    if exercise is None:
+        return None
+    _require_supported_tracking(exercise)
+    prescription = _prescription_with_suggestion(db, user_id=user_id, exercise=exercise,
+        base=WorkoutPrescriptionOut(sets=3, reps_min=8, reps_max=12, rest_seconds=90))
+    item = WorkoutBlockItemOut(exercise=_exercise_to_schema(exercise), prescription=prescription)
+    day.setdefault("exerciseBlocks", []).append({"blockType": "main", "items": [item.model_dump(by_alias=True)]})
+    estimate = estimate_minutes(day["exerciseBlocks"])
+    planning = normalized_day(day)
+    budget = planning["timeBudgetMinutes"]
+    if budget is not None and estimate > budget and not allow_over_budget:
+        raise WorkoutExerciseConflict({"code": "workout_time_budget_exceeded",
+            "message": "Adding this exercise exceeds this workout's time budget. Add it anyway to keep all exercises.",
+            "estimatedMinutes": estimate, "timeBudgetMinutes": budget})
+    day["estimatedMinutes"] = estimate
+    if planning["planningMode"] == "trainer_led":
+        day["durationMinutes"] = estimate
+    plan.plan_json = {**plan.plan_json, "workouts": days,
+                      "generatedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")}
+    db.commit()
+    db.refresh(plan)
+    return _plan_json_to_response(plan.plan_json)

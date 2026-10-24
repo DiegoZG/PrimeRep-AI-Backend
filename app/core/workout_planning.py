@@ -79,4 +79,8 @@ def planning_summary(day):
     if day.get("planningMode") == "trainer_led":
         count = sum(len(block.get("items", [])) for block in day.get("exerciseBlocks", []))
         return f"{count} exercise{'s' if count != 1 else ''}"
-    return f"Up to {day.get('timeBudgetMinutes') or day.get('durationMinutes', 35)} min"
+    budget = day.get("timeBudgetMinutes") or day.get("durationMinutes", 35)
+    estimate = day.get("estimatedMinutes")
+    if estimate is not None and estimate > budget:
+        return f"About {estimate} min · {budget} min budget"
+    return f"Up to {budget} min"
