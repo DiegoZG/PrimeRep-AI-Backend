@@ -7,6 +7,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.workout_planning_service import update_day_planning, apply_planning_preference, planning_editability, add_workout_exercise, WorkoutExerciseConflict
+from app.core.workout_template_service import TemplateValidationError
+from app.schemas.workout_week import WorkoutPlanningRequest, ApplyPlanningPreferenceRequest, ApplyPlanningPreferenceOut, AddWorkoutExerciseRequest
 from app.core.coach_feed_service import reconcile_after_mutation
 from app.core.security.deps import get_current_user
 from app.core.workout_week_service import (
@@ -74,7 +77,7 @@ def get_week_plan_endpoint(
     )
     if force:
         reconcile_after_mutation(db, user_id, invalidate_plan_items=True)
-    return result
+    return planning_editability(db, user_id, result)
 
 
 @router.post("/week/skip", response_model=WorkoutWeekResponseOut)
@@ -117,7 +120,7 @@ def skip_workout_endpoint(
     reconcile_after_mutation(
         db, user_id, workout_day_ids=[request.workout_day_id]
     )
-    return result
+    return planning_editability(db, user_id, result)
 
 
 @router.patch("/week/duration", response_model=WorkoutWeekResponseOut)
@@ -167,7 +170,7 @@ def update_duration_endpoint(
     reconcile_after_mutation(
         db, user_id, workout_day_ids=[request.workout_day_id]
     )
-    return result
+    return planning_editability(db, user_id, result)
 
 
 @router.post("/next", response_model=WorkoutNextResponseOut)
@@ -221,6 +224,9 @@ def get_next_workout(
                 "slotIndex": w.slot_index,
                 "date": w.date.isoformat(),
                 "durationMinutes": w.duration_minutes,
+                "planningMode": w.planning_mode,
+                "timeBudgetMinutes": w.time_budget_minutes,
+                "planningSource": w.planning_source,
                 "title": w.title,
                 "splitKey": w.split_key,
                 "dayType": w.day_type,
@@ -256,6 +262,9 @@ def get_next_workout(
                     "slotIndex": w.slot_index,
                     "date": w.date.isoformat(),
                     "durationMinutes": w.duration_minutes,
+                "planningMode": w.planning_mode,
+                "timeBudgetMinutes": w.time_budget_minutes,
+                "planningSource": w.planning_source,
                     "title": w.title,
                     "splitKey": w.split_key,
                     "dayType": w.day_type,
@@ -288,6 +297,58 @@ def get_next_workout(
         split_key=next_workout["splitKey"],
         day_type=next_workout["dayType"],
         estimated_minutes=next_workout["estimatedMinutes"],
+        planning_mode=next_workout.get("planningMode"),
+        time_budget_minutes=next_workout.get("timeBudgetMinutes"),
+        planning_source=next_workout.get("planningSource"),
         workout_intent=next_workout.get("workoutIntent"),
         exercise_blocks=exercise_blocks,
     )
+
+
+@router.patch("/week/planning", response_model=WorkoutWeekResponseOut)
+def update_planning_endpoint(request: WorkoutPlanningRequest, db: Session = Depends(get_db),
+                             current_user: User = Depends(get_current_user)):
+    try:
+        result = update_day_planning(db, user_id=str(current_user.id), workout_day_id=request.workout_day_id,
+                                    planning_mode=request.planning_mode, time_budget_minutes=request.time_budget_minutes,
+                                    week_start=request.week_start, effective_date=request.effective_date)
+    except ProgramDurationLockedError as error:
+        raise HTTPException(status_code=409, detail={"code": "program_duration_locked", "message": str(error)})
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error))
+    if result is None:
+        raise HTTPException(status_code=404, detail="Workout day not found. Refresh your week plan.")
+    reconcile_after_mutation(db, str(current_user.id), workout_day_ids=[request.workout_day_id])
+    return planning_editability(db, str(current_user.id), result)
+
+
+@router.post("/week/apply-planning-preference", response_model=ApplyPlanningPreferenceOut)
+def apply_planning_preference_endpoint(request: ApplyPlanningPreferenceRequest, db: Session = Depends(get_db),
+                                      current_user: User = Depends(get_current_user)):
+    try:
+        result = apply_planning_preference(db, user_id=str(current_user.id),
+                                           week_start=request.week_start, effective_date=request.effective_date)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error))
+    result["weekPlan"] = planning_editability(db, str(current_user.id), result["weekPlan"])
+    reconcile_after_mutation(db, str(current_user.id), invalidate_plan_items=True)
+    return result
+
+
+@router.post("/week/exercises", response_model=WorkoutWeekResponseOut)
+def add_workout_exercise_endpoint(request: AddWorkoutExerciseRequest, db: Session = Depends(get_db),
+                                  current_user: User = Depends(get_current_user)):
+    try:
+        result = add_workout_exercise(db, user_id=str(current_user.id), workout_day_id=request.workout_day_id,
+            exercise_id=request.exercise_id, expected_exercise_ids=request.expected_exercise_ids,
+            week_start=request.week_start, effective_date=request.effective_date, allow_over_budget=request.allow_over_budget)
+    except WorkoutExerciseConflict as error:
+        raise HTTPException(status_code=409, detail=error.detail)
+    except ProgramDurationLockedError as error:
+        raise HTTPException(status_code=409, detail={"code": "program_duration_locked", "message": str(error)})
+    except (ValueError, TemplateValidationError) as error:
+        raise HTTPException(status_code=422, detail=str(error))
+    if result is None:
+        raise HTTPException(status_code=404, detail="Workout or exercise unavailable. Refresh your workout.")
+    reconcile_after_mutation(db, str(current_user.id), workout_day_ids=[request.workout_day_id])
+    return planning_editability(db, str(current_user.id), result)

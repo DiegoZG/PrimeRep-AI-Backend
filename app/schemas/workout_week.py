@@ -1,9 +1,9 @@
 """Schemas for weekly workout plans."""
 
 from datetime import date, datetime
-from typing import Optional
+from typing import Optional, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.schemas.workout import WorkoutExerciseBlockOut
 
@@ -14,6 +14,10 @@ class WorkoutDayOut(BaseModel):
     workout_day_id: str = Field(..., alias="workoutDayId")
     slot_index: int = Field(..., alias="slotIndex")
     date: date
+    planning_mode: Literal["trainer_led", "time_budget"] = Field("time_budget", alias="planningMode")
+    time_budget_minutes: Optional[int] = Field(None, alias="timeBudgetMinutes")
+    planning_editable: Optional[bool] = Field(None, alias="planningEditable")
+    planning_source: Literal["default", "override"] = Field("default", alias="planningSource")
     duration_minutes: int = Field(..., alias="durationMinutes")
     title: str
     split_key: str = Field(..., alias="splitKey")
@@ -64,3 +68,41 @@ class WorkoutWeekDurationPatchRequest(BaseModel):
     week_start: Optional[date] = Field(None, alias="weekStart")
 
     model_config = ConfigDict(populate_by_name=True)
+
+
+class WorkoutPlanningRequest(BaseModel):
+    workout_day_id: str = Field(..., alias="workoutDayId")
+    planning_mode: Literal["trainer_led", "time_budget"] = Field(..., alias="planningMode")
+    time_budget_minutes: Optional[int] = Field(..., alias="timeBudgetMinutes", ge=15, le=120, strict=True)
+    week_start: date = Field(..., alias="weekStart")
+    effective_date: date = Field(..., alias="effectiveDate")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+    @model_validator(mode="after")
+    def mode_matches_budget(self):
+        if (self.planning_mode == "time_budget") != (self.time_budget_minutes is not None):
+            raise ValueError("Time budget mode requires minutes; Trainer-led requires null minutes")
+        return self
+
+
+class ApplyPlanningPreferenceRequest(BaseModel):
+    week_start: date = Field(..., alias="weekStart")
+    effective_date: date = Field(..., alias="effectiveDate")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+
+class ApplyPlanningPreferenceOut(BaseModel):
+    week_plan: WorkoutWeekResponseOut = Field(..., alias="weekPlan")
+    updated_workout_count: int = Field(..., alias="updatedWorkoutCount")
+    protected_workout_count: int = Field(..., alias="protectedWorkoutCount")
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class AddWorkoutExerciseRequest(BaseModel):
+    workout_day_id: str = Field(..., alias="workoutDayId", min_length=1)
+    exercise_id: str = Field(..., alias="exerciseId", min_length=1)
+    expected_exercise_ids: list[str] = Field(..., alias="expectedExerciseIds")
+    week_start: date = Field(..., alias="weekStart")
+    effective_date: date = Field(..., alias="effectiveDate")
+    allow_over_budget: bool = Field(False, alias="allowOverBudget", strict=True)
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")

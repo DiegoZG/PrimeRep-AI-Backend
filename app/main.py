@@ -16,6 +16,18 @@ app = FastAPI(
     title="PrimeRep API",
     version="1.0.0",
 )
+
+from fastapi.responses import JSONResponse
+from app.core.workout_planning import WorkoutTimeBudgetTooShort, WorkoutPlanningLocked
+
+@app.exception_handler(WorkoutTimeBudgetTooShort)
+async def planning_budget_error(request, error):
+    return JSONResponse(status_code=409, content={"detail": {"code": "workout_time_budget_too_short", "message": str(error), "minimumUsefulMinutes": error.minimum_useful_minutes}})
+
+@app.exception_handler(WorkoutPlanningLocked)
+async def planning_locked_error(request, error):
+    return JSONResponse(status_code=409, content={"detail": {"code": "workout_planning_locked", "message": str(error)}})
+
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(

@@ -1,5 +1,5 @@
 from datetime import date, datetime, timezone
-from typing import Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
@@ -138,6 +138,7 @@ def read_training_preferences(
 )
 def patch_training_preferences(
     body: TrainingPreferences,
+    plan_update_scope: Literal["refresh", "preserve"] = Query("refresh", alias="planUpdateScope"),
     week_start: Optional[date] = Query(None, alias="weekStart"),
     effective_date: Optional[date] = Query(None, alias="effectiveDate"),
     db: Session = Depends(get_db),
@@ -151,11 +152,12 @@ def patch_training_preferences(
             updates,
             week_start=week_start,
             effective_date=effective_date,
+            plan_update_scope=plan_update_scope,
         )
         reconcile_after_mutation(
             db,
             str(current_user.id),
-            invalidate_plan_items=bool(updates),
+            invalidate_plan_items=bool(updates) and plan_update_scope != "preserve",
             invalidate_program_items="selectedEquipment" in updates,
         )
         return result

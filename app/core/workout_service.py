@@ -143,6 +143,8 @@ class OnboardingWorkoutSettings:
     experience_level: Optional[str]
     variety_level: Optional[str]
     day_cycle: tuple[WorkoutDayDefinition, ...]
+    planning_mode: str = "time_budget"
+    preferred_workout_minutes: int = 35
 
     @property
     def selection_seed(self) -> str:
@@ -360,6 +362,8 @@ def normalize_onboarding_settings(data: dict[str, Any]) -> OnboardingWorkoutSett
         _canonical_or_legacy(data, "focusMuscles", "focus_muscles", [])
     )
 
+    from app.core.workout_planning import planning_defaults
+    planning_mode, preferred_minutes = planning_defaults(data)
     return OnboardingWorkoutSettings(
         equipment_ids=equipment,
         split_preference=split_preference,
@@ -369,6 +373,8 @@ def normalize_onboarding_settings(data: dict[str, Any]) -> OnboardingWorkoutSett
         experience_level=experience,
         variety_level=variety,
         day_cycle=day_cycle,
+        planning_mode=planning_mode,
+        preferred_workout_minutes=preferred_minutes,
     )
 
 

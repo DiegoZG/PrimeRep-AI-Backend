@@ -2480,7 +2480,7 @@ def test_duration_change_preserves_unrelated_guidance(monkeypatch):
         },
     )
     assert onboarding.status_code == 200
-    week = client.get("/v1/workouts/week", headers=headers)
+    week = client.get("/v1/workouts/week", headers=headers, params={"weekStart": (date.today() + timedelta(days=7-date.today().weekday())).isoformat()})
     assert week.status_code == 200
     workout = week.json()["workouts"][0]
     candidate = coach_feed_service._candidate(
