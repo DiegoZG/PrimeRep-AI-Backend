@@ -3,6 +3,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.api.v1.auth.router import router as auth_router
+from app.api.v1.feature_flags import router as feature_flags_router
 from app.api.v1.equipment.router import router as equipment_router
 from app.api.v1.exercises.favorites_router import router as exercise_favorites_router
 from app.api.v1.exercises.router import router as exercises_router
@@ -22,6 +23,7 @@ from app.core.database import get_db
 
 api_router = APIRouter()
 api_router.include_router(auth_router)
+api_router.include_router(feature_flags_router)
 api_router.include_router(users_router)
 api_router.include_router(profile_router)
 api_router.include_router(portability_router)

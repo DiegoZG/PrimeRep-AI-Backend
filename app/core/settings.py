@@ -1,4 +1,5 @@
 import os
+from uuid import UUID
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -6,6 +7,11 @@ load_dotenv()
 class Settings:
     APP_ENV: str = os.getenv("APP_ENV", "local")
     RELEASE_VERSION: str = os.getenv("RELEASE_VERSION", "unknown")
+    FEATURE_FLAG_ADMIN_USER_IDS: frozenset[str] = frozenset(
+        str(UUID(value.strip()))
+        for value in os.getenv("FEATURE_FLAG_ADMIN_USER_IDS", "").split(",")
+        if value.strip()
+    )
 
     if APP_ENV.lower() not in {"local", "test", "preview", "staging", "production", "prod"}:
         raise RuntimeError("APP_ENV must be local, test, preview, staging, or production")
