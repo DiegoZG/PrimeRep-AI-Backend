@@ -14,9 +14,8 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column("workout_sessions", sa.Column("effective_workout", postgresql.JSONB(), nullable=True))
-    op.add_column("workout_sessions", sa.Column("arrangement_revision", sa.Integer(), server_default="0", nullable=False))
-    op.add_column("workout_session_operations", sa.Column("payload_fingerprint", sa.String(64), nullable=True))
+    from migration_helpers import ensure_session_arrangements
+    ensure_session_arrangements(op)
 
 
 def downgrade():
