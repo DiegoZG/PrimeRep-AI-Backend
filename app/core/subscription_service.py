@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from uuid import UUID
 from typing import Optional
 
-from sqlalchemy import case, delete, or_, select
+from sqlalchemy import case, delete, or_, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.orm import Session
@@ -121,8 +121,6 @@ def get_subscription(db: Session, user_id: str, *, now=None) -> dict:
         allowed, source, access_expiry = False, "none", None
     else:
         allowed, source, access_expiry = None, "unknown", None
-    if state and (not state.next_check_at or _utc(state.next_check_at) <= now):
-        enqueue_reconciliation(db, user_id, now=now)
     return {
         "environment": flags["environment"], "flags_version": flags["version"], "flags": flags["flags"],
         "billing_status": state.billing_status if state else "unknown", "verification_status": verification,
@@ -136,6 +134,13 @@ def get_subscription(db: Session, user_id: str, *, now=None) -> dict:
 
 def training_access_allowed(db: Session, user_id: str) -> Optional[bool]:
     return get_subscription(db, user_id)["can_start_training"]
+
+
+def enqueue_due_reconciliation(db: Session, user_id: str, *, enforcement=False, now=None):
+    now = now or _now()
+    state = db.get(SubscriptionState, (flag_environment(), user_id), populate_existing=True)
+    if revenuecat_client.configured() and ((state and (not state.next_check_at or _utc(state.next_check_at) <= now)) or (not state and enforcement)):
+        enqueue_reconciliation(db, user_id, now=now)
 
 
 def _normalise_customer(value, user_id, now):
@@ -217,7 +222,6 @@ def reconcile_subscription(db: Session, user_id: str, *, now=None) -> dict:
         state.verification_status = "not_configured" if not revenuecat_client.configured() else "unavailable"
         state.next_check_at = now + timedelta(minutes=1)
         db.flush()
-        enqueue_reconciliation(db, user_id, now=now)
         raise SubscriptionAccessError(503, "subscription_verification_unavailable", "Couldn’t verify subscription access. Try again shortly.") from error
     db.flush()
     return get_subscription(db, user_id, now=now)
@@ -287,10 +291,14 @@ def schedule_due_reconciliations(db: Session, *, limit=100, now=None):
     now = now or _now()
     states = db.scalars(select(SubscriptionState).where(
         SubscriptionState.environment == flag_environment(), SubscriptionState.next_check_at <= now,
-    ).order_by(SubscriptionState.next_check_at).limit(limit).with_for_update(skip_locked=True)).all()
+    ).order_by(SubscriptionState.next_check_at).limit(limit)).all()
     for state in states:
+        previous_check = state.next_check_at
         enqueue_reconciliation(db, state.user_id, now=now)
-        state.next_check_at = now + timedelta(minutes=5)
+        db.execute(update(SubscriptionState).where(
+            SubscriptionState.environment == state.environment, SubscriptionState.user_id == state.user_id,
+            SubscriptionState.next_check_at == previous_check,
+        ).values(next_check_at=now + timedelta(minutes=5)).execution_options(synchronize_session=False))
     return len(states)
 
 

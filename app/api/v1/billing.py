@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.rate_limit import user_limiter
 from app.core.security.deps import get_current_user
-from app.core.subscription_service import SubscriptionAccessError, get_subscription, receive_webhook, reconcile_subscription, verify_webhook
+from app.core.subscription_service import SubscriptionAccessError, enqueue_due_reconciliation, enqueue_reconciliation, get_subscription, receive_webhook, reconcile_subscription, verify_webhook
 from app.models.user import User
 from app.schemas.subscription import SubscriptionSnapshot
 
@@ -15,6 +15,8 @@ router = APIRouter(tags=["subscriptions"])
 def read_subscription(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     snapshot = get_subscription(db, str(current_user.id))
     db.commit()
+    enqueue_due_reconciliation(db, str(current_user.id), enforcement=snapshot["flags"]["subscriptions_enforcement_enabled"])
+    db.commit()
     return snapshot
 
 
@@ -23,8 +25,11 @@ def read_subscription(db: Session = Depends(get_db), current_user: User = Depend
 def reconcile(request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     try:
         snapshot = reconcile_subscription(db, str(current_user.id))
-    except SubscriptionAccessError:
+    except SubscriptionAccessError as error:
         db.commit()
+        if error.status_code == 503:
+            enqueue_reconciliation(db, str(current_user.id), new_event=True)
+            db.commit()
         raise
     db.commit()
     return snapshot
