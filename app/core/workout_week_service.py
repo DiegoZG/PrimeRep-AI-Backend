@@ -7,6 +7,8 @@ from typing import Any, Optional
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+from app.core.feature_flag_service import get_feature_flags
+from app.core.subscription_service import require_training_access, training_access_allowed
 from sqlalchemy.orm.attributes import flag_modified
 
 from app.core.coach_service import generate_coach_content, generate_week_coach_content
@@ -599,6 +601,7 @@ def get_or_create_week_plan(
     if week_start is None:
         week_start = get_week_start(date.today())
     week_start = get_week_start(week_start)
+    get_feature_flags(db, user_id)
     lock_user_schedule(db, user_id)
 
     # An active program owns current/future schedule generation. Its immutable
@@ -611,6 +614,9 @@ def get_or_create_week_plan(
     existing_program_plan = get_week_plan(
         db, user_id=user_id, week_start=week_start
     )
+    if existing_program_plan and not force_regenerate and training_access_allowed(db, user_id) is not True:
+        return _plan_json_to_response(existing_program_plan.plan_json)
+    require_training_access(db, user_id)
     server_today = datetime.now(timezone.utc).date()
     earliest_current_week = min(
         get_week_start(server_today + timedelta(days=offset)) for offset in (-1, 0, 1)
@@ -784,6 +790,7 @@ def skip_workout_day(
     
     Returns None if the workout_day_id is not found in the current plan.
     """
+    require_training_access(db, user_id)
     if week_start is None:
         week_start = get_week_start(date.today())
     lock_user_schedule(db, user_id)

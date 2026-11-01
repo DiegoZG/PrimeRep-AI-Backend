@@ -8,6 +8,8 @@ from typing import Optional
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+from app.core.feature_flag_service import get_feature_flags
+from app.core.subscription_service import require_training_access
 
 from app.core.schedule_lock import lock_user_schedule
 from app.models.set_log import SetLog
@@ -106,10 +108,13 @@ def create_session(
     day_type: str,
     client_session_id: str,
 ) -> WorkoutSession:
+    get_feature_flags(db, user_id)
     lock_user_schedule(db, user_id)
     existing = get_session_by_client_id(db, user_id, client_session_id)
     if existing is not None:
         return _backfill_snapshot(db, existing)
+
+    require_training_access(db, user_id)
 
     # The partial unique index is the final concurrency guard. This lock makes
     # the usual active-session check deterministic when a row already exists.

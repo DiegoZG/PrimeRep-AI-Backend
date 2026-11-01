@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from sqlalchemy.orm import Session
+from app.core.subscription_service import require_training_access
 
 from app.core.onboarding_service import get_onboarding_by_user_id
 from app.core.settings import settings
@@ -78,6 +79,7 @@ def ask_question(
     Raises RateLimitExceededError if the user is over DAILY_QUESTION_LIMIT,
     or CoachUnavailableError if the LLM call fails for any reason.
     """
+    require_training_access(db, str(user.id))
     if count_questions_today(db, str(user.id)) >= DAILY_QUESTION_LIMIT:
         raise RateLimitExceededError(
             f"Daily question limit reached ({DAILY_QUESTION_LIMIT}/day). Try again tomorrow."

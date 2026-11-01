@@ -298,6 +298,34 @@ def test_erasure_survives_account_delete_and_prunes_on_completion(db, monkeypatc
     assert db.get(BillingJob, ("test", A, "erase")) is None
 
 
+def test_fresh_late_purchase_reopens_retained_erasure_without_recreating_account(db, monkeypatch):
+    service.enqueue_customer_erasure(db, A)
+    db.delete(db.get(User, A))
+    db.commit()
+    erased = []
+    monkeypatch.setattr(revenuecat_client, "erase_customer", erased.append)
+    assert service.process_billing_job(db)
+    db.commit()
+    assert db.get(BillingJob, ("test", A, "erase")).status == "done"
+    late = webhook("late-purchase", "INITIAL_PURCHASE")
+    service.receive_webhook(db, late)
+    db.commit()
+    assert db.get(BillingJob, ("test", A, "erase"), populate_existing=True).status == "pending"
+    assert service.process_billing_job(db)
+    db.commit()
+    assert erased == [A, A]
+    service.receive_webhook(db, late)
+    unknown = "00000000-0000-4000-8000-000000000099"
+    service.receive_webhook(db, webhook("unrecognized-purchase", "INITIAL_PURCHASE", app_user_id=unknown))
+    db.commit()
+    assert service.process_billing_job(db) is False
+    assert erased == [A, A]
+    assert db.get(User, A) is None
+    assert db.scalar(select(func.count()).select_from(SubscriptionState)) == 0
+    assert db.scalar(select(func.count()).select_from(BillingJob).where(BillingJob.kind == "reconcile")) == 0
+    assert db.get(BillingJob, ("test", unknown, "erase")) is None
+
+
 def test_pruning_is_environment_scoped(db):
     for environment in ("test", "production"):
         db.add(BillingWebhookEvent(environment=environment, event_id="old", event_type="RENEWAL", received_at=NOW - timedelta(days=31)))

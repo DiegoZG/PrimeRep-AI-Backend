@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta, timezone
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
+from app.core.subscription_service import training_access_allowed
 from sqlalchemy.orm.attributes import flag_modified
 
 from app.core.onboarding_service import get_onboarding_by_user_id, upsert_onboarding
@@ -94,6 +95,8 @@ def update_training_preferences(
     effective_date: Optional[date] = None,
     plan_update_scope: str = "refresh",
 ) -> dict[str, Any]:
+    if training_access_allowed(db, user_id) is not True:
+        plan_update_scope = "preserve"
     mutation_week_start, _ = _resolve_mutation_calendar(
         week_start=week_start, effective_date=effective_date
     )

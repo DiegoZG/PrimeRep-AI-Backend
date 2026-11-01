@@ -16,6 +16,7 @@ from pydantic import BaseModel, ConfigDict, TypeAdapter
 from sqlalchemy import and_, case, func, or_
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
+from app.core.subscription_service import training_access_allowed
 
 from app.core.achievement_service import workout_milestones
 from app.core.coach_weight_data import public_weight_data
@@ -780,6 +781,8 @@ def reconcile_feed(
     commit: bool = True,
     source: str = "feed",
 ) -> int:
+    if training_access_allowed(db, user_id) is not True:
+        return 0
     started = _now()
     db.execute(
         insert(CoachPreference)
@@ -843,7 +846,7 @@ def reconcile_feed(
         ).update({"status": "cancelled", "locked_at": None}, synchronize_session=False)
 
     eligible = _is_coach_eligible(db, user_id)
-    _sync_ai_eligibility_rows(existing, eligible)
+    _sync_ai_eligibility_rows(existing, eligible, preserve_enriched=_can_view_ai_content(db, user_id))
     for candidate in candidates:
         ai_status = "not_eligible"
         if eligible:
@@ -1024,9 +1027,11 @@ def reconcile_after_mutation(
         return 1 if marker_saved else 0
 
 
-def _sync_ai_eligibility_rows(items: list[CoachFeedItem], eligible: bool) -> None:
+def _sync_ai_eligibility_rows(items: list[CoachFeedItem], eligible: bool, *, preserve_enriched: bool = False) -> None:
     for item in items:
         if not eligible:
+            if preserve_enriched and item.ai_status == "enriched":
+                continue
             item.ai_title = None
             item.ai_body = None
             item.ai_detail = None
@@ -1061,10 +1066,15 @@ def _ai_safe_item(item: CoachFeedItem) -> bool:
     return item.kind in AI_SAFE_KINDS
 
 
+def _can_view_ai_content(db: Session, user_id: str) -> bool:
+    user = db.get(User, user_id)
+    return bool(user and user.coach_insights_enabled)
+
+
 def sync_ai_eligibility(db: Session, user_id: str) -> bool:
     eligible = _is_coach_eligible(db, user_id)
     rows = db.query(CoachFeedItem).filter(CoachFeedItem.user_id == user_id).all()
-    _sync_ai_eligibility_rows(rows, eligible)
+    _sync_ai_eligibility_rows(rows, eligible, preserve_enriched=_can_view_ai_content(db, user_id))
     db.commit()
     return eligible
 
@@ -1177,7 +1187,7 @@ def get_feed(
     has_more = len(rows) > limit
     page = rows[:limit]
     _event("coach_feed_read", user=_opaque(user_id), pageSize=len(page), hasMore=has_more)
-    ai_eligible = _is_coach_eligible(db, user_id)
+    ai_eligible = _can_view_ai_content(db, user_id)
     next_action = (
         build_next_action(db, user_id, local_date)
         if view == "now"
@@ -1218,7 +1228,7 @@ def get_item(db: Session, user_id: str, item_id: str) -> Optional[CoachFeedItemO
                 reason="stale_target",
             )
         return None
-    return _item_out(item, ai_eligible=_is_coach_eligible(db, user_id))
+    return _item_out(item, ai_eligible=_can_view_ai_content(db, user_id))
 
 
 def is_item_current(db: Session, item: CoachFeedItem) -> bool:
@@ -1295,7 +1305,7 @@ def mark_read(db: Session, user_id: str, item_id: str, reason: str) -> Optional[
         db.commit()
         db.refresh(item)
     _event("coach_item_read", user=_opaque(user_id), kind=item.kind, reason=reason)
-    return _item_out(item, ai_eligible=_is_coach_eligible(db, user_id))
+    return _item_out(item, ai_eligible=_can_view_ai_content(db, user_id))
 
 
 def dismiss_item(db: Session, user_id: str, item_id: str) -> bool:

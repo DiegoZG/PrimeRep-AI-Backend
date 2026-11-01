@@ -3,6 +3,7 @@ from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
+from app.core.subscription_service import get_subscription, require_training_access, training_access_allowed
 
 from app.core.database import get_db
 from app.core.legal import PRIVACY_VERSION, TERMS_VERSION
@@ -145,6 +146,8 @@ def patch_training_preferences(
     current_user: User = Depends(get_current_user),
 ):
     updates = body.model_dump(exclude_unset=True)
+    if training_access_allowed(db, str(current_user.id)) is not True:
+        plan_update_scope = "preserve"
     try:
         result = update_training_preferences(
             db,
@@ -212,8 +215,12 @@ def update_preferences(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Toggle AI coach insights. Requires a premium subscription."""
-    if current_user.subscription_tier != "premium":
+    """Update consent, requiring eligible access before enabling insights."""
+    subscription = get_subscription(db, str(current_user.id))
+    if subscription["flags"]["subscriptions_enforcement_enabled"]:
+        if body.coach_insights_enabled:
+            require_training_access(db, str(current_user.id))
+    elif body.coach_insights_enabled and current_user.subscription_tier != "premium":
         raise HTTPException(
             status_code=403,
             detail="AI Coach Insights require a Premium subscription.",

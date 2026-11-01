@@ -285,6 +285,8 @@ def receive_webhook(db: Session, raw: bytes):
         for user_id in sorted(ids):
             if db.get(User, user_id):
                 enqueue_reconciliation(db, user_id, now=now, new_event=True)
+            elif db.get(BillingJob, (flag_environment(), user_id, "erase")):
+                enqueue_reconciliation(db, user_id, kind="erase", now=now, new_event=True)
 
 
 def schedule_due_reconciliations(db: Session, *, limit=100, now=None):

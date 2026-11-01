@@ -535,19 +535,29 @@ def test_simultaneous_mutation_and_reconciliation_use_consistent_lock_order(monk
         coach_feed_service.reconcile_feed(db, user_id, date.today())
         item_id = db.query(CoachFeedItem).filter_by(user_id=user_id).one().id
 
-    barrier = threading.Barrier(2)
+    candidate_started = threading.Event()
+    mutation_finished = threading.Event()
+
+    def computed_candidate(*_args):
+        candidate_started.set()
+        assert mutation_finished.wait(timeout=5)
+        return [candidate]
+
+    monkeypatch.setattr(coach_feed_service, "_progression_candidates", computed_candidate)
 
     def reconcile():
         with SessionLocal() as db:
-            barrier.wait(timeout=5)
             return coach_feed_service.reconcile_feed(db, user_id, date.today())
 
     def mutate():
         with SessionLocal() as db:
-            barrier.wait(timeout=5)
-            return coach_feed_service.reconcile_after_mutation(
-                db, user_id, exercise_ids=[exercise_id]
-            )
+            assert candidate_started.wait(timeout=5)
+            try:
+                return coach_feed_service.reconcile_after_mutation(
+                    db, user_id, exercise_ids=[exercise_id]
+                )
+            finally:
+                mutation_finished.set()
 
     with ThreadPoolExecutor(max_workers=2) as pool:
         reconcile_future = pool.submit(reconcile)
