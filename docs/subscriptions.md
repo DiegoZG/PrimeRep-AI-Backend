@@ -17,6 +17,8 @@ Set these independently for each backend environment; never put server keys in t
 
 Use separate RevenueCat projects/configuration and webhook destinations for preview and production. Public SDK keys, app IDs, product IDs, and server secret keys must belong to the same project. The REST secret scopes customer reads to that project. Missing provider configuration leaves training unchanged with enforcement off; enforced accounts without a transition/verified access receive a retryable verification error, not a purchase demand.
 
+For local preview testing, PrimeRepAI's Test Store app is `app116807ef76` in project `proja9fc1792`. Set `REVENUECAT_PRODUCT_IDS=primerep_premium_monthly_test,primerep_premium_annual_test` and `REVENUECAT_APP_IDS=app116807ef76`. The approved API v1 key named `PrimeRep Preview Backend` is stored only in the ignored local `.env`; never commit or copy it to the mobile app. The `premium` entitlement and `default` offering include both products. Apple products and a production RevenueCat project are still pending.
+
 ## API and worker
 
 - `GET /v1/users/me/subscription` reads verified state and the current effective flags. It queues due refresh work without blocking the response on RevenueCat.
