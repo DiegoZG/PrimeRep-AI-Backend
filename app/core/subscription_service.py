@@ -91,6 +91,15 @@ def _transition(db, user, flags, now):
     return _utc(grant.expires_at) if grant else None
 
 
+def enroll_subscription_onboarding(db: Session, user_id: str) -> None:
+    flags = get_feature_flags(db, user_id)
+    if not flags["flags"]["subscriptions_onboarding_enabled"]:
+        return
+    state = SubscriptionState(environment=flags["environment"], user_id=user_id, onboarding_enrolled_at=_now())
+    db.add(state)
+    db.flush()
+
+
 def get_subscription(db: Session, user_id: str, *, now=None) -> dict:
     now = now or _now()
     user = db.get(User, user_id)
@@ -121,6 +130,13 @@ def get_subscription(db: Session, user_id: str, *, now=None) -> dict:
         allowed, source, access_expiry = False, "none", None
     else:
         allowed, source, access_expiry = None, "unknown", None
+    if state and state.onboarding_enrolled_at and not state.onboarding_completed_at and (has_premium or (transition and transition > now)):
+        state.onboarding_completed_at = now
+        db.flush()
+    onboarding_required = bool(
+        state and state.onboarding_enrolled_at and not state.onboarding_completed_at
+        and user.has_completed_onboarding and flags["flags"]["subscriptions_onboarding_enabled"]
+    )
     return {
         "environment": flags["environment"], "flags_version": flags["version"], "flags": flags["flags"],
         "billing_status": state.billing_status if state else "unknown", "verification_status": verification,
@@ -129,6 +145,7 @@ def get_subscription(db: Session, user_id: str, *, now=None) -> dict:
         "management_url": state.management_url if state else None, "has_premium": has_premium,
         "can_start_training": allowed, "access_source": source, "access_expires_at": access_expiry,
         "transition_ends_at": transition, "provider_configured": revenuecat_client.configured(),
+        "onboarding_subscription_required": onboarding_required,
     }
 
 

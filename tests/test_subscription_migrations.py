@@ -28,7 +28,24 @@ def test_revision_graph_has_unique_ids_and_one_head():
             if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "revision" for target in node.targets):
                 ids.append(ast.literal_eval(node.value))
     assert len(ids) == len(set(ids))
-    assert ScriptDirectory.from_config(Config(str(ROOT / "alembic.ini"))).get_heads() == ["e6f7g8h9i0j1"]
+    assert ScriptDirectory.from_config(Config(str(ROOT / "alembic.ini"))).get_heads() == ["f7g8h9i0j1k2"]
+
+
+def test_onboarding_upgrade_preserves_existing_billing_accounts(migration_database):
+    config, engine = migration_database
+    command.upgrade(config, "e6f7g8h9i0j1")
+    with engine.begin() as connection:
+        connection.execute(text("INSERT INTO users (id, email, preferred_name, password_hash, has_completed_onboarding, subscription_tier, coach_insights_enabled) VALUES ('existing-billing', 'existing@example.com', 'Existing', 'test', true, 'free', false)"))
+        connection.execute(text("INSERT INTO feature_flag_configs (environment, version, subscriptions_purchases_enabled, subscriptions_enforcement_enabled, launch_locked, updated_at) VALUES ('test', 7, false, false, false, now())"))
+        connection.execute(text("INSERT INTO subscription_states (environment, user_id, billing_status, verification_status) VALUES ('test', 'existing-billing', 'expired', 'verified')"))
+        connection.execute(text("INSERT INTO feature_flag_user_overrides (environment, user_id, subscriptions_purchases_enabled) VALUES ('test', 'existing-billing', true)"))
+    command.upgrade(config, "head")
+    with engine.begin() as connection:
+        assert connection.scalar(text("SELECT subscriptions_onboarding_enabled FROM feature_flag_configs WHERE environment='test'")) is False
+        assert connection.scalar(text("SELECT version FROM feature_flag_configs WHERE environment='test'")) == 7
+        assert connection.scalar(text("SELECT onboarding_enrolled_at FROM subscription_states WHERE user_id='existing-billing'")) is None
+        connection.execute(text("UPDATE feature_flag_user_overrides SET subscriptions_purchases_enabled=NULL, subscriptions_onboarding_enabled=true WHERE user_id='existing-billing'"))
+        assert connection.scalar(text("SELECT subscriptions_onboarding_enabled FROM feature_flag_user_overrides WHERE user_id='existing-billing'")) is True
 
 
 @pytest.fixture
@@ -80,7 +97,7 @@ def test_fresh_and_legacy_stamps_upgrade_without_losing_data(migration_database,
         assert "payload_fingerprint" in {column["name"] for column in schema.get_columns("workout_session_operations")}
         assert {"feature_flag_configs", "feature_flag_audits", "feature_flag_user_overrides", "subscription_states", "subscription_transition_grants", "billing_webhook_events", "billing_jobs"} <= set(schema.get_table_names())
         assert {"subscriptions_purchases_audience", "subscriptions_enforcement_audience"} <= {column["name"] for column in schema.get_columns("feature_flag_configs")}
-        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "e6f7g8h9i0j1"
+        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "f7g8h9i0j1k2"
         if legacy != "fresh":
             assert connection.scalar(text("SELECT preferred_name FROM users WHERE id = 'migration-sentinel'")) == "Preserve"
         if legacy in {"a2_flags", "b3_flags", "b3_combined"}:

@@ -15,6 +15,7 @@ from app.schemas.feature_flags import FeatureFlagPatch, UserFeatureFlagPatch
 FLAG_COLUMNS = {
     "subscriptions_purchases_enabled": "subscriptions_purchases_audience",
     "subscriptions_enforcement_enabled": "subscriptions_enforcement_audience",
+    "subscriptions_onboarding_enabled": "subscriptions_onboarding_audience",
 }
 
 
@@ -43,6 +44,7 @@ def _state(row: Optional[FeatureFlagConfig]) -> dict:
         "flags": {
             "subscriptions_purchases_enabled": bool(row and row.subscriptions_purchases_enabled),
             "subscriptions_enforcement_enabled": bool(row and row.subscriptions_enforcement_enabled),
+            "subscriptions_onboarding_enabled": bool(row and row.subscriptions_onboarding_enabled),
         },
         "audiences": {flag: getattr(row, column) if row else "everyone" for flag, column in FLAG_COLUMNS.items()},
         "subscriptions_launch_at": _utc(row.subscriptions_launch_at) if row else None,
@@ -92,6 +94,7 @@ def _effective(state: dict, overrides: dict) -> dict:
         for flag in FLAG_COLUMNS
     }
     result["subscriptions_enforcement_enabled"] &= result["subscriptions_purchases_enabled"]
+    result["subscriptions_onboarding_enabled"] &= result["subscriptions_enforcement_enabled"]
     return result
 
 

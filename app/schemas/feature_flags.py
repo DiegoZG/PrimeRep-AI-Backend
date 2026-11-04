@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, field_
 class SubscriptionFlags(BaseModel):
     subscriptions_purchases_enabled: bool
     subscriptions_enforcement_enabled: bool
+    subscriptions_onboarding_enabled: bool = False
 
 
 class SubscriptionFlagChanges(BaseModel):
@@ -14,11 +15,13 @@ class SubscriptionFlagChanges(BaseModel):
 
     subscriptions_purchases_enabled: StrictBool = False
     subscriptions_enforcement_enabled: StrictBool = False
+    subscriptions_onboarding_enabled: StrictBool = False
 
 
 class FeatureFlagAudiences(BaseModel):
     subscriptions_purchases_enabled: Literal["everyone", "selected"]
     subscriptions_enforcement_enabled: Literal["everyone", "selected"]
+    subscriptions_onboarding_enabled: Literal["everyone", "selected"] = "everyone"
 
 
 class FeatureFlagAudienceChanges(BaseModel):
@@ -26,6 +29,7 @@ class FeatureFlagAudienceChanges(BaseModel):
 
     subscriptions_purchases_enabled: Literal["everyone", "selected"] = "everyone"
     subscriptions_enforcement_enabled: Literal["everyone", "selected"] = "everyone"
+    subscriptions_onboarding_enabled: Literal["everyone", "selected"] = "everyone"
 
 
 class FeatureFlagPatch(BaseModel):
@@ -89,6 +93,7 @@ class FeatureFlagOverrides(BaseModel):
 
     subscriptions_purchases_enabled: Optional[StrictBool] = None
     subscriptions_enforcement_enabled: Optional[StrictBool] = None
+    subscriptions_onboarding_enabled: Optional[StrictBool] = None
 
 
 class UserFeatureFlagPatch(BaseModel):

@@ -99,9 +99,12 @@ def delete_private_exercise(
 
 @router.get("/me", response_model=UserResponse)
 def read_me(
+    db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return current_user
+    required = get_subscription(db, str(current_user.id))["onboarding_subscription_required"]
+    db.commit()
+    return UserResponse.model_validate(current_user).model_copy(update={"onboarding_subscription_required": required})
 
 
 @router.put("/me/legal-acceptance", response_model=UserResponse)

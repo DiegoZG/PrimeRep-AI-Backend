@@ -1,6 +1,6 @@
 # RevenueCat subscriptions
 
-The billing foundation uses the existing environment-scoped rollout flags. Both remain off until an operator changes them. It does not accept client entitlement claims, alter subscription prices, or activate enforcement in a migration. New-training entrypoints enforce server admission when enabled; local set logging and existing-session writes do not call RevenueCat.
+The billing foundation uses the existing environment-scoped rollout flags. All remain off until an operator changes them. It does not accept client entitlement claims, alter subscription prices, or activate enforcement in a migration. New-training entrypoints enforce server admission when enabled; local set logging and existing-session writes do not call RevenueCat.
 
 ## Configuration
 
@@ -54,6 +54,20 @@ Personal exports include only that account's normalized subscription status, pro
 Merged main contained two different migrations with revision `a2b3c4d5e6f7`: session arrangements and feature flags. Alembic could not distinguish schemas already stamped with that ID. This branch keeps `a2b3c4d5e6f7` for arrangements, assigns flags unique revision `c4d5e6f7g8h9`, and puts existing targeting `b3c4d5e6f7g8` after it. New repair revision `d5e6f7g8h9i0` ensures both legacy schemas are present before billing revision `e6f7g8h9i0j1`.
 
 The schema checks preserve existing flag settings/audit history and arrangement data. They support fresh upgrades and old stamps with flags only, arrangements only, or both. Run ordinary `alembic upgrade head`; do not manually stamp forward, drop tables, downgrade a deployed database, or reset rollout configuration as a repair. The catch-up revision’s downgrade intentionally does not remove legacy schema whose original ownership cannot be reconstructed.
+
+## Onboarding enrollment
+
+The additive `f7g8h9i0j1k2` migration adds the default-off `subscriptions_onboarding_enabled` master, audience and user override, plus nullable enrollment/completion timestamps on environment-scoped subscription state. No existing user or subscription row is enrolled. Effective onboarding requires effective purchases and enforcement; global/audience/override changes retain versioning and audit history.
+
+Fresh signup enrolls an account in the same transaction only when all three effective flags are on. The subscription snapshot and `/users/me` bootstrap response add `onboarding_subscription_required`, gated by completed onboarding and current effective flags. Provider uncertainty leaves enrolled accounts pending. Previously verified valid Premium/trial/grace or an unexpired transition grant permanently completes enrollment in the caller transaction; expiry never re-enrolls an account. Disabling a prerequisite releases the effective requirement without deleting its enrollment record. There is no client completion endpoint.
+
+Deploy this migration before its paired frontend. Keep the new flag off until preview validation. Account export includes enrollment and completion dates; account deletion cascades the existing subscription-state row. Selected targeting does not retroactively enroll accounts created outside the enabled signup cohort.
+
+## Native onboarding verification
+
+On November 4, 2026, the paired frontend passed compact 390 × 844 light/dark review, maximum accessibility text scrolling, account-action reachability and clean spoken labels. Terms/export navigation returned to the required gate. A workout deep link and cold restart before purchase did not bypass enrollment. Cancelling a monthly RevenueCat Test Store purchase retained the gate; a valid simulated purchase opened Home. A fresh backend session confirmed verified trial access, a persisted onboarding completion timestamp, `onboarding_subscription_required=false`, and allowed training. A cold restart after purchase returned to Home without reopening the gate. These simulations incurred no charge or StoreKit transaction. The simulators were restored to their original Large reading size, and the compact simulator to light appearance.
+
+The final frontend run covers 165 checks; the backend's 90 focused checks and separate 9 PostgreSQL migration cases are reported separately because the migration-graph check overlaps. Physical Apple sandbox lifecycle, real Apple products and production setup remain release requirements.
 
 ## Verification
 
