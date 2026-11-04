@@ -208,7 +208,7 @@ def _retained_health_days(db, user_id):
 
 def _collections(db, user_id):
     sessions = db.query(WorkoutSession.id).filter(WorkoutSession.user_id == user_id)
-    yield "subscriptions", _rows(db, SubscriptionState, user_id, "environment billing_status verification_status verified_at product_id expires_at grace_expires_at will_renew")
+    yield "subscriptions", _rows(db, SubscriptionState, user_id, "environment billing_status verification_status verified_at product_id expires_at grace_expires_at will_renew onboarding_enrolled_at onboarding_completed_at")
     yield "subscription_transition_grants", _rows(db, SubscriptionTransitionGrant, user_id, "environment launch_at expires_at")
     yield "favorites", (
         dict(row._mapping) for row in db.execute(

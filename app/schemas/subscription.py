@@ -22,3 +22,4 @@ class SubscriptionSnapshot(BaseModel):
     access_expires_at: Optional[datetime]
     transition_ends_at: Optional[datetime]
     provider_configured: bool
+    onboarding_subscription_required: bool = False

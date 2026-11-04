@@ -97,6 +97,110 @@ def test_default_off_preserves_baseline_without_faking_premium(db, monkeypatch):
     assert db.scalar(select(func.count()).select_from(SubscriptionTransitionGrant)) == 0
 
 
+def onboarding(db, user_id=A):
+    enforce(db)
+    config = db.get(FeatureFlagConfig, "test")
+    config.subscriptions_onboarding_enabled = True
+    db.get(User, user_id).has_completed_onboarding = True
+    db.get(User, user_id).created_at = NOW
+    db.commit()
+    service.enroll_subscription_onboarding(db, user_id)
+    db.commit()
+
+
+def test_onboarding_enrollment_requires_all_flags_and_excludes_existing_accounts(db):
+    service.enroll_subscription_onboarding(db, A)
+    assert db.get(SubscriptionState, ("test", A)) is None
+    onboarding(db)
+    assert service.get_subscription(db, A)["onboarding_subscription_required"] is True
+    assert service.get_subscription(db, B)["onboarding_subscription_required"] is False
+    override = FeatureFlagUserOverride(environment="test", user_id=A)
+    db.add(override)
+    for flag in ("subscriptions_purchases_enabled", "subscriptions_enforcement_enabled", "subscriptions_onboarding_enabled"):
+        setattr(override, flag, False)
+        db.flush()
+        assert service.get_subscription(db, A)["onboarding_subscription_required"] is False
+        setattr(override, flag, None)
+    db.delete(override)
+    db.flush()
+    assert service.get_subscription(db, A)["onboarding_subscription_required"] is True
+
+
+def test_onboarding_targeting_unknown_verification_and_environment_isolation(db, monkeypatch):
+    onboarding(db)
+    db.get(FeatureFlagConfig, "test").subscriptions_onboarding_audience = "selected"
+    db.commit()
+    assert service.get_subscription(db, A)["onboarding_subscription_required"] is False
+    db.add(FeatureFlagUserOverride(environment="test", user_id=A, subscriptions_onboarding_enabled=True))
+    db.commit()
+    assert service.get_subscription(db, A)["onboarding_subscription_required"] is True
+    assert service.get_subscription(db, A)["can_start_training"] is None
+    state = db.get(SubscriptionState, ("test", A))
+    state.verification_status = "unavailable"
+    db.commit()
+    assert service.get_subscription(db, A)["onboarding_subscription_required"] is True
+    monkeypatch.setattr(settings, "APP_ENV", "production")
+    assert service.get_subscription(db, A)["onboarding_subscription_required"] is False
+
+
+@pytest.mark.parametrize("period", ["normal", "trial"])
+def test_onboarding_completion_persists_across_sessions_and_expiry(db, monkeypatch, period):
+    onboarding(db)
+    assert verify(db, monkeypatch, customer(period=period))["onboarding_subscription_required"] is False
+    with Session(db.bind) as reopened:
+        assert reopened.get(SubscriptionState, ("test", A)).onboarding_completed_at is not None
+        assert service.get_subscription(reopened, A, now=NOW + timedelta(days=50))["onboarding_subscription_required"] is False
+
+
+def test_valid_transition_permanently_completes_onboarding_requirement(db):
+    onboarding(db)
+    db.get(User, A).created_at = NOW - timedelta(days=10)
+    db.get(FeatureFlagConfig, "test").subscriptions_launch_at = NOW - timedelta(days=5)
+    db.commit()
+    assert service.get_subscription(db, A)["onboarding_subscription_required"] is False
+    db.commit()
+    with Session(db.bind) as reopened:
+        assert reopened.get(SubscriptionState, ("test", A)).onboarding_completed_at is not None
+        assert service.get_subscription(reopened, A, now=NOW + timedelta(days=40))["onboarding_subscription_required"] is False
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_signup_enrollment_and_authenticated_bootstrap_hint(db, monkeypatch, enabled):
+    from app.api.v1.auth import router as auth_module
+    from app.api.v1.users.router import router as users_router
+    from app.core.legal import TERMS_VERSION, PRIVACY_VERSION
+
+    enforce(db)
+    db.get(FeatureFlagConfig, "test").subscriptions_onboarding_enabled = enabled
+    db.commit()
+    owner = "00000000-0000-4000-8000-000000000013"
+
+    def create_signup_user(session, **values):
+        values.pop("commit")
+        user = User(id=owner, created_at=NOW, **values)
+        session.add(user)
+        session.flush()
+        return user
+
+    monkeypatch.setattr(auth_module, "create_user", create_signup_user)
+    monkeypatch.setattr(auth_module, "hash_password", lambda _: "test")
+    monkeypatch.setattr(auth_module, "upsert_onboarding", lambda *args, **kwargs: None)
+    app = FastAPI()
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.include_router(auth_module.router, prefix="/v1")
+    app.include_router(users_router, prefix="/v1")
+    app.dependency_overrides[get_db] = lambda: db
+    app.dependency_overrides[get_current_user] = lambda: db.get(User, owner)
+    with TestClient(app) as client:
+        response = client.post("/v1/auth/signup", json={"email": "new@example.com", "password": "test-password", "preferred_name": "New", "onboarding": {}, "legalAcceptance": {"accepted": True, "termsVersion": TERMS_VERSION, "privacyVersion": PRIVACY_VERSION}})
+        assert response.status_code == 201
+        assert client.get("/v1/users/me").json()["onboarding_subscription_required"] is enabled
+    with Session(db.bind) as reopened:
+        state = reopened.get(SubscriptionState, ("test", owner))
+        assert bool(state and state.onboarding_enrolled_at) is enabled
+
+
 @pytest.mark.parametrize("period,status", [("normal", "active"), ("trial", "trial")])
 def test_verified_subscription_authorizes_and_projects_tier(db, monkeypatch, period, status):
     enforce(db)
