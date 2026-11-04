@@ -63,6 +63,12 @@ Fresh signup enrolls an account in the same transaction only when all three effe
 
 Deploy this migration before its paired frontend. Keep the new flag off until preview validation. Account export includes enrollment and completion dates; account deletion cascades the existing subscription-state row. Selected targeting does not retroactively enroll accounts created outside the enabled signup cohort.
 
+## Native onboarding verification
+
+On November 4, 2026, the paired frontend passed compact 390 × 844 light/dark review, maximum accessibility text scrolling, account-action reachability and clean spoken labels. Terms/export navigation returned to the required gate. A workout deep link and cold restart before purchase did not bypass enrollment. Cancelling a monthly RevenueCat Test Store purchase retained the gate; a valid simulated purchase opened Home. A fresh backend session confirmed verified trial access, a persisted onboarding completion timestamp, `onboarding_subscription_required=false`, and allowed training. A cold restart after purchase returned to Home without reopening the gate. These simulations incurred no charge or StoreKit transaction. The simulators were restored to their original Large reading size, and the compact simulator to light appearance.
+
+The final frontend run covers 165 checks; the backend's 90 focused checks and separate 9 PostgreSQL migration cases are reported separately because the migration-graph check overlaps. Physical Apple sandbox lifecycle, real Apple products and production setup remain release requirements.
+
 ## Verification
 
 `pytest tests/test_subscriptions.py tests/test_subscription_guards.py tests/test_feature_flags.py tests/test_subscription_migrations.py` covers lifecycle, flags-off baseline, fixed transition boundaries, unknown verification, forged claims, webhook auth/HMAC/dedup, transfers, retries, deletion, and unique migration graph. Set `SUBSCRIPTION_MIGRATION_TEST_URL` to a local PostgreSQL database for the migration snapshot cases; the tests create/drop randomly named disposable databases without modifying existing application tables. Provider calls are mocked in these tests.
