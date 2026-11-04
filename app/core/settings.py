@@ -12,6 +12,12 @@ class Settings:
         for value in os.getenv("FEATURE_FLAG_ADMIN_USER_IDS", "").split(",")
         if value.strip()
     )
+    REVENUECAT_SECRET_API_KEY: str = os.getenv("REVENUECAT_SECRET_API_KEY", "")
+    REVENUECAT_WEBHOOK_AUTHORIZATION: str = os.getenv("REVENUECAT_WEBHOOK_AUTHORIZATION", "")
+    REVENUECAT_WEBHOOK_SIGNING_SECRET: str = os.getenv("REVENUECAT_WEBHOOK_SIGNING_SECRET", "")
+    REVENUECAT_PRODUCT_IDS: frozenset[str] = frozenset(value.strip() for value in os.getenv("REVENUECAT_PRODUCT_IDS", "").split(",") if value.strip())
+    REVENUECAT_APP_IDS: frozenset[str] = frozenset(value.strip() for value in os.getenv("REVENUECAT_APP_IDS", "").split(",") if value.strip())
+    REVENUECAT_PRODUCTION_TEST_USER_IDS: frozenset[str] = frozenset(str(UUID(value.strip())) for value in os.getenv("REVENUECAT_PRODUCTION_TEST_USER_IDS", "").split(",") if value.strip())
 
     if APP_ENV.lower() not in {"local", "test", "preview", "staging", "production", "prod"}:
         raise RuntimeError("APP_ENV must be local, test, preview, staging, or production")

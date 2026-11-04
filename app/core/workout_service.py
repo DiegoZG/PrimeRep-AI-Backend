@@ -14,6 +14,7 @@ from app.models.exercise import Exercise
 from app.models.onboarding_profile import OnboardingProfile
 from app.models.workout_day_history import WorkoutDayHistory
 from app.core.exercise_service import exercise_visibility_filter
+from app.core.subscription_service import require_training_access
 from app.schemas.workout import (
     WorkoutBlockItemOut,
     WorkoutExerciseBlockOut,
@@ -596,6 +597,7 @@ def generate_next_workout(
         force_regenerate: If True, generates a new random workout instead of
                          returning the deterministic cached workout for today.
     """
+    require_training_access(db, user_id)
     if target_date is None:
         target_date = date.today()
 

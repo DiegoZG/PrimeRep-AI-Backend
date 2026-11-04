@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 from fastapi import HTTPException
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
+from app.models.subscription import SubscriptionState, SubscriptionTransitionGrant
 
 from app.core.onboarding_service import canonical_onboarding_data
 from app.core.profile_service import get_profile
@@ -207,6 +208,8 @@ def _retained_health_days(db, user_id):
 
 def _collections(db, user_id):
     sessions = db.query(WorkoutSession.id).filter(WorkoutSession.user_id == user_id)
+    yield "subscriptions", _rows(db, SubscriptionState, user_id, "environment billing_status verification_status verified_at product_id expires_at grace_expires_at will_renew")
+    yield "subscription_transition_grants", _rows(db, SubscriptionTransitionGrant, user_id, "environment launch_at expires_at")
     yield "favorites", (
         dict(row._mapping) for row in db.execute(
             select(user_exercise_favorites.c.exercise_id, user_exercise_favorites.c.created_at)
@@ -338,7 +341,7 @@ Generated: {now.isoformat()}
 
 account.json contains your saved profile, preferences, private programs/exercises,
 workout plans and session snapshots, notes, feedback, questions and retained Coach
-content. Sets include deleted_at; removed sets remain in JSON for transparency.
+content, normalized subscription state and fixed transition grants. Sets include deleted_at; removed sets remain in JSON for transparency.
 Canonical set weights and Coach weight_data values in JSON are kilograms. Coach
 weight_data uses the public API's field names and preserves target/record load context.
 Other stored weight preferences retain

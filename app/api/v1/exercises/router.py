@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.subscription_service import require_training_access
 from app.core.exercise_qa_service import (
     CoachUnavailableError,
     RateLimitExceededError,
@@ -136,6 +137,11 @@ def get_last_sets_endpoint(
     return LastSetsOut(items=[LastSetOut.model_validate(s) for s in sets])
 
 
+def _training_user(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    require_training_access(db, str(current_user.id))
+    return current_user
+
+
 @router.post("/{exercise_id}/ask", response_model=AskQuestionOut)
 @user_limiter.limit("5/minute")
 def ask_exercise_question_endpoint(
@@ -143,7 +149,7 @@ def ask_exercise_question_endpoint(
     exercise_id: str,
     payload: AskQuestionRequest,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(_training_user),
 ):
     """Ask the AI coach a question scoped to this exercise."""
     exercise = get_exercise(db, exercise_id, user_id=str(current_user.id))

@@ -19,6 +19,7 @@ from dataclasses import dataclass, field
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
+from app.core.subscription_service import get_subscription
 
 from app.core.onboarding_service import get_onboarding_by_user_id
 from app.core.settings import settings
@@ -49,6 +50,9 @@ def _is_coach_eligible(db: Session, user_id: str) -> bool:
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         return False
+    subscription = get_subscription(db, user_id)
+    if subscription["flags"]["subscriptions_enforcement_enabled"]:
+        return subscription["can_start_training"] is True and bool(user.coach_insights_enabled)
     tier = getattr(user, "subscription_tier", "free")
     enabled = getattr(user, "coach_insights_enabled", False)
     return tier == "premium" and bool(enabled)

@@ -71,6 +71,11 @@ def _config(db: Session, environment: str, *, write: bool = False) -> Optional[F
     )
 
 
+def lock_feature_flag_configuration(db: Session) -> None:
+    """Acquire configuration before account or worker row locks."""
+    _config(db, flag_environment())
+
+
 def _overrides(row: Optional[FeatureFlagUserOverride]) -> dict:
     return {flag: getattr(row, flag) if row else None for flag in FLAG_COLUMNS}
 

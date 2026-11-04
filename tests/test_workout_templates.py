@@ -960,14 +960,15 @@ def test_supersession_and_deactivation_preserve_stored_historical_program_week()
     assert historical.status_code == 200
     assert historical.json() == current_week
 
-    stopped = client.delete(
-        "/v1/workout-templates/active",
-        headers=headers,
-        params={
-            "weekStart": next_monday.isoformat(),
-            "effectiveDate": next_monday.isoformat(),
-        },
-    )
+    with _freeze_template_service_today(monday):
+        stopped = client.delete(
+            "/v1/workout-templates/active",
+            headers=headers,
+            params={
+                "weekStart": next_monday.isoformat(),
+                "effectiveDate": next_monday.isoformat(),
+            },
+        )
     assert stopped.status_code == 422
     with _freeze_template_service_today(next_monday):
         stopped = client.delete(

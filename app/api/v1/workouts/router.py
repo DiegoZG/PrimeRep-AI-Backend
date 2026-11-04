@@ -5,6 +5,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from app.core.subscription_service import require_training_access
 
 from app.core.database import get_db
 from app.core.workout_planning_service import update_day_planning, apply_planning_preference, planning_editability, add_workout_exercise, WorkoutExerciseConflict
@@ -55,6 +56,7 @@ def get_week_plan_endpoint(
     user_id = str(current_user.id)
 
     if force:
+        require_training_access(db, user_id)
         check_force_regeneration(user_id)
         try:
             _check_and_increment_force_regen(db, user_id)
@@ -196,6 +198,7 @@ def get_next_workout(
     week_start = get_week_start(today)
 
     if force:
+        require_training_access(db, user_id)
         check_force_regeneration(user_id)
         try:
             _check_and_increment_force_regen(db, user_id)

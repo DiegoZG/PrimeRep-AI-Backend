@@ -16,6 +16,8 @@ from app.core import coach_service
 from app.core.coach_service import CoachContent, WeekCoachContent, generate_coach_content
 from app.core.database import SessionLocal
 from app.main import app
+from app.models.user import User
+from app.core.settings import settings
 from conftest import LEGAL_ACCEPTANCE
 
 client = TestClient(app)
@@ -40,6 +42,11 @@ def _signup_and_get_token(email: str) -> tuple[str, str]:
     assert resp.status_code == 201
     token = resp.json()["access_token"]
     user_id = client.get("/v1/users/me", headers=_auth(token)).json()["id"]
+    with SessionLocal() as db:
+        user = db.get(User, user_id)
+        user.subscription_tier = "premium"
+        user.coach_insights_enabled = True
+        db.commit()
     return token, user_id
 
 
@@ -180,6 +187,11 @@ def test_generate_returns_fallback_when_no_db(monkeypatch):
     assert calls == []
 
 
+@pytest.fixture(autouse=True)
+def coach_provider_key(monkeypatch):
+    monkeypatch.setattr(settings, "ANTHROPIC_API_KEY", "fixture-key")
+
+
 def test_generate_one_call_for_multiple_exercises(monkeypatch):
     """Only one _call_anthropic call per workout, regardless of exercise count."""
     calls = []
@@ -198,6 +210,7 @@ def test_generate_one_call_for_multiple_exercises(monkeypatch):
 
     monkeypatch.setattr(coach_service, "_call_anthropic", fake_call)
 
+    _, user_id = _signup_and_get_token(_unique_email("multiple"))
     db = SessionLocal()
     try:
         exercises = [
@@ -209,7 +222,7 @@ def test_generate_one_call_for_multiple_exercises(monkeypatch):
         items = [(ex, _FakePrescription()) for ex in exercises]
         result = generate_coach_content(
             db=db,
-            user_id="fake-user-id-not-in-db",
+            user_id=user_id,
             day_type="full_body",
             title="Full Body",
             exercise_items=items,
@@ -272,11 +285,12 @@ def test_generate_fallback_on_timeout(monkeypatch):
 
     monkeypatch.setattr(coach_service, "_call_anthropic", fake_call)
 
+    _, user_id = _signup_and_get_token(_unique_email("fallback"))
     db = SessionLocal()
     try:
         result = generate_coach_content(
             db=db,
-            user_id="fake-user",
+            user_id=user_id,
             day_type="upper",
             title="Upper Body",
             exercise_items=[],
@@ -294,11 +308,12 @@ def test_generate_fallback_on_bad_json(monkeypatch):
         coach_service, "_call_anthropic", lambda s, u: "this is not json"
     )
 
+    _, user_id = _signup_and_get_token(_unique_email("fallback"))
     db = SessionLocal()
     try:
         result = generate_coach_content(
             db=db,
-            user_id="fake-user",
+            user_id=user_id,
             day_type="lower",
             title="Lower Body",
             exercise_items=[],

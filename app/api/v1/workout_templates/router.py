@@ -126,6 +126,8 @@ def remove_active_program(
             week_start=week_start,
             effective_date=effective_date,
         )
+        if week is None:
+            return Response(status_code=status.HTTP_204_NO_CONTENT)
         reconcile_after_mutation(
             db,
             str(current_user.id),

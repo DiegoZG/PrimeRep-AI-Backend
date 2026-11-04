@@ -19,6 +19,12 @@ app = FastAPI(
 
 from fastapi.responses import JSONResponse
 from app.core.workout_planning import WorkoutTimeBudgetTooShort, WorkoutPlanningLocked
+from app.core.subscription_service import SubscriptionAccessError
+
+
+@app.exception_handler(SubscriptionAccessError)
+async def subscription_access_error(request, error):
+    return JSONResponse(status_code=error.status_code, content={"detail": str(error), "code": error.code})
 
 @app.exception_handler(WorkoutTimeBudgetTooShort)
 async def planning_budget_error(request, error):

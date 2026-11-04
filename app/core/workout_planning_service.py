@@ -4,6 +4,7 @@ import random
 from datetime import date, datetime, timedelta, timezone
 
 from sqlalchemy.orm import Session
+from app.core.subscription_service import require_training_access
 
 from app.core.schedule_lock import lock_user_schedule
 from app.core.exercise_service import get_exercise
@@ -45,6 +46,7 @@ def _regenerate(db, user_id, week_start, day, settings, mode, minutes, source):
 
 def update_day_planning(db: Session, *, user_id: str, workout_day_id: str, planning_mode: str,
                         time_budget_minutes, week_start=None, effective_date=None):
+    require_training_access(db, user_id)
     effective_date = effective_date or datetime.now(timezone.utc).date()
     if week_start is not None:
         # The compatibility duration endpoint accepts an explicit future week.
@@ -74,6 +76,7 @@ def update_day_planning(db: Session, *, user_id: str, workout_day_id: str, plann
 
 
 def apply_planning_preference(db: Session, *, user_id: str, week_start: date, effective_date: date):
+    require_training_access(db, user_id)
     week_start, effective_date = _resolve_mutation_calendar(week_start=week_start, effective_date=effective_date)
     lock_user_schedule(db, user_id)
     if get_week_plan(db, user_id=user_id, week_start=week_start) is None:
@@ -133,6 +136,7 @@ class WorkoutExerciseConflict(Exception):
 def add_workout_exercise(db: Session, *, user_id: str, workout_day_id: str, exercise_id: str,
                          expected_exercise_ids: list[str], week_start: date, effective_date: date,
                          allow_over_budget: bool = False):
+    require_training_access(db, user_id)
     if effective_date not in {datetime.now(timezone.utc).date() + timedelta(days=i) for i in (-1, 0, 1)}:
         raise ValueError("effectiveDate must be the caller's current local date")
     lock_user_schedule(db, user_id)

@@ -268,7 +268,7 @@ def test_existing_row_cas_rejects_racing_writer(flag_db, monkeypatch):
 
 
 def test_migration_roundtrip_on_isolated_database(tmp_path, monkeypatch):
-    path = Path(__file__).resolve().parents[1] / "alembic/versions/a2b3c4d5e6f7_add_subscription_feature_flags.py"
+    path = Path(__file__).resolve().parents[1] / "alembic/versions/c4d5e6f7g8h9_add_subscription_feature_flags.py"
     spec = importlib.util.spec_from_file_location("feature_flag_migration", path)
     migration = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(migration)
@@ -545,7 +545,7 @@ def test_targeting_is_environment_scoped(flag_db, monkeypatch):
 def test_targeting_migration_preserves_existing_config_and_history(tmp_path, monkeypatch):
     engine = create_engine(f"sqlite:///{tmp_path / 'targeting-migration.db'}")
     migrations = []
-    for filename in ("a2b3c4d5e6f7_add_subscription_feature_flags.py", "b3c4d5e6f7g8_add_feature_flag_user_targeting.py"):
+    for filename in ("c4d5e6f7g8h9_add_subscription_feature_flags.py", "b3c4d5e6f7g8_add_feature_flag_user_targeting.py"):
         path = Path(__file__).resolve().parents[1] / "alembic/versions" / filename
         spec = importlib.util.spec_from_file_location(filename[:-3], path)
         module = importlib.util.module_from_spec(spec)

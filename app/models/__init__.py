@@ -1,4 +1,5 @@
 from app.models.user import User  # noqa: F401
+from app.models.subscription import SubscriptionState, SubscriptionTransitionGrant, BillingWebhookEvent, BillingJob  # noqa: F401
 from app.models.feature_flags import FeatureFlagConfig, FeatureFlagAudit, FeatureFlagUserOverride  # noqa: F401
 from app.models.health import HealthSource, HealthPreference, HealthDay  # noqa: F401
 from app.models.user_avatar import UserAvatar  # noqa: F401

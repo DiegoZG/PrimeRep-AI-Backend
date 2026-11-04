@@ -1,6 +1,7 @@
 from typing import Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from app.core.subscription_service import enqueue_customer_erasure
 from app.core.security.emails import normalize_email
 from app.models.user import User
 from app.models.exercise import Exercise
@@ -17,6 +18,7 @@ def get_user_by_id(db: Session, user_id: str) -> Optional[User]:
 
 def delete_user(db: Session, user: User) -> None:
     try:
+        enqueue_customer_erasure(db, str(user.id))
         db.query(Exercise).filter(
             Exercise.owner_user_id == str(user.id), Exercise.source == "user"
         ).update({Exercise.is_active: False}, synchronize_session=False)

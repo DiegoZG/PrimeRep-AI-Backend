@@ -10,6 +10,8 @@ from typing import Optional
 from sqlalchemy import case, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
+from app.core.feature_flag_service import get_feature_flags
+from app.core.subscription_service import require_training_access, training_access_allowed
 from sqlalchemy.orm.attributes import flag_modified
 
 from app.core.exercise_service import exercise_to_dict, exercise_visibility_filter, get_exercise
@@ -469,6 +471,7 @@ def _replace_template_graph(
 
 
 def create_template(db: Session, user_id: str, payload: WorkoutTemplateWrite) -> WorkoutTemplate:
+    require_training_access(db, user_id)
     template = WorkoutTemplate(owner_user_id=user_id, scope="private")
     try:
         _replace_template_graph(db, template, user_id, payload)
@@ -483,6 +486,7 @@ def create_template(db: Session, user_id: str, payload: WorkoutTemplateWrite) ->
 def update_template(
     db: Session, user_id: str, template_id: str, payload: WorkoutTemplateWrite, version: int
 ) -> WorkoutTemplate:
+    require_training_access(db, user_id)
     template = (
         _template_query(db, user_id)
         .filter(WorkoutTemplate.id == template_id)
@@ -537,6 +541,7 @@ def archive_template(db: Session, user_id: str, template_id: str) -> None:
 
 
 def clone_template(db: Session, user_id: str, template_id: str) -> WorkoutTemplate:
+    require_training_access(db, user_id)
     source = get_template(db, user_id, template_id)
     detail = template_detail(source, db=db, user_id=user_id)
     payload = WorkoutTemplateWrite.model_validate(
@@ -1055,6 +1060,7 @@ def activate_program(
         substitutions=substitutions,
         apply_mode=apply_mode,
     )
+    get_feature_flags(db, user_id)
     lock_user_schedule(db, user_id)
     existing = (
         db.query(UserProgramActivation)
@@ -1067,6 +1073,7 @@ def activate_program(
                 "clientOperationId was already used for a different activation request"
             )
         return existing, _activation_week_response(db, existing)
+    require_training_access(db, user_id)
     base_week, target_week, _ = validate_activation_schedule_input(
         week_start=week_start,
         effective_date=effective_date,
@@ -1317,6 +1324,7 @@ def install_activation_week(
     from app.core.workout_week_service import _plan_json_to_response, get_week_start
 
     week_start = get_week_start(week_start)
+    get_feature_flags(db, activation.user_id)
     lock_user_schedule(db, activation.user_id)
     record = (
         db.query(WorkoutWeekPlan)
@@ -1333,6 +1341,9 @@ def install_activation_week(
         and week_start < earliest_current_week
     ):
         return _plan_json_to_response(record.plan_json)
+    if record and training_access_allowed(db, activation.user_id) is not True:
+        return _plan_json_to_response(record.plan_json)
+    require_training_access(db, activation.user_id)
     current = list(record.plan_json.get("workouts", [])) if record else []
     statuses = _session_statuses_for_workouts(db, activation.user_id, current)
     preserved = [
@@ -1407,6 +1418,7 @@ def skip_program_workout_day(
     activation = db.get(UserProgramActivation, activation_id) if activation_id else None
     if activation is None:
         return None
+    require_training_access(db, activation.user_id)
     lock_user_schedule(db, activation.user_id)
     original_workouts = [dict(workout) for workout in plan.plan_json.get("workouts", [])]
     statuses = _session_statuses_for_workouts(db, activation.user_id, original_workouts)
@@ -1628,6 +1640,7 @@ def cancel_scheduled_program(
     effective_date: date,
 ) -> bool:
     effective_date = validate_caller_local_today(effective_date)
+    get_feature_flags(db, user_id)
     lock_user_schedule(db, user_id)
     scheduled = (
         db.query(UserProgramActivation)
@@ -1649,6 +1662,9 @@ def cancel_scheduled_program(
     scheduled.status = "deactivated"
     scheduled.deactivated_at = datetime.now(timezone.utc)
     db.flush()
+    if training_access_allowed(db, user_id) is not True:
+        db.commit()
+        return True
     target_week = scheduled.effective_date - timedelta(
         days=scheduled.effective_date.weekday()
     )
@@ -1690,6 +1706,7 @@ def deactivate_program(
         raise TemplateValidationError(
             "weekStart must be the Monday containing effectiveDate"
         )
+    get_feature_flags(db, user_id)
     lock_user_schedule(db, user_id)
     now = datetime.now(timezone.utc)
     activations = (
@@ -1706,6 +1723,9 @@ def deactivate_program(
         activation.status = "deactivated"
         activation.deactivated_at = now
     db.flush()
+    if training_access_allowed(db, user_id) is not True:
+        db.commit()
+        return None
     return _replace_program_week_with_preferences(
         db,
         user_id,
@@ -1717,6 +1737,7 @@ def deactivate_program(
 
 
 def create_custom_exercise(db: Session, user_id: str, payload) -> Exercise:
+    require_training_access(db, user_id)
     return _save_custom_exercise(db, user_id, None, payload)
 
 
@@ -1724,6 +1745,7 @@ def update_custom_exercise(db: Session, user_id: str, exercise_id: str, payload)
     exercise = get_exercise(db, exercise_id, user_id=user_id)
     if not exercise or exercise.source != "user" or exercise.owner_user_id != user_id:
         raise TemplateNotFoundError("Custom exercise not found")
+    require_training_access(db, user_id)
     result = _save_custom_exercise(db, user_id, exercise, payload, commit=False)
     _bump_referencing_template_versions(db, user_id, exercise_id)
     db.commit()

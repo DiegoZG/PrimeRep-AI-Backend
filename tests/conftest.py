@@ -46,16 +46,7 @@ _CANNED_SINGLE_COACH_RESPONSE = json.dumps(
 
 @pytest.fixture(autouse=True)
 def stub_coach_anthropic(monkeypatch):
-    """Replace coach_service._call_anthropic and _is_coach_eligible with stubs.
-
-    - _call_anthropic returns a canned response so no live API calls are made.
-    - _is_coach_eligible always returns True so eligibility gating doesn't
-      silently swallow what individual tests are trying to verify.
-
-    Tests that want to exercise parsing / fallback / eligibility logic should
-    monkeypatch these functions themselves inside the test body (those override
-    this fixture-level stub).
-    """
+    """Stub provider calls while retaining real eligibility checks."""
 
     def _fake_call(system: str, user_message: str) -> str:
         # Return week-format or single-day format based on prompt shape
@@ -64,5 +55,4 @@ def stub_coach_anthropic(monkeypatch):
         return _CANNED_SINGLE_COACH_RESPONSE
 
     monkeypatch.setattr(coach_service, "_call_anthropic", _fake_call)
-    monkeypatch.setattr(coach_service, "_is_coach_eligible", lambda db, user_id: True)
     reset_rate_limits()

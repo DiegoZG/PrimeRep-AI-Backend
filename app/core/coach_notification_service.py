@@ -12,6 +12,8 @@ from zoneinfo import ZoneInfo
 from sqlalchemy import func, or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+from app.core.feature_flag_service import lock_feature_flag_configuration
+from app.core.subscription_service import training_access_allowed
 
 from app.core.coach_feed_service import (
     AI_BATCH_LIMIT,
@@ -95,6 +97,7 @@ def enqueue_due_jobs(
     next_queue = "dirty"
     empty_turns = 0
     while processed_users < capped_limit and empty_turns < 2:
+        lock_feature_flag_configuration(db)
         preference = _claim_next_preference(
             db,
             queue=next_queue,
@@ -172,6 +175,10 @@ def _claim_next_preference(
 def _enqueue_for_preference(
     db: Session, preference: CoachPreference, now: datetime
 ) -> int:
+    if training_access_allowed(db, preference.user_id) is not True:
+        preference.reconciled_revision = preference.reconciliation_revision
+        preference.reconciliation_requested_at = None
+        return 0
     count = 0
     local_now = now.astimezone(ZoneInfo(preference.time_zone))
     local_date = local_now.date()
@@ -240,7 +247,6 @@ def process_ai_users(db: Session, limit: int = AI_WORKER_ITEM_LIMIT) -> int:
             db.query(CoachFeedItem.user_id)
             .join(User, User.id == CoachFeedItem.user_id)
             .filter(
-                User.subscription_tier == "premium",
                 User.coach_insights_enabled.is_(True),
                 CoachFeedItem.kind.in_(AI_SAFE_KINDS),
                 CoachFeedItem.expires_at > now,
@@ -367,6 +373,7 @@ def send_due_jobs(db: Session, now: Optional[datetime] = None) -> int:
 
         if (
             not item
+            or training_access_allowed(db, job.user_id) is not True
             or not preference
             or not preference.notifications_enabled
             or item.dismissed_at
