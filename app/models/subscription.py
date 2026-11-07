@@ -18,6 +18,8 @@ class SubscriptionState(Base):
     will_renew = Column(Boolean, nullable=True)
     management_url = Column(String(500), nullable=True)
     next_check_at = Column(DateTime(timezone=True), nullable=True)
+    onboarding_enrolled_at = Column(DateTime(timezone=True), nullable=True)
+    onboarding_completed_at = Column(DateTime(timezone=True), nullable=True)
 
     __table_args__ = (Index("ix_subscription_states_due", "environment", "next_check_at"),)
 

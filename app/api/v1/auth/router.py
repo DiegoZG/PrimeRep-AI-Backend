@@ -22,6 +22,7 @@ from app.core.security.jwt import (
     decode_refresh_token,
 )
 from app.core.onboarding_service import upsert_onboarding
+from app.core.subscription_service import enroll_subscription_onboarding
 from app.core.equipment_weights_service import upsert_equipment_weights
 from app.schemas.equipment_weights import EquipmentWeightsPayload
 from app.schemas.auth import (
@@ -110,6 +111,7 @@ def signup(request: Request, payload: SignUpRequest, db: Session = Depends(get_d
                 )
             user.has_completed_onboarding = True
             db.add(user)
+        enroll_subscription_onboarding(db, str(user.id))
         db.commit()
         db.refresh(user)
     except Exception:

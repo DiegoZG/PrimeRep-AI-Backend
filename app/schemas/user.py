@@ -10,6 +10,7 @@ class UserResponse(BaseModel):
     preferred_name: str
     last_name: Optional[str] = None
     has_completed_onboarding: bool
+    onboarding_subscription_required: bool = False
     subscription_tier: Literal["free", "premium"] = "free"
     coach_insights_enabled: bool = False
     terms_accepted_version: Optional[str] = None
