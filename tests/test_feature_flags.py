@@ -24,6 +24,7 @@ OTHER = "00000000-0000-4000-8000-000000000002"
 PURCHASES = "subscriptions_purchases_enabled"
 ENFORCEMENT = "subscriptions_enforcement_enabled"
 ONBOARDING = "subscriptions_onboarding_enabled"
+MONITORING = "workout_reliability_monitoring_enabled"
 
 
 @pytest.fixture
@@ -66,7 +67,7 @@ def test_defaults_are_read_only_and_public_hides_audit(client, flag_db):
     assert response.status_code == 200
     assert response.json() == {
         "environment": "test", "version": 0,
-        "flags": {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False},
+        "flags": {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False, MONITORING: False},
         "subscriptions_launch_at": None, "transition_ends_at": None,
         "launch_locked": False, "can_manage_flags": True, "updated_at": None,
     }
@@ -143,7 +144,7 @@ def test_launch_requirements_and_freeze_survive_rollback(flag_db):
         assert error.value.status_code == 422
     with pytest.raises(HTTPException):
         save(flag_db, 1, {PURCHASES: False})
-    disabled = save(flag_db, 1, {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False})
+    disabled = save(flag_db, 1, {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False, MONITORING: False})
     assert disabled["launch_locked"] is True
     assert disabled["subscriptions_launch_at"] == past
     with pytest.raises(HTTPException):
@@ -293,7 +294,7 @@ def save_user(db, user_id=OTHER, version=0, **overrides):
 
 def test_selected_audience_is_per_user_and_public_does_not_leak_rules(client, flag_db):
     saved = save(flag_db, flags={PURCHASES: True}, audiences={PURCHASES: "selected"})
-    assert saved["audiences"] == {PURCHASES: "selected", ENFORCEMENT: "everyone", ONBOARDING: "everyone"}
+    assert saved["audiences"] == {PURCHASES: "selected", ENFORCEMENT: "everyone", ONBOARDING: "everyone", MONITORING: "everyone"}
     assert client.get("/v1/feature-flags").json()["flags"][PURCHASES] is False
     selected = save_user(flag_db, version=1, **{PURCHASES: True})
     assert selected["effective_flags"][PURCHASES] is True
@@ -318,11 +319,38 @@ def test_onboarding_targeting_audit_and_effective_prerequisites(flag_db):
     assert history[2]["after"]["flags"][ONBOARDING] is True
 
 
+def test_monitoring_is_independent_targeted_and_audited(flag_db):
+    saved = save(flag_db, flags={MONITORING: True}, audiences={MONITORING: "selected"})
+    assert all(saved["flags"][flag] is False for flag in (PURCHASES, ENFORCEMENT, ONBOARDING))
+    assert service.get_feature_flags(flag_db, OTHER)["flags"][MONITORING] is False
+    allowed = save_user(flag_db, version=1, **{MONITORING: True})
+    assert allowed["effective_flags"][MONITORING] is True
+    assert all(allowed["effective_flags"][flag] is False for flag in (PURCHASES, ENFORCEMENT, ONBOARDING))
+    denied = save_user(flag_db, version=2, **{MONITORING: False})
+    assert denied["effective_flags"][MONITORING] is False
+    inherited = save_user(flag_db, version=3, **{MONITORING: None})
+    assert inherited["effective_flags"][MONITORING] is False
+    assert flag_db.get(FeatureFlagUserOverride, ("test", OTHER)) is None
+    history = service.get_feature_flags(flag_db, ADMIN, admin=True)["history"]
+    assert history[-1]["after"]["flags"][MONITORING] is True
+    assert history[-2]["after"]["overrides"][MONITORING] is True
+
+
+def test_monitoring_global_off_wins_without_touching_subscriptions(flag_db):
+    save_user(flag_db, **{MONITORING: True})
+    assert service.get_feature_flags(flag_db, OTHER)["flags"][MONITORING] is False
+    save(flag_db, 1, flags={MONITORING: True})
+    assert service.get_feature_flags(flag_db, OTHER)["flags"][MONITORING] is True
+    save(flag_db, 2, flags={MONITORING: False})
+    flags = service.get_feature_flags(flag_db, OTHER)["flags"]
+    assert not any(flags.values())
+
+
 def test_master_off_wins_and_staged_allow_can_be_saved(flag_db):
     staged = save_user(flag_db, **{PURCHASES: True, ENFORCEMENT: True})
-    assert staged["global_flags"] == {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False}
-    assert staged["overrides"] == {PURCHASES: True, ENFORCEMENT: True, ONBOARDING: None}
-    assert staged["effective_flags"] == {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False}
+    assert staged["global_flags"] == {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False, MONITORING: False}
+    assert staged["overrides"] == {PURCHASES: True, ENFORCEMENT: True, ONBOARDING: None, MONITORING: None}
+    assert staged["effective_flags"] == {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False, MONITORING: False}
     save(flag_db, 1, {PURCHASES: True}, audiences={PURCHASES: "selected"})
     assert service.get_user_feature_flags(flag_db, ADMIN, OTHER)["effective_flags"][PURCHASES] is True
     save(flag_db, 2, {PURCHASES: False})
@@ -337,7 +365,7 @@ def test_allow_deny_inherit_and_remove_override_row(flag_db):
     assert allowed["effective_flags"][PURCHASES] is True
     inherited = save_user(flag_db, version=3, **{PURCHASES: None})
     assert inherited["effective_flags"][PURCHASES] is True
-    assert inherited["overrides"] == {PURCHASES: None, ENFORCEMENT: None, ONBOARDING: None}
+    assert inherited["overrides"] == {PURCHASES: None, ENFORCEMENT: None, ONBOARDING: None, MONITORING: None}
     assert flag_db.get(FeatureFlagUserOverride, ("test", OTHER)) is None
     assert save_user(flag_db, version=4, **{PURCHASES: None})["version"] == 4
     assert len(service.get_feature_flags(flag_db, ADMIN, admin=True)["history"]) == 4
@@ -346,7 +374,7 @@ def test_allow_deny_inherit_and_remove_override_row(flag_db):
 def test_individual_null_clears_only_requested_rule(flag_db):
     save_user(flag_db, **{PURCHASES: True, ENFORCEMENT: False})
     changed = save_user(flag_db, version=1, **{PURCHASES: None})
-    assert changed["overrides"] == {PURCHASES: None, ENFORCEMENT: False, ONBOARDING: None}
+    assert changed["overrides"] == {PURCHASES: None, ENFORCEMENT: False, ONBOARDING: None, MONITORING: None}
     assert flag_db.get(FeatureFlagUserOverride, ("test", OTHER)) is not None
 
 
@@ -354,10 +382,10 @@ def test_enforcement_requires_effective_purchases_and_clock_never_restarts(flag_
     launch = datetime.now(timezone.utc) - timedelta(days=4)
     save(flag_db, flags={PURCHASES: True, ENFORCEMENT: True}, subscriptions_launch_at=launch)
     denied = save_user(flag_db, version=1, **{PURCHASES: False, ENFORCEMENT: True})
-    assert denied["effective_flags"] == {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False}
+    assert denied["effective_flags"] == {PURCHASES: False, ENFORCEMENT: False, ONBOARDING: False, MONITORING: False}
     save(flag_db, 2, audiences={PURCHASES: "selected", ENFORCEMENT: "selected"})
     enabled = save_user(flag_db, version=3, **{PURCHASES: True})
-    assert enabled["effective_flags"] == {PURCHASES: True, ENFORCEMENT: True, ONBOARDING: False}
+    assert enabled["effective_flags"] == {PURCHASES: True, ENFORCEMENT: True, ONBOARDING: False, MONITORING: False}
     assert enabled["subscriptions_launch_at"] == launch
     assert enabled["transition_ends_at"] == launch + timedelta(days=30)
     assert enabled["launch_locked"] is True
@@ -400,7 +428,7 @@ def test_lookup_exact_email_or_uuid_and_read_only_defaults(client, flag_db):
         result = response.json()
         assert result["user"] == {"id": OTHER, "email": "other@example.test", "preferred_name": "Other"}
         assert result["version"] == 0
-        assert result["overrides"] == {PURCHASES: None, ENFORCEMENT: None, ONBOARDING: None}
+        assert result["overrides"] == {PURCHASES: None, ENFORCEMENT: None, ONBOARDING: None, MONITORING: None}
     for identifier in ("other", "other@", "example.test", "00000000-0000-4000-8000-000000000099"):
         assert client.post("/v1/admin/feature-flags/users/lookup", json={"identifier": identifier}).status_code == 404
     assert flag_db.get(FeatureFlagConfig, "test") is None
@@ -467,7 +495,7 @@ def test_shared_versions_and_audits_for_global_and_user_changes(flag_db):
     assert [item["version"] for item in history] == [3, 2, 1]
     assert [item["scope"] for item in history] == ["global", "user", "global"]
     assert history[1]["target_user_id"] == OTHER
-    assert history[1]["after"] == {"overrides": {PURCHASES: False, ENFORCEMENT: None, ONBOARDING: None}}
+    assert history[1]["after"] == {"overrides": {PURCHASES: False, ENFORCEMENT: None, ONBOARDING: None, MONITORING: None}}
     assert "email" not in str(history[1])
     assert "preferred_name" not in str(history[1])
 

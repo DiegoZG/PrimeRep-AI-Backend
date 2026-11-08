@@ -11,9 +11,11 @@ class FeatureFlagConfig(Base):
     subscriptions_purchases_enabled = Column(Boolean, nullable=False, default=False)
     subscriptions_enforcement_enabled = Column(Boolean, nullable=False, default=False)
     subscriptions_onboarding_enabled = Column(Boolean, nullable=False, default=False, server_default="false")
+    workout_reliability_monitoring_enabled = Column(Boolean, nullable=False, default=False, server_default="false")
     subscriptions_purchases_audience = Column(String(16), nullable=False, default="everyone", server_default="everyone")
     subscriptions_enforcement_audience = Column(String(16), nullable=False, default="everyone", server_default="everyone")
     subscriptions_onboarding_audience = Column(String(16), nullable=False, default="everyone", server_default="everyone")
+    workout_reliability_monitoring_audience = Column(String(16), nullable=False, default="everyone", server_default="everyone")
     subscriptions_launch_at = Column(DateTime(timezone=True), nullable=True)
     launch_locked = Column(Boolean, nullable=False, default=False)
     updated_at = Column(DateTime(timezone=True), nullable=False)
@@ -28,6 +30,7 @@ class FeatureFlagConfig(Base):
         CheckConstraint("subscriptions_purchases_audience IN ('everyone', 'selected')", name="ck_feature_flag_purchases_audience"),
         CheckConstraint("subscriptions_enforcement_audience IN ('everyone', 'selected')", name="ck_feature_flag_enforcement_audience"),
         CheckConstraint("subscriptions_onboarding_audience IN ('everyone', 'selected')", name="ck_feature_flag_onboarding_audience"),
+        CheckConstraint("workout_reliability_monitoring_audience IN ('everyone', 'selected')", name="ck_feature_flag_monitoring_audience"),
     )
 
 
@@ -39,9 +42,10 @@ class FeatureFlagUserOverride(Base):
     subscriptions_purchases_enabled = Column(Boolean, nullable=True)
     subscriptions_enforcement_enabled = Column(Boolean, nullable=True)
     subscriptions_onboarding_enabled = Column(Boolean, nullable=True)
+    workout_reliability_monitoring_enabled = Column(Boolean, nullable=True)
 
     __table_args__ = (
-        CheckConstraint("subscriptions_purchases_enabled IS NOT NULL OR subscriptions_enforcement_enabled IS NOT NULL OR subscriptions_onboarding_enabled IS NOT NULL", name="ck_feature_flag_override_has_rule"),
+        CheckConstraint("subscriptions_purchases_enabled IS NOT NULL OR subscriptions_enforcement_enabled IS NOT NULL OR subscriptions_onboarding_enabled IS NOT NULL OR workout_reliability_monitoring_enabled IS NOT NULL", name="ck_feature_flag_override_has_rule"),
     )
 
 

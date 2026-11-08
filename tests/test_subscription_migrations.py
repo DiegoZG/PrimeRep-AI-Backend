@@ -28,7 +28,30 @@ def test_revision_graph_has_unique_ids_and_one_head():
             if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "revision" for target in node.targets):
                 ids.append(ast.literal_eval(node.value))
     assert len(ids) == len(set(ids))
-    assert ScriptDirectory.from_config(Config(str(ROOT / "alembic.ini"))).get_heads() == ["f7g8h9i0j1k2"]
+    assert ScriptDirectory.from_config(Config(str(ROOT / "alembic.ini"))).get_heads() == ["g8h9i0j1k2l3"]
+
+
+def test_monitoring_flag_upgrade_and_downgrade_preserve_existing_rules(migration_database):
+    config, engine = migration_database
+    command.upgrade(config, "f7g8h9i0j1k2")
+    with engine.begin() as connection:
+        connection.execute(text("INSERT INTO users (id, email, preferred_name, password_hash, has_completed_onboarding, subscription_tier, coach_insights_enabled) VALUES ('monitoring-old', 'old@example.test', 'Old', 'test', true, 'free', false), ('monitoring-only', 'only@example.test', 'Only', 'test', true, 'free', false)"))
+        connection.execute(text("INSERT INTO feature_flag_configs (environment, version, subscriptions_purchases_enabled, subscriptions_enforcement_enabled, subscriptions_onboarding_enabled, launch_locked, updated_at) VALUES ('test', 7, false, false, false, false, now())"))
+        connection.execute(text("INSERT INTO feature_flag_user_overrides (environment, user_id, subscriptions_purchases_enabled) VALUES ('test', 'monitoring-old', true)"))
+        connection.execute(text("INSERT INTO feature_flag_audits (environment, version, changed_at, scope, before, after) VALUES ('test', 7, now(), 'global', '{}', '{}')"))
+    command.upgrade(config, "head")
+    with engine.begin() as connection:
+        row = connection.execute(text("SELECT version, workout_reliability_monitoring_enabled, workout_reliability_monitoring_audience FROM feature_flag_configs WHERE environment='test'")).one()
+        assert tuple(row) == (7, False, "everyone")
+        assert connection.scalar(text("SELECT COUNT(*) FROM feature_flag_audits")) == 1
+        assert connection.scalar(text("SELECT subscriptions_purchases_enabled FROM feature_flag_user_overrides WHERE user_id='monitoring-old'")) is True
+        connection.execute(text("INSERT INTO feature_flag_user_overrides (environment, user_id, workout_reliability_monitoring_enabled) VALUES ('test', 'monitoring-only', true)"))
+    command.downgrade(config, "f7g8h9i0j1k2")
+    with engine.connect() as connection:
+        assert connection.scalar(text("SELECT COUNT(*) FROM feature_flag_user_overrides WHERE user_id='monitoring-only'")) == 0
+        assert connection.scalar(text("SELECT subscriptions_purchases_enabled FROM feature_flag_user_overrides WHERE user_id='monitoring-old'")) is True
+        assert connection.scalar(text("SELECT COUNT(*) FROM feature_flag_audits")) == 1
+    command.upgrade(config, "head")
 
 
 def test_onboarding_upgrade_preserves_existing_billing_accounts(migration_database):
@@ -97,7 +120,7 @@ def test_fresh_and_legacy_stamps_upgrade_without_losing_data(migration_database,
         assert "payload_fingerprint" in {column["name"] for column in schema.get_columns("workout_session_operations")}
         assert {"feature_flag_configs", "feature_flag_audits", "feature_flag_user_overrides", "subscription_states", "subscription_transition_grants", "billing_webhook_events", "billing_jobs"} <= set(schema.get_table_names())
         assert {"subscriptions_purchases_audience", "subscriptions_enforcement_audience"} <= {column["name"] for column in schema.get_columns("feature_flag_configs")}
-        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "f7g8h9i0j1k2"
+        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "g8h9i0j1k2l3"
         if legacy != "fresh":
             assert connection.scalar(text("SELECT preferred_name FROM users WHERE id = 'migration-sentinel'")) == "Preserve"
         if legacy in {"a2_flags", "b3_flags", "b3_combined"}:
