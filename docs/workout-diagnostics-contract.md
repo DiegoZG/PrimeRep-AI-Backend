@@ -1,11 +1,11 @@
 # Workout diagnostics v1 contract
 
-Implementation reference: `app/schemas/workout_diagnostics.py`. The ingestion endpoint is introduced in the next phase; this document defines its shared wire contract first.
+Implementation reference: `app/schemas/workout_diagnostics.py`, `app/api/v1/workout_diagnostics.py` and `app/core/workout_diagnostics_service.py`.
 
 ## Rollout and transport
 
 - Independent effective flag: `workout_reliability_monitoring_enabled`, default false. It uses existing everyone/selected audience, per-user allow/deny/inherit, versions and audit history. Subscription flags are not prerequisites.
-- Proposed endpoint: authenticated `POST /v1/diagnostics/workout-sync`.
+- Endpoint: authenticated `POST /v1/diagnostics/workout-sync`, limited to 30 batches per minute per authenticated account using the existing limiter storage. Rate rejection does not log the account's limit key. HTTP 429 returns `Retry-After: 60`; HTTP 503 means diagnostic storage/admission is temporarily unavailable. Both remain background diagnostic delivery conditions.
 - Maximum request body: 32 KiB; JSON batch contains 1–20 events.
 - Account identity comes from the bearer token. Environment comes from backend `APP_ENV`/existing `flag_environment()`. User/environment selectors are forbidden in JSON and query parameters.
 - Extra keys are forbidden at both batch and event levels. Validation errors must be sanitized and never echo rejected input.
@@ -70,6 +70,7 @@ All numeric fields below are strict integers (not booleans, numeric strings or f
 
 - `operation_queued`, `sync_attempt`, `sync_result`, `retry_scheduled` and `operation_terminal` require `trace_id` and `operation_type`.
 - `local_save`, `sync_result` and `finish_result` require `success|failure` outcome.
+- Successful `local_save` requires positive `saved_count`; success is emitted only after the existing durable device write.
 - `operation_terminal` requires an acknowledged/superseded/cancelled outcome; acknowledged additionally requires `acknowledgment_kind`.
 - Only result or terminal events accept `outcome`. Error categories require a failure or `retry_scheduled`.
 - `queue_snapshot` requires `queue_depth`; `unknown_age_count` cannot exceed it.
@@ -85,11 +86,11 @@ These are observed diagnostics under the enabled flag, not a census of all worko
 | --- | --- | --- |
 | `local_save` | Local-write duration distribution over observed completed durable write attempts with known duration; storage-failure share over observed successful or storage-failed write attempts. Report successful `saved_count` separately. | Success means the existing device write completed durably and `saved_count > 0`. Validation rejection and admission conflict are separate categories, excluded from storage-failure numerators and denominators. A batch write is one attempt, not one attempt per saved set. |
 | `operation_queued` | Observed enqueue count and trace cohort, grouped by fixed operation type. | Only new logical operations enter the cohort; delivery retries and restart do not create new traces. Pre-instrumentation operations may lack enqueue coverage. |
-| `sync_attempt` | Actual HTTP request attempt count. | Emit only when replay issues a real request, never for polling, guard checks, scheduled retries or canonical local reconciliation. |
-| `sync_result` | Request success/failure counts and failure share among observed request results; duration distribution among results with known duration. | Keep attempted requests without a result visible as unknown. Request failures remain nonterminal and can recover; they are not lost sets. |
+| `sync_attempt` | Actual mutating replay write-request attempt count. | Emit only when replay calls a mutating service (create/log/update/delete/restore/order/replace/complete/abandon/notes), never for canonical GETs, polling, guard checks, scheduled retries or local reconciliation. |
+| `sync_result` | Write-request success/failure counts and failure share among observed write-request results; duration distribution among results with known duration. | Canonical GET-only reconciliation uses `acknowledgment_kind=reconciled` and creates no synthetic per-operation write request. Keep attempted writes without a result visible as unknown. Request failures remain nonterminal and can recover; they are not lost sets. |
 | `retry_scheduled` | Retry scheduling count and delay distribution over observed scheduling events. | A retry is not an additional request or additional failure until an actual request/result occurs. |
 | `operation_terminal` | Unique acknowledged/superseded/cancelled trace counts; queue-to-ack age distribution over unique acknowledged traces with known valid age; direct/reconciled and restart-recovery shares among acknowledged traces with those fields known. | Acknowledgment follows the existing durable canonical merge. Superseded and cancelled work are intentional terminal outcomes, separate from acknowledgment and data loss. Never divide acknowledgments by HTTP attempts. |
-| `queue_snapshot` | Latest observed queue depth, unknown-age count and known-age distribution for the sampled scope/time. | Snapshots are gauges, never additive counts or proof of loss. Missing or stale samples remain unknown; do not zero-fill them. |
+| `queue_snapshot` | Latest observed queue depth and unknown-age coverage for the sampled scope/time. | Snapshots are gauges, never additive counts or proof of loss. Reports select the latest received sample, breaking receipt-time ties with valid observation time; delayed samples stay stale and ambiguous/invalid-clock samples stay unknown. No snapshot-age distribution is provided; queue-to-ack distributions come from acknowledged terminal events. Do not zero-fill missing coverage. |
 | `finish_result` | Success/failure counts and duration distributions separately for `server` and `local_cleanup`, using observed results for that same stage as the denominator. | Server completion and local cleanup are distinct stages; neither substitutes for the other or creates a second terminal operation. |
 | `diagnostics_dropped` | Sum of deduplicated `dropped_count` by report bucket. | Signals collection gaps caused by bounded telemetry storage/delivery, not dropped workout operations. Report gaps alongside the other metrics. |
 

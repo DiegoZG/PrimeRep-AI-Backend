@@ -63,6 +63,8 @@ class WorkoutDiagnosticEvent(BaseModel):
             raise ValueError("acknowledgment_kind is only valid for acknowledged terminal operations")
         if self.event_type in {"local_save", "sync_result", "finish_result"} and self.outcome not in {"success", "failure"}:
             raise ValueError("Result events require success or failure")
+        if self.event_type == "local_save" and self.outcome == "success" and not self.saved_count:
+            raise ValueError("Successful local saves require a positive saved_count")
         if self.outcome is not None and self.event_type not in {"local_save", "sync_result", "finish_result", "operation_terminal"}:
             raise ValueError("Only result and terminal events accept outcome")
         if self.error_category is not None and self.outcome != "failure" and self.event_type != "retry_scheduled":
