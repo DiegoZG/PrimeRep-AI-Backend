@@ -35,6 +35,16 @@ def check_force_regeneration(user_id: str) -> None:
         raise HTTPException(status_code=429, detail="Too many forced regenerations. Try again shortly.")
 
 
+def check_workout_diagnostics(user_id: str) -> None:
+    # SlowAPI's decorator logs limit keys; use its public strategy without identity-bearing logs.
+    try:
+        admitted = user_limiter.limiter.hit(parse("30/minute"), "workout-diagnostics", user_id)
+    except Exception:
+        raise HTTPException(status_code=503, detail="Diagnostics are temporarily unavailable") from None
+    if not admitted:
+        raise HTTPException(status_code=429, detail="Too many diagnostic batches", headers={"Retry-After": "60"})
+
+
 def reset_rate_limits() -> None:
     limiter.reset()
     user_limiter.reset()
