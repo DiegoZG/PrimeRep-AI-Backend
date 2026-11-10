@@ -44,11 +44,19 @@ class Settings:
         ).split(",") if origin.strip()
     ]
 
-    # Optional — the exercise Q&A feature checks this at call time and returns
-    # a 503 if missing, rather than failing the whole app at import time
-    # (keeps local dev / tests working without an API key).
-    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
-    ANTHROPIC_QA_MODEL: str = os.getenv("ANTHROPIC_QA_MODEL", "claude-haiku-4-5-20251001")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    OPENAI_CHAT_MODEL: str = os.getenv("OPENAI_CHAT_MODEL", "gpt-6-luna")
+    OPENAI_VISION_MODEL: str = os.getenv("OPENAI_VISION_MODEL", "gpt-6-luna")
+    OPENAI_CHAT_REASONING: str = os.getenv("OPENAI_CHAT_REASONING", "none")
+    OPENAI_VISION_REASONING: str = os.getenv("OPENAI_VISION_REASONING", "none")
+    OPENAI_TEST_BUDGET_USD: str = os.getenv("OPENAI_TEST_BUDGET_USD", "10")
+    OPENAI_DAILY_BUDGET_USD: str = os.getenv("OPENAI_DAILY_BUDGET_USD", "10")
+    OPENAI_MONTHLY_BUDGET_USD: str = os.getenv("OPENAI_MONTHLY_BUDGET_USD", "10")
+    EQUIPMENT_SCAN_ATTEMPTS_PER_MINUTE: int = int(os.getenv("EQUIPMENT_SCAN_ATTEMPTS_PER_MINUTE", "3"))
+    EQUIPMENT_SCAN_ATTEMPTS_PER_DAY: int = int(os.getenv("EQUIPMENT_SCAN_ATTEMPTS_PER_DAY", "20"))
+    EQUIPMENT_SCAN_GLOBAL_CONCURRENCY: int = int(os.getenv("EQUIPMENT_SCAN_GLOBAL_CONCURRENCY", "2"))
+    EQUIPMENT_SCAN_MAX_EDGE: int = int(os.getenv("EQUIPMENT_SCAN_MAX_EDGE", "1024"))
+    EQUIPMENT_SCAN_TIMEOUT_SECONDS: float = float(os.getenv("EQUIPMENT_SCAN_TIMEOUT_SECONDS", "20"))
     EXPO_ACCESS_TOKEN: str = os.getenv("EXPO_ACCESS_TOKEN", "")
 
     if not JWT_SECRET:

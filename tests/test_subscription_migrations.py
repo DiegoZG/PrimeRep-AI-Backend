@@ -28,7 +28,7 @@ def test_revision_graph_has_unique_ids_and_one_head():
             if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == "revision" for target in node.targets):
                 ids.append(ast.literal_eval(node.value))
     assert len(ids) == len(set(ids))
-    assert ScriptDirectory.from_config(Config(str(ROOT / "alembic.ini"))).get_heads() == ["h9i0j1k2l3m4"]
+    assert ScriptDirectory.from_config(Config(str(ROOT / "alembic.ini"))).get_heads() == ["i0j1k2l3m4n5"]
 
 
 def test_monitoring_flag_upgrade_and_downgrade_preserve_existing_rules(migration_database):
@@ -120,7 +120,7 @@ def test_fresh_and_legacy_stamps_upgrade_without_losing_data(migration_database,
         assert "payload_fingerprint" in {column["name"] for column in schema.get_columns("workout_session_operations")}
         assert {"feature_flag_configs", "feature_flag_audits", "feature_flag_user_overrides", "subscription_states", "subscription_transition_grants", "billing_webhook_events", "billing_jobs"} <= set(schema.get_table_names())
         assert {"subscriptions_purchases_audience", "subscriptions_enforcement_audience"} <= {column["name"] for column in schema.get_columns("feature_flag_configs")}
-        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "h9i0j1k2l3m4"
+        assert connection.scalar(text("SELECT version_num FROM alembic_version")) == "i0j1k2l3m4n5"
         if legacy != "fresh":
             assert connection.scalar(text("SELECT preferred_name FROM users WHERE id = 'migration-sentinel'")) == "Preserve"
         if legacy in {"a2_flags", "b3_flags", "b3_combined"}:

@@ -167,6 +167,8 @@ def test_onboarding_accepts_explicit_null_weight_arrays():
     assert response.json()["data"] == {
         "dumbbellWeights": None,
         "plateWeights": None,
+        "workoutPlanningMode": "trainer_led",
+        "preferredWorkoutMinutes": 35,
         "preferredName": "Security",
         "lastName": None,
         "email": tokens["email"],
@@ -174,22 +176,24 @@ def test_onboarding_accepts_explicit_null_weight_arrays():
 
 
 def test_cors_allows_only_configured_local_origin():
+    origin = settings.CORS_ALLOWED_ORIGINS[0]
     allowed = client.options(
         "/v1/auth/login",
-        headers={"Origin": "http://localhost:8081", "Access-Control-Request-Method": "POST"},
+        headers={"Origin": origin, "Access-Control-Request-Method": "POST"},
     )
     denied = client.options(
         "/v1/auth/login",
         headers={"Origin": "https://not-allowed.example", "Access-Control-Request-Method": "POST"},
     )
-    assert allowed.headers["access-control-allow-origin"] == "http://localhost:8081"
+    assert allowed.headers["access-control-allow-origin"] == origin
     assert "access-control-allow-origin" not in denied.headers
 
 
 def test_cors_allows_configured_simple_requests():
-    response = client.get("/health", headers={"Origin": "http://localhost:8081"})
+    origin = settings.CORS_ALLOWED_ORIGINS[0]
+    response = client.get("/health", headers={"Origin": origin})
     assert response.status_code == 200
-    assert response.headers["access-control-allow-origin"] == "http://localhost:8081"
+    assert response.headers["access-control-allow-origin"] == origin
 
 
 def test_limiter_reset_clears_ip_scoped_signup_state():
@@ -202,7 +206,7 @@ def test_limiter_reset_clears_ip_scoped_signup_state():
 def test_qa_limit_is_user_scoped(monkeypatch):
     monkeypatch.setattr(
         exercise_qa_service,
-        "_call_anthropic",
+        "_call_ai",
         lambda system, question: "A mocked answer.",
     )
     first = _signup("qa_first")

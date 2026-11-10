@@ -1,0 +1,37 @@
+# Equipment discovery and scanning v1
+
+Authoritative DTOs: `app/schemas/equipment_scan.py`. Shared examples: `tests/fixtures/equipment_scanning/*.json`. These examples use existing `lat_pulldown_cable` and `lat_pulldown` identities; their unavailable guidance state does not claim content approval or benchmark quality. Every new response is explicitly projected, snake_case and `schema_version: 1`. No existing exercise/equipment/workout API changes its response shape or identity.
+
+## Endpoints
+
+All new routes require authentication. Manual discovery and published guidance do not require scanning to be enabled or subscription access. They exclude private, draft and retired content.
+
+- `POST /v1/equipment-scans`: one raw JPEG/PNG request body, `Content-Type: image/jpeg|image/png`, UUID `Idempotency-Key`. No multipart, image arrays, URL input or query selectors. Maximum received bytes 5 MiB, decoded pixels 20 million, exactly one decoded frame; server normalization preserves aspect ratio/orientation, strips metadata and uses at most 1024 px initially (configurable ceiling 1536), JPEG quality 80. Successful synchronous response is `ScanResult` (HTTP 200); it contains at most five machine candidates and three exercise previews per machine. Candidates require explicit user confirmation. Uncalibrated confidence is `unknown` with `score: null`. No match has an empty candidate list, no confirmation and a fixed reason: `not_equipment|multiple_subjects|image_unclear|unsupported_equipment|uncertain`.
+- `GET /v1/equipment-scans/attempts/{attempt_key}`: lookup by the same owned UUID without uploading a photo. `ScanAttemptStatus` has `processing|completed|failed|unknown`; only completed contains a `result`, exactly the original `ScanResult` shape. Failed/unknown contain a bounded `ScanErrorDetail`. This endpoint never invokes a provider. Absent or other-account attempts are 404. Expired/version-stale results return 409 `scan_result_stale`. A 404 or expired result must not silently trigger another POST; offer manual discovery or an explicit new Identify action.
+- `GET /v1/equipment/search?q=&limit=20&cursor=`: bounded names/aliases search, including empty-query browsing. Query maximum 100 characters, limit 1–20. `EquipmentSearchPage` contains `versions`, `items: [{id,name}]` and nullable `next_cursor`. Cursors bind the query, page size and relevant versions; changed versions require refresh.
+- `GET /v1/equipment/{equipment_id}/exercise-options?limit=20&cursor=&available_equipment_ids=`: machine confirmation is a user action before navigation. Optional comma-separated available equipment IDs have a maximum of 32 unique current owned catalog identities; the confirmed machine is included as available. `ExerciseOptionsPage` contains the confirmed `equipment`, current versions, at most twenty options and nullable cursor. Each option includes required/missing `{id,name}` summaries, companion `missing_equipment_ids`, deterministic `compatible|needs_equipment_confirmation`, nullable tracking/load semantics and separate guidance/video availability. A machine photo never confirms additional attachments.
+- `GET /v1/exercises/{exercise_id}/guidance`: `ExerciseGuidance` contains owned identity/name, versions, nullable tracking/load metadata, `instructions` and `video`. Instructions are `published` with current verified `content_version` and existing `StructuredContent`, or `instructions_unavailable` with null content/version. Video is `approved` with a currently valid HTTPS descriptor/asset ID, or `video_unavailable` with null descriptors. Revalidate publication, approvals and withdrawal every read. Never fall back to legacy how-to text or demo URLs.
+
+Versions have `catalog_version`, `equipment_revision`, `mapping_revision`, `resolver_version`. Model/settings/normalization versions also bind internal receipts/fingerprints but are not public provider payloads. Provider name-only labels are observations, not external IDs. Real external mappings are added only when a provider supplies stable identifiers; no vendor ID replaces PrimeRep identities.
+
+## Errors and recovery
+
+New route errors have this JSON envelope:
+
+```json
+{"schema_version":1,"error":{"code":"scan_in_progress","detail":"Another equipment scan is still processing. Check its result or use manual search.","request_id":"22222222-2222-4222-8222-222222222222","retry_after_seconds":2,"attempt_key":"33333333-3333-4333-8333-333333333333"}}
+```
+
+`attempt_key` is returned only from an attempt owned by the authenticated account/environment, allowing another route/device to recover an active attempt. It never discovers another account's attempt. Retry information is advisory for read-only checking or a later explicit action, not permission for a billable automatic retry.
+
+Statuses: 401 authentication; 403 `scan_disabled|scan_access_required`; 503 `scan_access_unknown` (check/retry; never claim missing access); 404 unavailable/retired/absent owned resource; 409 `scan_in_progress|scan_idempotency_conflict|scan_result_stale`; 413 `scan_image_too_large`; 415 `scan_media_type_unsupported`; 422 `scan_image_invalid|scan_image_not_allowed|scan_invalid_request`; 429 `scan_quota_exceeded|scan_budget_exceeded` with retry information; 503/504 bounded provider/unavailable/deadline/unknown-outcome errors. No raw provider response, image text or exception is returned. The manual-search path remains available.
+
+One account/environment may have one admitted active attempt across workers/devices. Identical keys/images reuse receipts, and the same normalized image may reuse a current same-account receipt under a new key during the fifteen-minute window. Changed payload under the same key is 409. Accepted no-match/blocked/failed attempts consume quota; identical receipt replays do not. Cancellation/deadline does not prove external processing or billing stopped. Unknown outcomes retain conservative spend reservations; read-only checking never retries recognition. New attempts are explicit and face the normal access, quota and budget checks.
+
+Scanning is default off via independent `equipment_scanning_enabled`. The paid scan policy uses server-verified active/trial/grace access or a currently valid existing grant; training enforcement being off is not implicit free scan access. No production-wide QA bypass. Manual search and reviewed guidance remain usable when scanning is disabled.
+
+## Provider boundary and release limits
+
+Recognition and safety adapters receive only normalized image bytes and bounded instructions, never account identity, Health data, workout history or database objects. The adapter combines clear-primary-equipment classification and recognition after image moderation; rejection/failure does not bypass moderation. Provider labels, scores and image text remain untrusted. Only the deterministic repository/resolver returns canonical owned equipment/exercise IDs and compatibility. Providers never generate published exercise instructions or media.
+
+OpenAI Responses uses a separately configurable chat and vision model, candidate `gpt-6-luna`, reasoning `none`, `store=False`, bounded output/deadlines and SDK `max_retries=0`; no automatic paid retry/fallback. PrimeRep does not persist the photo and cleans its own temporary data. `store=False` is not a guarantee of provider zero retention: user-facing transmission disclosure must describe OpenAI processing and the applicable provider policies. Mock/fixture verification precedes any separately authorized live inference or real-photo transmission.

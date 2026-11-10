@@ -1,7 +1,8 @@
+from datetime import date, datetime, timezone
 """Tests for the coach content generation service (coach_service.py).
 
-`coach_service._call_anthropic` is monkeypatched in every test — these tests
-never hit the real Anthropic API. The autouse stub in conftest.py covers any
+`coach_service._call_ai` is monkeypatched in every test — these tests
+never hit the real provider API. The autouse stub in conftest.py covers any
 incidental calls from other fixtures.
 """
 
@@ -161,7 +162,7 @@ def test_suggestion_line_no_suggestion():
 
 def test_generate_returns_fallback_when_no_user_id(monkeypatch):
     calls = []
-    monkeypatch.setattr(coach_service, "_call_anthropic", lambda s, u: calls.append(1) or "")
+    monkeypatch.setattr(coach_service, "_call_ai", lambda s, u: calls.append(1) or "")
     result = generate_coach_content(
         db=None,
         user_id=None,
@@ -175,7 +176,7 @@ def test_generate_returns_fallback_when_no_user_id(monkeypatch):
 
 def test_generate_returns_fallback_when_no_db(monkeypatch):
     calls = []
-    monkeypatch.setattr(coach_service, "_call_anthropic", lambda s, u: calls.append(1) or "")
+    monkeypatch.setattr(coach_service, "_call_ai", lambda s, u: calls.append(1) or "")
     result = generate_coach_content(
         db=None,
         user_id="some-user-id",
@@ -189,11 +190,11 @@ def test_generate_returns_fallback_when_no_db(monkeypatch):
 
 @pytest.fixture(autouse=True)
 def coach_provider_key(monkeypatch):
-    monkeypatch.setattr(settings, "ANTHROPIC_API_KEY", "fixture-key")
+    monkeypatch.setattr(settings, "OPENAI_API_KEY", "fixture-key")
 
 
 def test_generate_one_call_for_multiple_exercises(monkeypatch):
-    """Only one _call_anthropic call per workout, regardless of exercise count."""
+    """Only one _call_ai call per workout, regardless of exercise count."""
     calls = []
 
     def fake_call(system: str, user_message: str) -> str:
@@ -208,7 +209,7 @@ def test_generate_one_call_for_multiple_exercises(monkeypatch):
             },
         })
 
-    monkeypatch.setattr(coach_service, "_call_anthropic", fake_call)
+    monkeypatch.setattr(coach_service, "_call_ai", fake_call)
 
     _, user_id = _signup_and_get_token(_unique_email("multiple"))
     db = SessionLocal()
@@ -246,7 +247,7 @@ def test_generate_prompt_contains_fitness_goal_and_experience(monkeypatch):
             "exerciseRationale": {},
         })
 
-    monkeypatch.setattr(coach_service, "_call_anthropic", fake_call)
+    monkeypatch.setattr(coach_service, "_call_ai", fake_call)
 
     token, user_id = _signup_and_get_token(_unique_email("prompt_content"))
     _set_onboarding(token, {
@@ -277,13 +278,13 @@ def test_generate_prompt_contains_fitness_goal_and_experience(monkeypatch):
 
 
 def test_generate_fallback_on_timeout(monkeypatch):
-    """A timeout exception from _call_anthropic must yield template fallback, not raise."""
+    """A timeout exception from _call_ai must yield template fallback, not raise."""
     import socket
 
     def fake_call(system: str, user_message: str) -> str:
         raise TimeoutError("simulated timeout")
 
-    monkeypatch.setattr(coach_service, "_call_anthropic", fake_call)
+    monkeypatch.setattr(coach_service, "_call_ai", fake_call)
 
     _, user_id = _signup_and_get_token(_unique_email("fallback"))
     db = SessionLocal()
@@ -305,7 +306,7 @@ def test_generate_fallback_on_timeout(monkeypatch):
 def test_generate_fallback_on_bad_json(monkeypatch):
     """Unparseable LLM output must yield template fallback, not raise."""
     monkeypatch.setattr(
-        coach_service, "_call_anthropic", lambda s, u: "this is not json"
+        coach_service, "_call_ai", lambda s, u: "this is not json"
     )
 
     _, user_id = _signup_and_get_token(_unique_email("fallback"))
@@ -440,9 +441,9 @@ def test_duration_change_uses_single_day_coach_not_week_batch(monkeypatch):
     week_resp = client.get("/v1/workouts/week", headers=_auth(token))
     assert week_resp.status_code == 200
     initial = week_resp.json()
-    changed = initial["workouts"][0]
+    changed = next(day for day in initial["workouts"] if day["date"] >= datetime.now(timezone.utc).date().isoformat())
     workout_id = changed["workoutDayId"]
-    unchanged = initial["workouts"][1]
+    unchanged = next(day for day in initial["workouts"] if day["workoutDayId"] != workout_id)
     unchanged_intent = unchanged.get("workoutIntent")
 
     week_calls.clear()
@@ -453,7 +454,7 @@ def test_duration_change_uses_single_day_coach_not_week_batch(monkeypatch):
         json={"workoutDayId": workout_id, "durationMinutes": 60},
         headers=_auth(token),
     )
-    assert duration_resp.status_code == 200
+    assert duration_resp.status_code == 200, duration_resp.text
     updated = duration_resp.json()
 
     assert week_calls == [], "duration change must not trigger batched week coach call"

@@ -15,7 +15,7 @@ from conftest import LEGAL_ACCEPTANCE
 from workout_test_utils import install_startable_workout
 
 client = TestClient(app)
-TODAY = datetime.date.today()
+TODAY = datetime.datetime.now(datetime.timezone.utc).date()
 MONDAY = TODAY - datetime.timedelta(days=TODAY.weekday())
 
 
