@@ -17,6 +17,7 @@ FLAG_COLUMNS = {
     "subscriptions_enforcement_enabled": "subscriptions_enforcement_audience",
     "subscriptions_onboarding_enabled": "subscriptions_onboarding_audience",
     "workout_reliability_monitoring_enabled": "workout_reliability_monitoring_audience",
+    "equipment_scanning_enabled": "equipment_scanning_audience",
 }
 
 
@@ -47,6 +48,7 @@ def _state(row: Optional[FeatureFlagConfig]) -> dict:
             "subscriptions_enforcement_enabled": bool(row and row.subscriptions_enforcement_enabled),
             "subscriptions_onboarding_enabled": bool(row and row.subscriptions_onboarding_enabled),
             "workout_reliability_monitoring_enabled": bool(row and row.workout_reliability_monitoring_enabled),
+            "equipment_scanning_enabled": bool(row and row.equipment_scanning_enabled),
         },
         "audiences": {flag: getattr(row, column) if row else "everyone" for flag, column in FLAG_COLUMNS.items()},
         "subscriptions_launch_at": _utc(row.subscriptions_launch_at) if row else None,

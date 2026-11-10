@@ -1,3 +1,4 @@
+from app.api.v1.equipment_scans import router as equipment_scans_router
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -56,3 +57,5 @@ def ping():
 def db_ping(db: Session = Depends(get_db)):
     result = db.execute(text("SELECT 1")).scalar()
     return {"db": "ok", "result": result}
+
+api_router.include_router(equipment_scans_router)

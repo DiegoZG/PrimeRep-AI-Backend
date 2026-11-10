@@ -1,7 +1,7 @@
 """Business logic for on-demand AI exercise Q&A.
 
 A user can ask a free-text question about a specific exercise. We answer it
-with a short-lived call to Claude, scoped tightly to that exercise using
+with a short-lived call to OpenAI, scoped tightly to that exercise using
 content columns on `Exercise` plus the user's onboarding profile and recent
 set history for extra personalization. Answers are persisted for history.
 """
@@ -22,8 +22,8 @@ from app.models.set_log import SetLog
 from app.models.user import User
 
 DAILY_QUESTION_LIMIT = 20
-_ANTHROPIC_TIMEOUT_SECONDS = 10.0
-_ANTHROPIC_MAX_TOKENS = 500
+_OPENAI_TIMEOUT_SECONDS = 10.0
+_OPENAI_MAX_TOKENS = 500
 
 
 class RateLimitExceededError(Exception):
@@ -91,7 +91,7 @@ def ask_question(
     system_prompt = _build_system_prompt(exercise, experience_level, recent_sets)
 
     try:
-        answer = _call_anthropic(system_prompt, question)
+        answer = _call_ai(system_prompt, question)
     except Exception as exc:
         raise CoachUnavailableError(
             "Coach is temporarily unavailable. Please try again in a moment."
@@ -176,26 +176,6 @@ def _build_system_prompt(
     return "\n".join(lines)
 
 
-def _call_anthropic(system: str, user_message: str) -> str:
-    """Thin wrapper around the Anthropic SDK, isolated so tests can monkeypatch it."""
-    if not settings.ANTHROPIC_API_KEY:
-        raise RuntimeError("ANTHROPIC_API_KEY is not configured")
-
-    import anthropic
-
-    client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-    response = client.messages.create(
-        model=settings.ANTHROPIC_QA_MODEL,
-        max_tokens=_ANTHROPIC_MAX_TOKENS,
-        system=system,
-        messages=[{"role": "user", "content": user_message}],
-        timeout=_ANTHROPIC_TIMEOUT_SECONDS,
-    )
-    text = "".join(
-        block.text for block in response.content if getattr(block, "type", None) == "text"
-    ).strip()
-
-    if not text:
-        raise RuntimeError("Anthropic returned an empty response")
-
-    return text
+def _call_ai(system: str, user_message: str) -> str:
+    from app.core.ai_provider import call_text
+    return call_text(system, user_message, purpose="exercise_qa", max_output_tokens=500).text

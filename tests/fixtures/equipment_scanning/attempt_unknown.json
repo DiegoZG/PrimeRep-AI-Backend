@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "attempt_key": "33333333-3333-4333-8333-333333333333",
+  "status": "unknown",
+  "retry_after_seconds": null,
+  "result": null,
+  "error": {
+    "code": "scan_provider_outcome_unknown",
+    "detail": "The provider outcome is unknown. Check the result or use manual search.",
+    "request_id": "22222222-2222-4222-8222-222222222222",
+    "retry_after_seconds": null,
+    "attempt_key": "33333333-3333-4333-8333-333333333333"
+  }
+}

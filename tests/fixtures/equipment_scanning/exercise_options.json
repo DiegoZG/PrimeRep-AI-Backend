@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "versions": {
+    "catalog_version": "0.0",
+    "equipment_revision": "fixture-equipment-v1",
+    "mapping_revision": "name-observations-v1",
+    "resolver_version": "resolver-v1"
+  },
+  "equipment": {
+    "id": "lat_pulldown_cable",
+    "name": "Lat Pulldown Cable"
+  },
+  "items": [
+    {
+      "exercise_id": "lat_pulldown",
+      "name": "Lat Pulldown",
+      "compatibility": "compatible",
+      "required_equipment": [
+        {
+          "id": "lat_pulldown_cable",
+          "name": "Lat Pulldown Cable"
+        }
+      ],
+      "missing_equipment": [],
+      "missing_equipment_ids": [],
+      "guidance_available": false,
+      "approved_video_available": false,
+      "tracking_mode": "reps",
+      "load_profile": null
+    }
+  ],
+  "next_cursor": null
+}

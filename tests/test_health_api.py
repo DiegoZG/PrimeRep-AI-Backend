@@ -364,7 +364,7 @@ def test_health_coach_requires_four_valid_baseline_days_and_prefers_sleep(accoun
         assert coach_feed_service.is_item_current(db, item)
         coach_feed_service.reconcile_feed(db, user_id, today)
         assert len(_active_health_items(db, user_id)) == 1
-        monkeypatch.setattr(coach_feed_service.settings, "ANTHROPIC_API_KEY", "test")
+        monkeypatch.setattr(coach_feed_service.settings, "OPENAI_API_KEY", "test")
         monkeypatch.setattr(coach_feed_service, "_call_coach_feed_ai", lambda *args: pytest.fail("Health sent to AI"))
         assert coach_feed_service.enrich_pending_items(db, user_id) == 0
     days[-1]["asleepMinutes"] = 280

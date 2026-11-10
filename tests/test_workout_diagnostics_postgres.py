@@ -16,7 +16,6 @@ from app.core.settings import settings
 from app.core.user_service import delete_user
 from app.core.workout_diagnostics_report import diagnostic_report
 from app.core.workout_diagnostics_service import ingest_diagnostics
-from app.models.feature_flags import FeatureFlagConfig
 from app.models.user import User
 from app.models.workout_diagnostics import WorkoutDiagnostic as Raw, WorkoutDiagnosticAggregate as Aggregate
 from app.schemas.workout_diagnostics import WorkoutDiagnosticBatch
@@ -35,7 +34,11 @@ def seed(engine):
     owner, other = str(uuid4()), str(uuid4())
     with Session(engine) as db:
         db.add_all([User(id=value, email=f"{value}@example.test", preferred_name="Observer", password_hash="test") for value in (owner, other)])
-        db.add(FeatureFlagConfig(environment="test", version=1, updated_at=datetime.now(timezone.utc), workout_reliability_monitoring_enabled=True))
+        db.execute(text("""INSERT INTO feature_flag_configs
+            (environment, version, subscriptions_purchases_enabled,
+             subscriptions_enforcement_enabled, workout_reliability_monitoring_enabled, updated_at)
+            VALUES ('test', 1, false, false, true, :updated_at)"""),
+            {"updated_at": datetime.now(timezone.utc)})
         db.commit()
     return owner, other
 

@@ -1,7 +1,7 @@
 """Coach content generation: day-level intent and per-exercise rationale.
 
 Two entry points:
-- generate_week_coach_content: one Anthropic call for the full week (used by
+- generate_week_coach_content: one OpenAI call for the full week (used by
   _generate_week_plan). Cheaper and gives the LLM cross-day context.
 - generate_coach_content: single-day call (used by skip_workout_day where only
   one new day is appended).
@@ -10,7 +10,7 @@ Both never raise — LLM failures silently fall back to template text so /week
 and /next never 500.
 
 Access is gated by subscription tier and user opt-in. Free users and opted-out
-premium users receive only template content with zero Anthropic calls.
+premium users receive only template content with zero OpenAI calls.
 """
 
 import json
@@ -24,8 +24,8 @@ from app.core.subscription_service import get_subscription
 from app.core.onboarding_service import get_onboarding_by_user_id
 from app.core.settings import settings
 
-_ANTHROPIC_TIMEOUT_SECONDS = 10.0
-_ANTHROPIC_MAX_TOKENS = 2000
+_OPENAI_TIMEOUT_SECONDS = 10.0
+_OPENAI_MAX_TOKENS = 2000
 
 
 @dataclass
@@ -88,7 +88,7 @@ def generate_week_coach_content(
     if not days or not user_id or db is None:
         return week_fallback
 
-    if not settings.ANTHROPIC_API_KEY:
+    if not settings.OPENAI_API_KEY:
         return week_fallback
 
     if not _is_coach_eligible(db, user_id):
@@ -110,7 +110,7 @@ def generate_week_coach_content(
     )
 
     try:
-        raw = _call_anthropic(system_prompt, user_message)
+        raw = _call_ai(system_prompt, user_message)
         return _parse_week_response(raw, days, fallback_map)
     except Exception:
         return week_fallback
@@ -139,7 +139,7 @@ def generate_coach_content(
     if not user_id or db is None:
         return fallback
 
-    if not settings.ANTHROPIC_API_KEY:
+    if not settings.OPENAI_API_KEY:
         return fallback
 
     if not _is_coach_eligible(db, user_id):
@@ -163,7 +163,7 @@ def generate_coach_content(
     )
 
     try:
-        raw = _call_anthropic(system_prompt, user_message)
+        raw = _call_ai(system_prompt, user_message)
         return _parse_response(raw, fallback)
     except Exception:
         return fallback
@@ -389,26 +389,6 @@ def _suggestion_line(prescription: Any) -> str:
     return "no suggestion yet"
 
 
-def _call_anthropic(system: str, user_message: str) -> str:
-    """Thin wrapper around the Anthropic SDK, isolated so tests can monkeypatch it."""
-    if not settings.ANTHROPIC_API_KEY:
-        raise RuntimeError("ANTHROPIC_API_KEY is not configured")
-
-    import anthropic
-
-    client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-    response = client.messages.create(
-        model=settings.ANTHROPIC_QA_MODEL,
-        max_tokens=_ANTHROPIC_MAX_TOKENS,
-        system=system,
-        messages=[{"role": "user", "content": user_message}],
-        timeout=_ANTHROPIC_TIMEOUT_SECONDS,
-    )
-    text = "".join(
-        block.text for block in response.content if getattr(block, "type", None) == "text"
-    ).strip()
-
-    if not text:
-        raise RuntimeError("Anthropic returned an empty response")
-
-    return text
+def _call_ai(system: str, user_message: str) -> str:
+    from app.core.ai_provider import call_text
+    return call_text(system, user_message, purpose="coach_week" if '"days"' in user_message else "coach_day", max_output_tokens=2000).text

@@ -2,6 +2,14 @@
 
 Proposed implementation plan, November 7, 2026. This document plans the feature; it does not select a provider, enable scanning, or claim that recognition or approved media coverage already exists.
 
+## Implementation status — November 9, 2026
+
+Backend implementation is complete for the contract, provider-neutral catalog/resolver, OpenAI migration, independent default-off scan flag, conservative shared application budget, owned recovery receipts and approved-only guidance. The frozen contract and operations notes are in [equipment-scanning-contract.md](equipment-scanning-contract.md) and [equipment-scanning-operations.md](equipment-scanning-operations.md).
+
+The scan branches were subsequently stacked on the verified workout-reliability branches to preserve their additive feature-flag and migration changes; current backend migration `i0j1k2l3m4n5` follows `h9i0j1k2l3m4`. The original worktrees/main were not merged or changed by this delivery.
+
+Automated acceptance uses an isolated test database, blank provider keys and SDK/recognition fixtures. Actual device acceptance, manual paid-photo evaluation, calibrated accuracy/latency/cost, approved content/media coverage and deployment/operator prerequisites remain release gates. No automated inference or production enablement is authorized. Existing seed coverage is twelve linked equipment entries, one exercise each, with no published guidance/media; unavailable results must remain explicit.
+
 ## Outcome and scope
 
 Photograph equipment → review the photo → identify possible machines → confirm a PrimeRep equipment entry → choose among compatible exercises → read published instructions and watch an approved demonstration when available.
