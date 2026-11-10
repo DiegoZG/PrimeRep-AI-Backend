@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from app.models.subscription import SubscriptionState, SubscriptionTransitionGrant
 
 from app.core.onboarding_service import canonical_onboarding_data
+from app.core.workout_diagnostics_service import export_diagnostics
 from app.core.profile_service import get_profile
 from app.core.coach_weight_data import public_weight_data
 from app.models.coach import CoachFeedItem, CoachPreference
@@ -208,6 +209,7 @@ def _retained_health_days(db, user_id):
 
 def _collections(db, user_id):
     sessions = db.query(WorkoutSession.id).filter(WorkoutSession.user_id == user_id)
+    yield "workout_diagnostics", export_diagnostics(db, user_id)
     yield "subscriptions", _rows(db, SubscriptionState, user_id, "environment billing_status verification_status verified_at product_id expires_at grace_expires_at will_renew onboarding_enrolled_at onboarding_completed_at")
     yield "subscription_transition_grants", _rows(db, SubscriptionTransitionGrant, user_id, "environment launch_at expires_at")
     yield "favorites", (
