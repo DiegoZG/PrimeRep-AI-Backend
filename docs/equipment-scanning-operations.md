@@ -47,6 +47,14 @@ One account's processing or externally unknown attempt blocks another admitted a
 
 Read-only Check result never calls a provider. Cancellation does not prove external work or billing stopped. A new inference always requires an explicit user action and fresh admission; no network retry silently sends the photo again. Rollback is checked before admission and again after moderation, before recognition. Existing workout logging, purchases, subscription launch clocks and reliability monitoring are unchanged.
 
+## Conservative pilot matching
+
+Recognition now requires an explicit internal `image_type`. Missing classification fails validation; observations classified as an illustration, diagram, screenshot or unclear image become `no_match/image_unclear`, even if the provider also guesses a machine name. The prompt asks for real photographs and visible discriminating hardware, including ambiguity around combined lat/row and curl/extension stations. This is still a model judgment, not an independent proof that the image is a photo or that the observed parts exist.
+
+The resolver accepts only exact normalized canonical names or explicit owned aliases of a single supported equipment identity and matching equipment kind. It does not use string similarity. Generic cable stations, shared aliases, unknown kinds, unlisted observations and contradictory alternatives all abstain; one exact observation cannot hide another unclear observation. Duplicate names/aliases for the same identity remain one candidate, which still requires user confirmation and has unknown/null confidence. Curated recognition aliases for the three readiness machines are versioned in source; this does not publish exercise content or alter existing equipment identities.
+
+`real-photo-primary-v2`, `owned-name-alias-v2` and `exact-unambiguous-v2` bind prompt settings and public mapping/resolver versions. Old completed receipts fail both read-only recovery and same-key replay after a rules change; a new paid attempt requires a separate explicit user action and normal admission. Same-photo reuse under a new key also rechecks the complete current version set. Deterministic fixtures prove these boundaries, not real-photo recognition accuracy. The [three-machine review/evaluation packet](equipment-scanning-pilot-review.md) keeps missing content and unassessed real-photo results explicit.
+
 ## Actual pilot coverage and release gates
 
 The isolated seed audit found 59 active machine-family equipment entries (27 machine, 28 plate-loaded, 4 cable), of which only twelve link to active public exercises. Each currently has one seed exercise; all 41 active seed exercises are legacy, with zero published content revisions, approved media or media publications. The twelve initial canonical pilot IDs are:
@@ -55,7 +63,7 @@ The isolated seed audit found 59 active machine-family equipment entries (27 mac
 - Machine: `ab_crunch_machine`, `calf_raise_machine`, `fly_machine`, `leg_curl_machine`, `leg_extension_machine`, `leg_press_machine_selectorized`.
 - Plate-loaded: `plate_loaded_seated_calf`, `plate_loaded_t_bar`.
 
-Recognition context is limited to this linked pilot cohort. Unsupported/lookalike plate-loaded machines must not be forced into a selectorized option. Broad cable observations remain ambiguous and require explicit confirmation. All confidence is unknown/null until a held-out study calibrates it. Manual search may show other active equipment with no exercise options; that is truthful. One-to-many options and published/withdrawn guidance are proven with isolated test-only fixtures, not fabricated product approvals.
+Recognition context is limited to this linked pilot cohort. Unsupported/lookalike plate-loaded machines must not be forced into a selectorized option. Broad cable observations abstain and offer manual discovery. All confidence is unknown/null until a held-out study calibrates it. Manual search may show other active equipment with no exercise options; that is truthful. One-to-many options and published/withdrawn guidance are proven with isolated test-only fixtures, not fabricated product approvals.
 
 No held-out photo accuracy, latency, safety or cost-per-useful-match benchmark is claimed. Broad rollout and truthful subscription-teaser availability remain gated on reviewed content/media coverage, consented photo evaluation, provider disclosure/store declarations and operator approval. Keep the flag off after additive backend deployment; begin with explicitly selected synthetic/internal users only. No production deployment or live photo/inference call is authorized by the implementation tests.
 

@@ -108,10 +108,10 @@ def _admit(db, user_id, key, fingerprint, versions, *, now):
         db.query(EquipmentScanAttempt).filter(EquipmentScanAttempt.environment == environment, EquipmentScanAttempt.status == "processing", EquipmentScanAttempt.deadline_at <= now).update({EquipmentScanAttempt.status: "unknown"}, synchronize_session=False)
         previous = _lookup(db, user_id, key)
         if previous:
-            if previous.fingerprint != fingerprint:
-                raise ScanError("scan_idempotency_conflict", request_id=previous.id)
             if not _valid_receipt(previous, versions, now):
                 raise ScanError("scan_result_stale", request_id=previous.id)
+            if previous.fingerprint != fingerprint:
+                raise ScanError("scan_idempotency_conflict", request_id=previous.id)
             if previous.status == "completed":
                 return previous, None
             if previous.status in {"processing", "unknown"}:
@@ -206,7 +206,9 @@ async def scan(db, user_id, key, raw, content_type, *, adapter=None):
         require_scan_access(db, user_id)
         repository = SQLCatalogRepository(db)
         latest = repository.versions()
-        if observed.subject == "single_equipment":
+        if observed.image_type != "photo":
+            candidates, reason = [], "image_unclear"
+        elif observed.subject == "single_equipment":
             candidates = resolve(observed.observations, repository)
             reason = None if candidates else "unsupported_equipment"
         else:

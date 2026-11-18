@@ -35,7 +35,7 @@ def image(color="blue"):
 
 
 def adapter(subject="single_equipment", blocked=False):
-    return FixtureRecognitionAdapter({"subject": subject, "observations": [{"label": "Lat Pulldown Cable", "equipment_kind": "cable"}] if subject == "single_equipment" else []}, blocked=blocked)
+    return FixtureRecognitionAdapter({"image_type": "photo", "subject": subject, "observations": [{"label": "Lat Pulldown Cable", "equipment_kind": "cable"}] if subject == "single_equipment" else []}, blocked=blocked)
 
 
 @pytest.fixture
@@ -135,12 +135,63 @@ def test_no_match_never_contains_candidates_or_guidance(db):
     assert not result.requires_confirmation
 
 
+@pytest.mark.parametrize("image_type", ["illustration", "diagram", "screenshot", "unclear"])
+def test_non_photo_output_cannot_promote_a_machine_guess(db, image_type):
+    payload = {"image_type": image_type, "subject": "single_equipment", "observations": [{"label": "Leg Extension Machine", "equipment_kind": "selectorized"}]}
+    provider = FixtureRecognitionAdapter(payload)
+    result = run(db, user(db), provider=provider)
+    assert result.status == "no_match" and result.reason == "image_unclear"
+    assert result.candidates == [] and not result.requires_confirmation
+    assert provider.calls == ["moderation", "recognition"]
+
+
+@pytest.mark.parametrize("label,kind", [("Leg Flexion Machine", "selectorized"), ("Cable machine", "cable"), ("Lat Pullup Cable", "cable")])
+def test_near_names_and_broad_cable_labels_remain_unmatched_end_to_end(db, label, kind):
+    provider = FixtureRecognitionAdapter({"image_type": "photo", "subject": "single_equipment", "observations": [{"label": label, "equipment_kind": kind}]})
+    result = run(db, user(db), provider=provider)
+    assert result.status == "no_match" and result.reason == "unsupported_equipment" and result.candidates == []
+
+
+@pytest.mark.parametrize("label,kind,equipment", [("LAT-PULLDOWN", "cable", "lat_pulldown_cable"), ("Seated cable row", "cable", "row_cable"), ("Leg extension", "selectorized", "leg_extension_machine")])
+def test_three_pilot_machine_aliases_resolve_without_fuzzy_similarity(db, label, kind, equipment):
+    provider = FixtureRecognitionAdapter({"image_type": "photo", "subject": "single_equipment", "observations": [{"label": label, "equipment_kind": kind}]})
+    result = run(db, user(db), provider=provider)
+    assert result.status == "candidates" and result.requires_confirmation
+    assert [candidate.equipment.id for candidate in result.candidates] == [equipment]
+    assert result.candidates[0].confidence.level == "unknown" and result.candidates[0].confidence.score is None
+
+
+@pytest.mark.parametrize("revision", ["prompt", "mapping", "resolver"])
+def test_old_recognition_and_mapping_receipts_require_explicit_new_attempt(db, monkeypatch, revision):
+    from app.core import equipment_scan_catalog as catalog
+    from app.core import equipment_scan_provider as recognition
+    module, attribute = (recognition, "RECOGNITION_VERSION") if revision == "prompt" else (catalog, "MAPPING_REVISION" if revision == "mapping" else "RESOLVER_VERSION")
+    current = getattr(module, attribute)
+    monkeypatch.setattr(module, attribute, "older-reviewed-rules")
+    owner, provider, key = user(db), adapter(), uuid.uuid4()
+    old = run(db, owner, key=key, provider=provider)
+    old_fingerprint = db.query(EquipmentScanAttempt).one().fingerprint
+    monkeypatch.setattr(module, attribute, current)
+    with pytest.raises(scans.ScanError) as get_error:
+        scans.attempt_status(db, owner, key)
+    assert get_error.value.detail.code == "scan_result_stale"
+    with pytest.raises(scans.ScanError) as post_error:
+        run(db, owner, key=key, provider=provider)
+    assert post_error.value.detail.code == "scan_result_stale"
+    assert provider.calls == ["moderation", "recognition"] and db.query(AIRequestReservation).count() == 1
+    fresh = run(db, owner, provider=provider)
+    assert fresh.scan_id != old.scan_id and provider.calls == ["moderation", "recognition"] * 2
+    if revision == "prompt":
+        assert db.query(EquipmentScanAttempt).filter_by(attempt_key=str(key)).one().fingerprint == old_fingerprint
+        assert scans._fingerprint(scans.normalize_image(image(), "image/png"), owner, "test") != old_fingerprint
+
+
 def test_same_account_concurrent_keys_are_fenced_across_sessions_and_return_only_owned_key(db):
     owner = user(db); key = uuid.uuid4(); entered = release = None
     class Held(FixtureRecognitionAdapter):
         async def moderate(self, image, timeout):
             entered.set(); await release.wait()
-    provider = Held({"subject": "not_equipment", "observations": []})
+    provider = Held({"image_type": "photo", "subject": "not_equipment", "observations": []})
     async def exercise():
         nonlocal entered, release
         entered, release = asyncio.Event(), asyncio.Event()
@@ -163,7 +214,7 @@ def test_flag_rollback_after_moderation_stops_recognition_and_releases_known_zer
     class Held(FixtureRecognitionAdapter):
         async def moderate(self, image, timeout):
             self.calls.append("moderation"); entered.set(); await release.wait()
-    provider = Held({"subject": "not_equipment", "observations": []})
+    provider = Held({"image_type": "photo", "subject": "not_equipment", "observations": []})
     async def exercise():
         nonlocal entered, release
         entered, release = asyncio.Event(), asyncio.Event()
@@ -186,7 +237,7 @@ def test_account_deleted_during_recognition_cannot_persist_or_return_result(db):
         async def recognize(self, image, cohort, timeout):
             entered.set(); await release.wait()
             return await super().recognize(image, cohort, timeout)
-    provider = Held({"subject": "not_equipment", "observations": []})
+    provider = Held({"image_type": "photo", "subject": "not_equipment", "observations": []})
     async def exercise():
         nonlocal entered, release
         entered, release = asyncio.Event(), asyncio.Event()
@@ -206,7 +257,7 @@ def test_unknown_provider_charge_stays_reserved_without_blocking_other_accounts_
             raise ScanProviderError("scan_provider_outcome_unknown")
     owners = [user(db) for _ in range(3)]
     for owner in owners[:2]:
-        with pytest.raises(scans.ScanError): run(db, owner, provider=Unknown({"subject": "not_equipment", "observations": []}))
+        with pytest.raises(scans.ScanError): run(db, owner, provider=Unknown({"image_type": "photo", "subject": "not_equipment", "observations": []}))
     assert all(item.status == "unknown" and item.accounted_micro_usd is None for item in db.query(AIRequestReservation))
     result = run(db, owners[2])
     assert result.status == "candidates"

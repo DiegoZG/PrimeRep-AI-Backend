@@ -1,6 +1,5 @@
 """Provider-neutral canonical catalog projection and deterministic local resolver."""
 import base64
-import difflib
 import hashlib
 import hmac
 import json
@@ -26,6 +25,14 @@ PILOT_EQUIPMENT = {
     "leg_curl_machine": "selectorized", "leg_extension_machine": "selectorized", "leg_press_machine_selectorized": "selectorized",
     "plate_loaded_seated_calf": "plate_loaded", "plate_loaded_t_bar": "plate_loaded",
 }
+PILOT_ALIASES = {
+    "lat_pulldown_cable": ("lat pulldown", "lat pulldown machine", "cable lat pulldown"),
+    "row_cable": ("seated cable row", "seated row cable", "low cable row"),
+    "leg_extension_machine": ("leg extension", "seated leg extension", "selectorized leg extension"),
+}
+MAPPING_REVISION = "owned-name-alias-v2"
+RESOLVER_VERSION = "exact-unambiguous-v2"
+UNSPECIFIC_LABELS = {"machine", "gym equipment", "cable machine", "cable station", "functional trainer", "cable crossover station", "leg machine", "pull machine"}
 
 
 class CatalogError(Exception):
@@ -53,28 +60,27 @@ class CatalogRepository(Protocol):
 
 def resolve(observations, catalog):
     """Only known canonical cohort identities can leave this boundary."""
-    records = catalog.pilot()
-    ranked = {}
+    names = {}
+    for record in catalog.pilot():
+        for name in {normalized(record.name), *(normalized(alias) for alias in record.aliases)}:
+            names.setdefault(name, {})[record.id] = record
+    matched = {}
     for observation in observations:
         label, kind = normalized(observation.label), observation.equipment_kind
-        if kind == "unknown":
-            continue
-        broad_cable = kind == "cable" and label in {"cable machine", "cable station", "functional trainer", "cable crossover station"}
-        for record in records:
-            if record.kind != kind:
-                continue
-            names = [normalized(record.name), *[normalized(alias) for alias in record.aliases]]
-            exact = label in names
-            score = 1.0 if exact else max((difflib.SequenceMatcher(None, label, name).ratio() for name in names), default=0)
-            if broad_cable:
-                score = 0.75
-            if score >= 0.75:
-                ranked[record.id] = (max(score, ranked.get(record.id, (0,))[0]), record)
-    result = []
-    for _, record in sorted(ranked.values(), key=lambda pair: (-pair[0], pair[1].id))[:5]:
-        options = catalog.options(record.id, [record.id], limit=3)
-        result.append(ScanCandidate(equipment=EquipmentSummary(id=record.id, name=record.name), confidence=ScanConfidence(level="unknown", score=None), exercise_candidates=options.items))
-    return result
+        if kind == "unknown" or label in UNSPECIFIC_LABELS:
+            return []
+        owners = names.get(label, {})
+        if len(owners) != 1:
+            return []
+        record = next(iter(owners.values()))
+        if record.kind != kind:
+            return []
+        matched[record.id] = record
+    if len(matched) != 1:
+        return []
+    record = next(iter(matched.values()))
+    options = catalog.options(record.id, [record.id], limit=3)
+    return [ScanCandidate(equipment=EquipmentSummary(id=record.id, name=record.name), confidence=ScanConfidence(level="unknown", score=None), exercise_candidates=options.items)]
 
 
 class SQLCatalogRepository:
@@ -89,7 +95,7 @@ class SQLCatalogRepository:
         media_revision = self.db.query(func.max(ExerciseMediaReview.id)).scalar() or 0
         publication_state = hashlib.sha256((exercise + links + str(review_revision) + ":" + str(media_revision)).encode()).hexdigest()
         return ScanVersions(catalog_version=catalog_version(self.db) + "." + publication_state,
-                            equipment_revision=equipment, mapping_revision="name-observations-v1", resolver_version="resolver-v1")
+                            equipment_revision=equipment, mapping_revision=MAPPING_REVISION, resolver_version=RESOLVER_VERSION)
 
     def _equipment(self, identifier):
         item = self.db.query(Equipment).filter(Equipment.id == identifier, Equipment.is_active.is_(True)).first()
@@ -103,7 +109,7 @@ class SQLCatalogRepository:
         for item in rows:
             has_option = self.db.query(Exercise.id).filter(Exercise.equipment.any(Equipment.id == item.id), Exercise.is_active.is_(True), Exercise.owner_user_id.is_(None), Exercise.source.in_(["seed", "catalog"]), Exercise.publication_status.in_(["legacy", "published"])).first()
             if has_option:
-                result.append(EquipmentRecord(item.id, item.name, tuple(item.aliases or []), PILOT_EQUIPMENT[item.id]))
+                result.append(EquipmentRecord(item.id, item.name, tuple(item.aliases or []) + PILOT_ALIASES.get(item.id, ()), PILOT_EQUIPMENT[item.id]))
         return result
 
     def _cursor(self, cursor, scope, versions, limit):

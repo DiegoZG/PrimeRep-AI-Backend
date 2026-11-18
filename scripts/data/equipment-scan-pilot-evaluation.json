@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "prediction_run_reference": null,
+  "model": null,
+  "recognition_revision": null,
+  "catalog_version": null,
+  "cases": [
+    {
+      "case_id": "lat-pulldown-front",
+      "scenario": "Real lat-pulldown photo, front view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "lat_pulldown_cable"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "lat-pulldown-angled",
+      "scenario": "Real lat-pulldown photo, angled view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "lat_pulldown_cable"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "lat-pulldown-side",
+      "scenario": "Real lat-pulldown photo, side view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "lat_pulldown_cable"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "seated-row-front",
+      "scenario": "Real seated-row photo, front view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "row_cable"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "seated-row-angled",
+      "scenario": "Real seated-row photo, angled view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "row_cable"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "seated-row-cable-and-supports",
+      "scenario": "Real seated-row photo, cable-and-supports view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "row_cable"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "leg-extension-front",
+      "scenario": "Real leg-extension photo, front view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "leg_extension_machine"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "leg-extension-side",
+      "scenario": "Real leg-extension photo, side view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "leg_extension_machine"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "leg-extension-shin-pad-and-seat",
+      "scenario": "Real leg-extension photo, shin-pad-and-seat view; reviewer confirms visible apparatus and attachments.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "leg_extension_machine"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "pull-up-bar",
+      "scenario": "Pull-up bar without a cable machine; do not force a lat-pulldown or leg-extension match.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "leg-curl-confuser",
+      "scenario": "Leg curl machine; distinguish it from leg extension.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [
+        "leg_curl_machine"
+      ],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "dual-purpose-station",
+      "scenario": "Combined lat/row or leg-curl/extension station without verified single-purpose mapping.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "non-equipment",
+      "scenario": "Unrelated chair or household object; no gym-equipment match.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "unclear-crop",
+      "scenario": "Machine photo cropped so distinguishing cable/pads/configuration cannot be established.",
+      "source_kind": "real_photo",
+      "expected_equipment_ids": [],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    },
+    {
+      "case_id": "illustration-negative",
+      "scenario": "Synthetic UI drawing or diagram; reject instead of treating it as real-photo recognition evidence.",
+      "source_kind": "illustration",
+      "expected_equipment_ids": [],
+      "source_reference": null,
+      "rights_status": "pending",
+      "permission_reference": null,
+      "ground_truth_status": "pending",
+      "reviewer": null,
+      "predicted_equipment_ids": null
+    }
+  ]
+}
