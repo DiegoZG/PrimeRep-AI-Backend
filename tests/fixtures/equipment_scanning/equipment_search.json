@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "versions": {
+    "catalog_version": "0.0",
+    "equipment_revision": "fixture-equipment-v1",
+    "mapping_revision": "name-observations-v1",
+    "resolver_version": "resolver-v1"
+  },
+  "items": [
+    {
+      "id": "lat_pulldown_cable",
+      "name": "Lat Pulldown Cable"
+    }
+  ],
+  "next_cursor": null
+}

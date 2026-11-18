@@ -3,7 +3,7 @@ Tests for the exercise AI Q&A feature:
 - POST /v1/exercises/{exercise_id}/ask
 - GET /v1/exercises/{exercise_id}/questions
 
-`_call_anthropic` is monkeypatched in every test — these tests never hit the
+`_call_ai` is monkeypatched in every test — these tests never hit the
 real Anthropic API.
 
 Note: These tests assume migrations have been run (including
@@ -95,14 +95,14 @@ def _insert_question(user_id: str, exercise_id: str, created_at=None) -> None:
 
 @pytest.fixture
 def mock_anthropic_success(monkeypatch):
-    """Patch _call_anthropic to succeed and capture the (system, user_message) args."""
+    """Patch _call_ai to succeed and capture the (system, user_message) args."""
     calls = []
 
     def fake_call(system: str, user_message: str) -> str:
         calls.append({"system": system, "user_message": user_message})
         return "Here is a helpful, mocked coaching answer."
 
-    monkeypatch.setattr(exercise_qa_service, "_call_anthropic", fake_call)
+    monkeypatch.setattr(exercise_qa_service, "_call_ai", fake_call)
     return calls
 
 
@@ -111,7 +111,7 @@ def mock_anthropic_failure(monkeypatch):
     def fake_call(system: str, user_message: str) -> str:
         raise RuntimeError("simulated Anthropic outage")
 
-    monkeypatch.setattr(exercise_qa_service, "_call_anthropic", fake_call)
+    monkeypatch.setattr(exercise_qa_service, "_call_ai", fake_call)
 
 
 # ── Auth guards ───────────────────────────────────────────────────────────────

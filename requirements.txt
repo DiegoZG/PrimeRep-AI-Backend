@@ -9,6 +9,8 @@ alembic
 # Auth & security
 python-jose[cryptography]
 passlib[bcrypt]
+# Preserve the tested Passlib password backend; bcrypt 5 breaks its self-test.
+bcrypt==3.2.2
 
 # Validation
 pydantic[email]
@@ -18,7 +20,7 @@ Pillow>=11.3.0,<13
 python-dotenv
 
 # AI / LLM
-anthropic
+openai==2.8.1
 
 # Object storage — used only by scripts/upload_local_footage.py, never by the
 # running app. Speaks to AWS S3 or any S3-compatible service (e.g. Cloudflare R2).

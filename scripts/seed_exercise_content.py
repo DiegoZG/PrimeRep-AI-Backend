@@ -6,8 +6,8 @@ reviews tied to immutable hashes. Existing content has legacy provenance.
 
 Usage
 -----
-    # 1. (Optional) Generate a first draft with Claude Sonnet. Requires
-    #    ANTHROPIC_API_KEY. Writes scripts/data/exercise_content_draft.json.
+    # 1. (Optional) Generate a first draft with OpenAI. Requires
+    #    OPENAI_API_KEY. Writes scripts/data/exercise_content_draft.json.
     python scripts/seed_exercise_content.py generate
 
     # 2. Adapt drafts to the CatalogEntry schema and use exercise_catalog.py.
@@ -30,7 +30,6 @@ REVIEWED_PATH = DATA_DIR / "exercise_content.json"
 
 CONTENT_FIELDS = ["how_to", "why_it_works", "common_mistakes", "beginner_notes"]
 
-DEFAULT_SEED_MODEL = "claude-sonnet-4-5-20250929"
 
 
 def _seed_exercise_ids() -> list[dict]:
@@ -52,15 +51,13 @@ def _seed_exercise_ids() -> list[dict]:
 
 
 def cmd_generate(_args: argparse.Namespace) -> None:
-    """Draft content for every seeded exercise using Claude Sonnet."""
-    import anthropic
+    """Draft content for every seeded exercise using OpenAI."""
+    from app.core.ai_provider import call_text
 
-    api_key = os.getenv("ANTHROPIC_API_KEY", "")
+    api_key = os.getenv("OPENAI_API_KEY", "")
     if not api_key:
-        raise SystemExit("ANTHROPIC_API_KEY must be set to generate drafts.")
+        raise SystemExit("OPENAI_API_KEY must be set to generate drafts.")
 
-    model = os.getenv("ANTHROPIC_SEED_MODEL", DEFAULT_SEED_MODEL)
-    client = anthropic.Anthropic(api_key=api_key)
     exercises = _seed_exercise_ids()
 
     drafts = []
@@ -73,14 +70,8 @@ def cmd_generate(_args: argparse.Namespace) -> None:
             "common_mistakes, beginner_notes. Each value should be 2-4 sentences of "
             "practical, technically accurate advice suitable for a fitness app."
         )
-        response = client.messages.create(
-            model=model,
-            max_tokens=800,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        text = "".join(
-            block.text for block in response.content if getattr(block, "type", None) == "text"
-        ).strip()
+        text = call_text("Generate a draft only. Publication requires independent review.", prompt,
+                         purpose="draft_content", max_output_tokens=800).text
 
         try:
             parsed = json.loads(text)
@@ -111,7 +102,7 @@ def main() -> None:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     generate_parser = subparsers.add_parser(
-        "generate", help="Draft content via Claude Sonnet (requires ANTHROPIC_API_KEY)"
+        "generate", help="Draft content via OpenAI (requires OPENAI_API_KEY)"
     )
     generate_parser.set_defaults(func=cmd_generate)
 

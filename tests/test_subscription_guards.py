@@ -220,8 +220,8 @@ def test_question_denial_precedes_request_and_daily_quotas(account, monkeypatch)
         db.get(FeatureFlagConfig, account[2]).subscriptions_enforcement_enabled = False
         db.commit()
     monkeypatch.setattr(qa, "count_questions_today", lambda *_: 0)
-    monkeypatch.setattr(settings, "ANTHROPIC_API_KEY", "fixture-key")
-    monkeypatch.setattr(qa, "_call_anthropic", lambda *_: "Fixture answer")
+    monkeypatch.setattr(settings, "OPENAI_API_KEY", "fixture-key")
+    monkeypatch.setattr(qa, "_call_ai", lambda *_: "Fixture answer")
     assert client.post("/v1/exercises/push_up/ask", headers=account[0], json={"question": "How should I do this?"}).status_code == 200
 
 
@@ -286,7 +286,7 @@ def test_coach_discards_ai_result_when_verified_access_expires_in_flight(account
             detail="This is training guidance, not medical advice.", ai_status="pending", expires_at=now + timedelta(days=1),
             protected_facts={"recommendation": "keep_next_session_as_written", "requiredText": ["next session", "as written"]})
         db.add(item); db.commit(); item_id = item.id
-    monkeypatch.setattr(settings, "ANTHROPIC_API_KEY", "fixture-key")
+    monkeypatch.setattr(settings, "OPENAI_API_KEY", "fixture-key")
     def expire_then_return(choices):
         with SessionLocal() as other:
             state = other.get(SubscriptionState, (account[2], account[1]))

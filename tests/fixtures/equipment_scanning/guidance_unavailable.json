@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "exercise_id": "lat_pulldown",
+  "name": "Lat Pulldown",
+  "versions": {
+    "catalog_version": "0.0",
+    "equipment_revision": "fixture-equipment-v1",
+    "mapping_revision": "name-observations-v1",
+    "resolver_version": "resolver-v1"
+  },
+  "tracking_mode": "reps",
+  "load_profile": null,
+  "instructions": {
+    "status": "instructions_unavailable",
+    "content_version": null,
+    "content": null
+  },
+  "video": {
+    "status": "video_unavailable",
+    "asset_id": null,
+    "url": null,
+    "mime_type": null,
+    "poster_url": null
+  }
+}

@@ -1407,7 +1407,7 @@ def enrich_pending_items(db: Session, user_id: str, *, limit: int = AI_BATCH_LIM
         .limit(min(AI_BATCH_LIMIT, max(1, limit)))
         .all()
     )
-    if not items or not settings.ANTHROPIC_API_KEY:
+    if not items or not settings.OPENAI_API_KEY:
         return 0
     claim_token = str(uuid.uuid4())
     for item in items:
@@ -1434,7 +1434,7 @@ def enrich_pending_items(db: Session, user_id: str, *, limit: int = AI_BATCH_LIM
             _event(
                 "coach_ai_batch",
                 user=_opaque(user_id),
-                source="anthropic",
+                source="openai",
                 outcome="discarded_ineligible",
                 itemCount=len(items),
                 durationMs=int((_now() - started).total_seconds() * 1000),
@@ -1470,7 +1470,7 @@ def enrich_pending_items(db: Session, user_id: str, *, limit: int = AI_BATCH_LIM
         _event(
             "coach_ai_batch",
             user=_opaque(user_id),
-            source="anthropic",
+            source="openai",
             outcome="success",
             itemCount=len(items),
             attempt=max(item.ai_attempt_count for item in items),
@@ -1496,7 +1496,7 @@ def enrich_pending_items(db: Session, user_id: str, *, limit: int = AI_BATCH_LIM
         _event(
             "coach_ai_batch",
             user=_opaque(user_id),
-            source="anthropic",
+            source="openai",
             outcome="fallback",
             reason=type(error).__name__,
             itemCount=len(claimed_rows),
@@ -1535,7 +1535,7 @@ def _render_ai_variant(
 
 
 def _call_coach_feed_ai(items: list[dict]) -> CoachAISelectionBatch:
-    import anthropic
+    from app.core.ai_provider import call_text
 
     for item in items:
         if (
@@ -1544,22 +1544,13 @@ def _call_coach_feed_ai(items: list[dict]) -> CoachAISelectionBatch:
             or set(item) != {"id", "kind", "availableVariants"}
         ):
             raise ValueError("Unsafe Coach AI payload")
-    client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY, timeout=10.0)
-    message = client.messages.parse(
-        model=settings.ANTHROPIC_QA_MODEL,
-        max_tokens=1800,
-        temperature=0.2,
-        system=(
-            "Choose exactly one available wording variant for each categorical PrimeRep card. "
-            "Do not generate coaching copy, recommendations, facts, or additional fields."
-        ),
-        messages=[{"role": "user", "content": json.dumps({"items": items})}],
-        output_format=CoachAISelectionBatch,
+    response = call_text(
+        "Choose exactly one available wording variant for each categorical PrimeRep card. "
+        "Do not generate coaching copy, recommendations, facts, or additional fields.",
+        json.dumps({"items": items}), purpose="coach_feed", max_output_tokens=1800,
+        response_type=CoachAISelectionBatch,
     )
-    result = getattr(message, "parsed_output", None)
-    if not isinstance(result, CoachAISelectionBatch):
-        raise ValueError("Malformed Coach AI response")
-    return result
+    return response.parsed
 
 
 def purge_expired(db: Session, *, limit: int = 500) -> tuple[int, int]:

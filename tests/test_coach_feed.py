@@ -586,7 +586,7 @@ def test_ai_enrichment_preserves_target_and_falls_back(monkeypatch):
         db.commit()
         original_target = dict(row.target_data)
 
-        monkeypatch.setattr(coach_feed_service.settings, "ANTHROPIC_API_KEY", "test")
+        monkeypatch.setattr(coach_feed_service.settings, "OPENAI_API_KEY", "test")
         monkeypatch.setattr(
             coach_feed_service,
             "_call_coach_feed_ai",
@@ -645,7 +645,7 @@ def test_ai_malformed_then_timeout_uses_deterministic_fallback(monkeypatch):
         row.ai_status = "pending"
         db.add(row)
         db.commit()
-        monkeypatch.setattr(coach_feed_service.settings, "ANTHROPIC_API_KEY", "test")
+        monkeypatch.setattr(coach_feed_service.settings, "OPENAI_API_KEY", "test")
         monkeypatch.setattr(
             coach_feed_service,
             "_call_coach_feed_ai",
@@ -724,7 +724,7 @@ def test_ai_payload_excludes_exact_training_values(monkeypatch):
         }
         db.add_all([safe, sensitive])
         db.commit()
-        monkeypatch.setattr(coach_feed_service.settings, "ANTHROPIC_API_KEY", "test")
+        monkeypatch.setattr(coach_feed_service.settings, "OPENAI_API_KEY", "test")
 
         def rewrite(facts):
             captured.extend(facts)
@@ -775,7 +775,7 @@ def test_ai_result_is_discarded_when_user_opts_out_in_flight(monkeypatch):
         row.ai_status = "pending"
         db.add(row)
         db.commit()
-        monkeypatch.setattr(coach_feed_service.settings, "ANTHROPIC_API_KEY", "test")
+        monkeypatch.setattr(coach_feed_service.settings, "OPENAI_API_KEY", "test")
 
         def opt_out_then_return(facts):
             with SessionLocal() as other:
@@ -1487,7 +1487,7 @@ def test_worker_limits_notification_users_and_ai_items(monkeypatch):
             row.ai_status = "pending"
         db.add_all(rows)
         db.commit()
-        monkeypatch.setattr(coach_feed_service.settings, "ANTHROPIC_API_KEY", "test")
+        monkeypatch.setattr(coach_feed_service.settings, "OPENAI_API_KEY", "test")
         monkeypatch.setattr(
             coach_feed_service,
             "_call_coach_feed_ai",

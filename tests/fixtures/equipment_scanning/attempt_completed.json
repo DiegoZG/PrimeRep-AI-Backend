@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "attempt_key": "33333333-3333-4333-8333-333333333333",
+  "status": "completed",
+  "retry_after_seconds": null,
+  "result": {
+    "schema_version": 1,
+    "scan_id": "11111111-1111-4111-8111-111111111111",
+    "status": "candidates",
+    "requires_confirmation": true,
+    "versions": {
+      "catalog_version": "0.0",
+      "equipment_revision": "fixture-equipment-v1",
+      "mapping_revision": "name-observations-v1",
+      "resolver_version": "resolver-v1"
+    },
+    "candidates": [
+      {
+        "equipment": {
+          "id": "lat_pulldown_cable",
+          "name": "Lat Pulldown Cable"
+        },
+        "confidence": {
+          "level": "unknown",
+          "score": null
+        },
+        "exercise_candidates": [
+          {
+            "exercise_id": "lat_pulldown",
+            "name": "Lat Pulldown",
+            "compatibility": "compatible",
+            "required_equipment": [
+              {
+                "id": "lat_pulldown_cable",
+                "name": "Lat Pulldown Cable"
+              }
+            ],
+            "missing_equipment": [],
+            "missing_equipment_ids": [],
+            "guidance_available": false,
+            "approved_video_available": false,
+            "tracking_mode": "reps",
+            "load_profile": null
+          }
+        ]
+      }
+    ],
+    "reason": null,
+    "manual_search_available": true
+  },
+  "error": null
+}

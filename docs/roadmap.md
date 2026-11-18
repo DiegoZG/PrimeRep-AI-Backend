@@ -15,6 +15,8 @@ Current agreed roadmap, September 24, 2026. Phase names supersede older workspac
 | 11 | Subscriptions and entitlements | Planned |
 | 12 / MVP+ | Camera-based gym-machine identification, exercise guidance/video, and questions | Planned |
 
+Part 12's initial equipment-scanning slice follows the [proposed gym-equipment scanning plan](part12-gym-equipment-scanning-plan.md): owned catalog IDs, provider adapters, user-confirmed machine candidates, compatible exercises, published instructions and approved media. Provider selection and image Q&A remain separate decisions.
+
 Part 9 follows [the production readiness and observability plan](part9-production-readiness-plan.md). It verifies workout recovery and sync, deploys with production configuration, adds privacy-safe monitoring, and rehearses backup and rollback before a release decision.
 
 Part 7.5 is specified in [the approved implementation plan](exercise-content-foundation-plan.md). A separate engineering milestone delivers tooling and drafts; publication requires actual trainer/owner approval. Continue content expansion and media production as an ongoing track after this foundation.
