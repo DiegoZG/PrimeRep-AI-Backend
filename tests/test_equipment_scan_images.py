@@ -112,6 +112,7 @@ def test_missing_image_classification_is_not_assumed_to_be_a_real_photo():
     assert error.value.errors()[0]["loc"] == ("image_type",)
     schema = RecognitionResult.model_json_schema()
     assert "image_type" in schema["required"] and "default" not in schema["properties"]["image_type"]
+    assert "product_image" in schema["properties"]["image_type"]["enum"]
 
 
 def test_recognition_prompt_is_bounded_to_real_visible_machine_evidence(monkeypatch):
@@ -129,12 +130,15 @@ def test_recognition_prompt_is_bounded_to_real_visible_machine_evidence(monkeypa
     assert result.subject == "uncertain" and len(captured) == 1
     request = captured[0]
     assert request["store"] is False and request["tools"] == [] and request["max_output_tokens"] == 768
-    assert "Drawings, renders, cartoons" in request["instructions"]
+    assert "photorealistic product or" in request["instructions"]
+    assert "Transparent or checkerboard backgrounds alone" in request["instructions"]
+    assert "do not reject it just because it came" in request["instructions"]
+    assert "Simplified drawings, cartoons, illustrations and diagrams" in request["instructions"]
     assert "fixed pull-up bar without a cable" in request["instructions"]
     assert "Dual-purpose" in request["instructions"] and "Do not force a closest catalog match" in request["instructions"]
 
 
 def test_prompt_revision_changes_the_image_receipt_settings_namespace(monkeypatch):
     before = provider.settings_version()
-    monkeypatch.setattr(provider, "RECOGNITION_VERSION", "future-reviewed-recognition")
+    monkeypatch.setattr(provider, "RECOGNITION_VERSION", "real-photo-primary-v2")
     assert provider.settings_version() != before

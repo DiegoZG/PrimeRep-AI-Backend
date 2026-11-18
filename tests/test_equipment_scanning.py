@@ -136,13 +136,31 @@ def test_no_match_never_contains_candidates_or_guidance(db):
 
 
 @pytest.mark.parametrize("image_type", ["illustration", "diagram", "screenshot", "unclear"])
-def test_non_photo_output_cannot_promote_a_machine_guess(db, image_type):
+def test_simplified_or_obscured_image_output_cannot_promote_a_machine_guess(db, image_type):
     payload = {"image_type": image_type, "subject": "single_equipment", "observations": [{"label": "Leg Extension Machine", "equipment_kind": "selectorized"}]}
     provider = FixtureRecognitionAdapter(payload)
     result = run(db, user(db), provider=provider)
     assert result.status == "no_match" and result.reason == "image_unclear"
     assert result.candidates == [] and not result.requires_confirmation
     assert provider.calls == ["moderation", "recognition"]
+
+
+@pytest.mark.parametrize("label,kind,equipment", [("Lat Pulldown Cable", "cable", "lat_pulldown_cable"), ("Seated cable row", "cable", "row_cable"), ("Leg Extension Machine", "selectorized", "leg_extension_machine")])
+def test_clear_product_image_output_can_resolve_after_moderation_and_requires_confirmation(db, label, kind, equipment):
+    provider = FixtureRecognitionAdapter({"image_type": "product_image", "subject": "single_equipment", "observations": [{"label": label, "equipment_kind": kind}]})
+    result = run(db, user(db), provider=provider)
+    assert result.status == "candidates" and result.requires_confirmation
+    assert [candidate.equipment.id for candidate in result.candidates] == [equipment]
+    assert result.candidates[0].confidence.level == "unknown" and result.candidates[0].confidence.score is None
+    assert provider.calls == ["moderation", "recognition"]
+
+
+@pytest.mark.parametrize("subject", ["uncertain", "unsupported_equipment", "multiple_subjects", "not_equipment", "image_unclear"])
+def test_product_presentation_does_not_override_uncertain_variant_or_subject(db, subject):
+    provider = FixtureRecognitionAdapter({"image_type": "product_image", "subject": subject, "observations": []})
+    result = run(db, user(db), provider=provider)
+    assert result.status == "no_match" and result.reason == subject
+    assert result.candidates == [] and not result.requires_confirmation
 
 
 @pytest.mark.parametrize("label,kind", [("Leg Flexion Machine", "selectorized"), ("Cable machine", "cable"), ("Lat Pullup Cable", "cable")])
@@ -167,7 +185,7 @@ def test_old_recognition_and_mapping_receipts_require_explicit_new_attempt(db, m
     from app.core import equipment_scan_provider as recognition
     module, attribute = (recognition, "RECOGNITION_VERSION") if revision == "prompt" else (catalog, "MAPPING_REVISION" if revision == "mapping" else "RESOLVER_VERSION")
     current = getattr(module, attribute)
-    monkeypatch.setattr(module, attribute, "older-reviewed-rules")
+    monkeypatch.setattr(module, attribute, "real-photo-primary-v2" if revision == "prompt" else "older-reviewed-rules")
     owner, provider, key = user(db), adapter(), uuid.uuid4()
     old = run(db, owner, key=key, provider=provider)
     old_fingerprint = db.query(EquipmentScanAttempt).one().fingerprint

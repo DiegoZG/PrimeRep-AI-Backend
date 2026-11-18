@@ -206,7 +206,7 @@ async def scan(db, user_id, key, raw, content_type, *, adapter=None):
         require_scan_access(db, user_id)
         repository = SQLCatalogRepository(db)
         latest = repository.versions()
-        if observed.image_type != "photo":
+        if observed.image_type not in {"photo", "product_image"}:
             candidates, reason = [], "image_unclear"
         elif observed.subject == "single_equipment":
             candidates = resolve(observed.observations, repository)
